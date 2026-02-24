@@ -1,0 +1,20 @@
+{
+  "name": "freelancehub",
+  "version": "1.0.0",
+  "description": "A Professional Freelance Marketplace Platform",
+  "scripts": {
+    "server": "cd server && npm run dev",
+    "client": "cd client && npm run dev",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "keywords": [
+    "freelance",
+    "marketplace",
+    "mern"
+  ],
+  "author": "Dawood Ahmed",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
