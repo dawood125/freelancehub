@@ -211,170 +211,246 @@ FreelanceHub is a comprehensive freelance marketplace platform inspired by Fiver
 - **MongoDB Atlas** account ([Sign up](https://www.mongodb.com/atlas))
 - **Git** ([Download](https://git-scm.com/))
 
-### Installation
 
-1. **Clone the repository**
+## 📦 Installation Guide
 
-   ```bash
-   git clone https://github.com/YOUR_USERNAME/freelancehub.git
-   cd freelancehub
+### 1️⃣ Clone the Repository
 
-   Install dependencies
-   # Install root dependencies
-   npm install
-   ```
+```bash
+git clone https://github.com/dawood125/freelancehub
+cd freelancehub
+```
 
-# 2.Install server dependencies
+---
 
-cd server && npm install
+### 2️⃣ Install Dependencies
 
-# 3.Install client dependencies
+#### Install Root Dependencies
 
-cd ../client && npm install
+```bash
+npm install
+```
 
-Set up environment variables
+#### Install Server Dependencies
 
-# 4.In the server folder, create .env file
+```bash
+cd server
+npm install
+```
 
-cp server/.env.example server/.env
+#### Install Client Dependencies
 
-Update server/.env with your credentials:
+```bash
+cd ../client
+npm install
+```
 
+---
+
+### 3️⃣ Setup Environment Variables
+
+Inside the `server` folder, create a `.env` file:
+
+```bash
+cp .env.example .env
+```
+
+Now update the `.env` file with your credentials:
+
+```env
 PORT=5000
 NODE_ENV=development
 MONGODB_URI=your_mongodb_connection_string
 JWT_SECRET=your_jwt_secret_key
 CLIENT_URL=http://localhost:5173
+```
 
-5. Run the application
+---
 
-# From root folder - runs both frontend and backend
+### 4️⃣ Run the Application
 
+From the **root folder**, run:
+
+```bash
 npm run dev
+```
 
-Open in browser
+---
 
-Frontend: http://localhost:5173
-Backend API: http://localhost:5000/api/health
+## 🌐 Application URLs
+
+| Service | URL |
+|----------|------|
+| Frontend | http://localhost:5173 |
+| Backend API | http://localhost:5000/api/health |
+
+---
 
 # 📡 API Documentation
 
-Base URL
-http://localhost:5000/api
+### Base URL
 
-Authentication Endpoints
-Method Endpoint Description Auth
-POST /auth/register Register new user ❌
-POST /auth/login Login user ❌
-GET /auth/me Get current user profile ✅
-POST /auth/verify-email Verify email with OTP ❌
-POST /auth/forgot-password Request password reset ❌
-POST /auth/reset-password/:token Reset password ❌
-User Endpoints
-Method Endpoint Description Auth
-GET /users/me Get my profile ✅
-PUT /users/me Update my profile ✅
-GET /users/:username Get user by username ❌
-Gig Endpoints
-Method Endpoint Description Auth
-GET /gigs Get all gigs (with filters) ❌
-GET /gigs/:id Get gig by ID ❌
-POST /gigs Create new gig ✅
-PUT /gigs/:id Update gig ✅
-DELETE /gigs/:id Delete gig ✅
-Order Endpoints
-Method Endpoint Description Auth
-GET /orders Get my orders ✅
-POST /orders Create order ✅
-POST /orders/:id/deliver Submit delivery ✅
-POST /orders/:id/accept Accept delivery ✅
-Full API documentation will be added as endpoints are built.
+```
+http://localhost:5000/api
+```
+
+---
+
+## 🔐 Authentication Endpoints
+
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| POST | `/auth/register` | Register new user | ❌ |
+| POST | `/auth/login` | Login user | ❌ |
+| GET | `/auth/me` | Get current user profile | ✅ |
+| POST | `/auth/verify-email` | Verify email with OTP | ❌ |
+| POST | `/auth/forgot-password` | Request password reset | ❌ |
+| POST | `/auth/reset-password/:token` | Reset password | ❌ |
+
+---
+
+## 👤 User Endpoints
+
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| GET | `/users/me` | Get my profile | ✅ |
+| PUT | `/users/me` | Update my profile | ✅ |
+| GET | `/users/:username` | Get user by username | ❌ |
+
+---
+
+## 💼 Gig Endpoints
+
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| GET | `/gigs` | Get all gigs (with filters) | ❌ |
+| GET | `/gigs/:id` | Get gig by ID | ❌ |
+| POST | `/gigs` | Create new gig | ✅ |
+| PUT | `/gigs/:id` | Update gig | ✅ |
+| DELETE | `/gigs/:id` | Delete gig | ✅ |
+
+---
+
+## 🛒 Order Endpoints
+
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| GET | `/orders` | Get my orders | ✅ |
+| POST | `/orders` | Create order | ✅ |
+| POST | `/orders/:id/deliver` | Submit delivery | ✅ |
+| POST | `/orders/:id/accept` | Accept delivery | ✅ |
+
+> 📌 Full API documentation will be added as endpoints are completed.
+
+---
 
 # 📁 Project Structure
 
+```
 freelancehub/
-├── client/ # React Frontend
-│ ├── src/
-│ │ ├── components/ # Reusable UI components
-│ │ ├── pages/ # Page components
-│ │ ├── hooks/ # Custom React hooks
-│ │ ├── services/ # API service functions
-│ │ ├── context/ # React contexts
-│ │ ├── utils/ # Utility functions
-│ │ ├── App.jsx # Root component
-│ │ └── main.jsx # Entry point
-│ └── package.json
 │
-├── server/ # Node.js Backend
-│ ├── src/
-│ │ ├── config/ # Database & service configs
-│ │ ├── controllers/ # Request handlers
-│ │ ├── middleware/ # Auth, error handling, etc.
-│ │ ├── models/ # Mongoose schemas
-│ │ ├── routes/ # API route definitions
-│ │ ├── services/ # Business logic
-│ │ ├── utils/ # Helper functions
-│ │ ├── sockets/ # Socket.io handlers
-│ │ └── app.js # Express app setup
-│ ├── server.js # Server entry point
-│ └── package.json
+├── client/                 # React Frontend
+│   ├── src/
+│   │   ├── components/     # Reusable UI components
+│   │   ├── pages/          # Page components
+│   │   ├── hooks/          # Custom React hooks
+│   │   ├── services/       # API service functions
+│   │   ├── context/        # React contexts
+│   │   ├── utils/          # Utility functions
+│   │   ├── App.jsx         # Root component
+│   │   └── main.jsx        # Entry point
+│   └── package.json
+│
+├── server/                 # Node.js Backend
+│   ├── src/
+│   │   ├── config/         # Database & service configs
+│   │   ├── controllers/    # Request handlers
+│   │   ├── middleware/     # Auth & error handling
+│   │   ├── models/         # Mongoose schemas
+│   │   ├── routes/         # API routes
+│   │   ├── services/       # Business logic
+│   │   ├── utils/          # Helper functions
+│   │   ├── sockets/        # Socket.io handlers
+│   │   └── app.js          # Express app setup
+│   ├── server.js           # Server entry point
+│   └── package.json
 │
 ├── .gitignore
 ├── README.md
-└── package.json # Root scripts
+└── package.json            # Root scripts
+```
 
-# 📸 Screenshots
+---
 
-Screenshots will be added as the UI is developed.
+# 🖼 Screenshots
 
-Page Preview
-Home Page Coming Soon
-Gig Listing Coming Soon
-Gig Detail Coming Soon
-Dashboard Coming Soon
-Chat Coming Soon
-Checkout Coming Soon
+🚧 Screenshots will be added as the UI is developed.
+
+- Home Page – Coming Soon  
+- Gig Listing – Coming Soon  
+- Gig Detail – Coming Soon  
+- Dashboard – Coming Soon  
+- Chat – Coming Soon  
+- Checkout – Coming Soon  
+
+---
 
 # 🗺 Roadmap
 
-Project setup & architecture
-Database schemas (User model)
-Authentication (Register & Login with JWT)
-Email verification (OTP)
-OAuth (Google & GitHub)
-User profile management
-Gig CRUD operations
-Search & filters
-Order management system
-Stripe payment integration
-Real-time chat (Socket.io)
-Review & rating system
-Notification system
-Freelancer dashboard
-Client dashboard
-Admin panel
-2FA authentication
-Deployment
+- [x] Project setup & architecture  
+- [x] Database schemas (User model)  
+- [x] Authentication (JWT)  
+- [ ] Email verification (OTP)  
+- [ ] OAuth (Google & GitHub)  
+- [ ] User profile management  
+- [ ] Gig CRUD operations  
+- [ ] Search & filters  
+- [ ] Order management system  
+- [ ] Stripe payment integration  
+- [ ] Real-time chat (Socket.io)  
+- [ ] Review & rating system  
+- [ ] Notification system  
+- [ ] Freelancer dashboard  
+- [ ] Client dashboard  
+- [ ] Admin panel  
+- [ ] 2FA authentication  
+- [ ] Deployment  
+
+---
 
 # 🤝 Contributing
 
-Contributions are welcome! Feel free to open an issue or submit a pull request.
+Contributions are welcome!
 
-Fork the project
-Create your feature branch (git checkout -b feature/AmazingFeature)
-Commit your changes (git commit -m 'Add some AmazingFeature')
-Push to the branch (git push origin feature/AmazingFeature)
-Open a Pull Request
+1. Fork the repository  
+2. Create your feature branch:
+   ```bash
+   git checkout -b feature/AmazingFeature
+   ```
+3. Commit your changes:
+   ```bash
+   git commit -m "Add AmazingFeature"
+   ```
+4. Push to the branch:
+   ```bash
+   git push origin feature/AmazingFeature"
+   ```
+5. Open a Pull Request  
+
+---
 
 # 📞 Contact
 
-Dawood Ahmed
+**Dawood Ahmed**
 
-GitHub
-LinkedIn
-```
+- GitHub : https://github.com/dawood125
+- LinkedIn : www.linkedin.com/in/dawood-ahmed-8953b63a2 
+
+---
+
 <div align="center">
-⭐ Star this repo if you found it helpful!
+
+⭐ **Star this repository if you found it helpful!**  
 Made with ❤️ by Dawood Ahmed
 
-</div> ```
+</div>
