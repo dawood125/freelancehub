@@ -3,7 +3,9 @@ const AppError = require('../utils/AppError');
 const catchAsync = require('../utils/catchAsync');
 const { generateAccessToken } = require('../utils/jwt');
 const { generateOTP, verifyOTP } = require('../utils/otp');
-const { sendVerificationEmail } = require('../services/emailService');
+const { generateResetToken, hashToken } = require('../utils/token');
+const { sendVerificationEmail, sendPasswordResetEmail } = require('../services/emailService');
+
 
 
 const register = catchAsync(async (req, res, next) => {
@@ -23,7 +25,6 @@ const register = catchAsync(async (req, res, next) => {
     return next(new AppError('Username is already taken', 400));
   }
 
-
   const { otp, hashedOTP, expiresAt } = generateOTP();
 
   const user = await User.create({
@@ -31,10 +32,9 @@ const register = catchAsync(async (req, res, next) => {
     username: username.toLowerCase(),
     email: email.toLowerCase(),
     password,
-    emailVerificationOTP: hashedOTP,       
-    emailVerificationExpires: expiresAt    
+    emailVerificationOTP: hashedOTP,
+    emailVerificationExpires: expiresAt
   });
-
 
   try {
     await sendVerificationEmail(user.email, user.name, otp);
@@ -69,13 +69,13 @@ const register = catchAsync(async (req, res, next) => {
 });
 
 
+
 const verifyEmail = catchAsync(async (req, res, next) => {
   const { email, otp } = req.body;
 
   if (!email || !otp) {
     return next(new AppError('Please provide email and OTP', 400));
   }
-
 
   const user = await User.findOne({ email: email.toLowerCase() })
     .select('+emailVerificationOTP +emailVerificationExpires');
@@ -84,11 +84,9 @@ const verifyEmail = catchAsync(async (req, res, next) => {
     return next(new AppError('No account found with this email', 404));
   }
 
-
   if (user.isEmailVerified) {
     return next(new AppError('Email is already verified', 400));
   }
-
 
   if (!user.emailVerificationOTP) {
     return next(new AppError('No verification code found. Please request a new one.', 400));
@@ -98,11 +96,9 @@ const verifyEmail = catchAsync(async (req, res, next) => {
     user.emailVerificationOTP = undefined;
     user.emailVerificationExpires = undefined;
     await user.save({ validateBeforeSave: false });
-
     return next(new AppError('Verification code has expired. Please request a new one.', 400));
   }
 
- 
   const isValidOTP = verifyOTP(otp, user.emailVerificationOTP);
 
   if (!isValidOTP) {
@@ -121,12 +117,14 @@ const verifyEmail = catchAsync(async (req, res, next) => {
 });
 
 
+
 const resendOTP = catchAsync(async (req, res, next) => {
   const { email } = req.body;
 
   if (!email) {
     return next(new AppError('Please provide your email', 400));
   }
+
   const user = await User.findOne({ email: email.toLowerCase() });
 
   if (!user) {
@@ -213,6 +211,96 @@ const login = catchAsync(async (req, res, next) => {
   });
 });
 
+
+const forgotPassword = catchAsync(async (req, res, next) => {
+  const { email } = req.body;
+
+  if (!email) {
+    return next(new AppError('Please provide your email', 400));
+  }
+
+  const user = await User.findOne({ email: email.toLowerCase() });
+
+  if (!user) {
+    return res.status(200).json({
+      success: true,
+      message: 'If an account exists with this email, a password reset link has been sent.'
+    });
+  }
+
+  const { resetToken, hashedToken, expiresAt } = generateResetToken();
+
+
+  user.passwordResetToken = hashedToken;
+  user.passwordResetExpires = expiresAt;
+  await user.save({ validateBeforeSave: false });
+
+  const resetUrl = `${process.env.CLIENT_URL}/reset-password/${resetToken}`;
+
+  try {
+    await sendPasswordResetEmail(user.email, user.name, resetUrl);
+
+    res.status(200).json({
+      success: true,
+      message: 'If an account exists with this email, a password reset link has been sent.'
+    });
+  } catch (emailError) {
+    user.passwordResetToken = undefined;
+    user.passwordResetExpires = undefined;
+    await user.save({ validateBeforeSave: false });
+
+    console.error('❌ Email sending failed:', emailError.message);
+    return next(new AppError('Failed to send reset email. Please try again later.', 500));
+  }
+});
+
+
+const resetPassword = catchAsync(async (req, res, next) => {
+  const { password } = req.body;
+  const { token } = req.params;
+
+  if (!password) {
+    return next(new AppError('Please provide a new password', 400));
+  }
+
+  if (password.length < 8) {
+    return next(new AppError('Password must be at least 8 characters', 400));
+  }
+
+  const hashedToken = hashToken(token);
+
+  const user = await User.findOne({
+    passwordResetToken: hashedToken,
+    passwordResetExpires: { $gt: Date.now() }
+  });
+
+  if (!user) {
+    return next(new AppError('Invalid or expired reset token. Please request a new one.', 400));
+  }
+
+  user.password = password;
+
+  user.passwordResetToken = undefined;
+  user.passwordResetExpires = undefined;
+
+  await user.save();
+
+  res.status(200).json({
+    success: true,
+    message: 'Password reset successful! You can now login with your new password.'
+  });
+});
+
+
+
+const logout = catchAsync(async (req, res, next) => {
+
+  res.status(200).json({
+    success: true,
+    message: 'Logged out successfully!'
+  });
+});
+
 const getMe = catchAsync(async (req, res, next) => {
   const user = req.user;
 
@@ -244,5 +332,8 @@ module.exports = {
   verifyEmail,
   resendOTP,
   login,
+  forgotPassword,
+  resetPassword,
+  logout,
   getMe
 };
