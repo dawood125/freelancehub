@@ -1,20 +1,33 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { HiMenu, HiX } from 'react-icons/hi';
 import { FiSearch } from 'react-icons/fi';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
   const [isScrolled, setIsScrolled] = useState(false);
+
+
+  const location = useLocation();
+
+ 
+  const isHomePage = location.pathname === '/';
+
+ 
+  const isSolid = isScrolled || !isHomePage;
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
     };
+
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [location.pathname]);
 
   const navLinks = [
     { name: 'Explore', path: '/gigs' },
@@ -25,12 +38,11 @@ const Navbar = () => {
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled
+        isSolid
           ? 'bg-white/95 backdrop-blur-md shadow-lg'
           : 'bg-transparent'
       }`}
     >
-
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           <Link to="/" className="flex items-center space-x-2 group">
@@ -38,7 +50,7 @@ const Navbar = () => {
               <span className="text-white font-bold text-xl">F</span>
             </div>
             <span className={`text-2xl font-bold transition-colors duration-300 ${
-              isScrolled ? 'text-gray-900' : 'text-white'
+              isSolid ? 'text-gray-900' : 'text-white'
             }`}>
               Freelance<span className="text-green-500">Hub</span>
             </span>
@@ -50,7 +62,7 @@ const Navbar = () => {
                 key={link.name}
                 to={link.path}
                 className={`font-medium transition-all duration-300 hover:text-green-500 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-green-500 after:transition-all after:duration-300 hover:after:w-full ${
-                  isScrolled ? 'text-gray-700' : 'text-white/90'
+                  isSolid ? 'text-gray-700' : 'text-white/90'
                 }`}
               >
                 {link.name}
@@ -60,7 +72,7 @@ const Navbar = () => {
 
           <div className="hidden md:flex items-center space-x-4">
             <button className={`p-2 rounded-full transition-all duration-300 hover:bg-green-500/10 ${
-              isScrolled ? 'text-gray-700' : 'text-white'
+              isSolid ? 'text-gray-700' : 'text-white'
             }`}>
               <FiSearch className="w-5 h-5" />
             </button>
@@ -68,11 +80,12 @@ const Navbar = () => {
             <Link
               to="/login"
               className={`px-5 py-2.5 font-medium rounded-full transition-all duration-300 hover:text-green-500 ${
-                isScrolled ? 'text-gray-700' : 'text-white'
+                isSolid ? 'text-gray-700' : 'text-white'
               }`}
             >
               Sign In
             </Link>
+
             <Link
               to="/register"
               className="px-6 py-2.5 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-medium rounded-full hover:shadow-lg hover:shadow-green-500/30 transform hover:-translate-y-0.5 transition-all duration-300"
@@ -84,7 +97,7 @@ const Navbar = () => {
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             className={`md:hidden p-2 rounded-lg transition-colors duration-300 ${
-              isScrolled ? 'text-gray-700' : 'text-white'
+              isSolid ? 'text-gray-700' : 'text-white'
             }`}
           >
             {isMenuOpen ? (
