@@ -110,7 +110,7 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex mt-12">
+    <div className="min-h-screen flex">
       <div className="w-full lg:w-1/2 flex items-center justify-center px-4 sm:px-8 py-12">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
