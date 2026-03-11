@@ -7,6 +7,9 @@ import Footer from './components/layout/Footer';
 import HomePage from './pages/home/HomePage';
 import LoginPage from './pages/auth/LoginPage';
 import RegisterPage from './pages/auth/RegisterPage';
+import VerifyEmailPage from './pages/auth/VerifyEmailPage';
+import ForgotPasswordPage from './pages/auth/ForgotPasswordPage';
+import ResetPasswordPage from './pages/auth/ResetPasswordPage';
 
 function App() {
   return (
@@ -24,16 +27,10 @@ function App() {
               fontSize: '14px',
             },
             success: {
-              iconTheme: {
-                primary: '#22c55e',
-                secondary: '#ffffff',
-              },
+              iconTheme: { primary: '#22c55e', secondary: '#ffffff' },
             },
             error: {
-              iconTheme: {
-                primary: '#ef4444',
-                secondary: '#ffffff',
-              },
+              iconTheme: { primary: '#ef4444', secondary: '#ffffff' },
             },
           }}
         />
@@ -45,6 +42,9 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
+            <Route path="/verify-email" element={<VerifyEmailPage />} />
+            <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+            <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
           </Routes>
         </main>
 

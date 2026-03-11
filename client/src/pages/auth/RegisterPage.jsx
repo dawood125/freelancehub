@@ -100,7 +100,7 @@ const RegisterPage = () => {
 
       toast.success('Account created! Check your email for verification code 📧');
 
-      navigate('/');
+      navigate('/verify-email', { state: { email: formData.email } });
     } catch (error) {
       const message = error.response?.data?.message || 'Something went wrong. Please try again.';
       toast.error(message);
