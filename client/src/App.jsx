@@ -1,16 +1,20 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { Toaster } from "react-hot-toast";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
 
-import Navbar from "./components/layout/Navbar";
-import Footer from "./components/layout/Footer";
+// Layout
+import Navbar from './components/layout/Navbar';
+import Footer from './components/layout/Footer';
 
-import HomePage from "./pages/home/HomePage";
-import LoginPage from "./pages/auth/LoginPage";
-import RegisterPage from "./pages/auth/RegisterPage";
-import VerifyEmailPage from "./pages/auth/VerifyEmailPage";
-import ForgotPasswordPage from "./pages/auth/ForgotPasswordPage";
-import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
-import ProfilePage from "./pages/profile/ProfilePage";
+// Pages
+import HomePage from './pages/home/HomePage';
+import LoginPage from './pages/auth/LoginPage';
+import RegisterPage from './pages/auth/RegisterPage';
+import VerifyEmailPage from './pages/auth/VerifyEmailPage';
+import ForgotPasswordPage from './pages/auth/ForgotPasswordPage';
+import ResetPasswordPage from './pages/auth/ResetPasswordPage';
+import ProfilePage from './pages/profile/ProfilePage';
+import GigsPage from './pages/gigs/GigsPage';
+import GigDetailPage from './pages/gigs/GigDetailPage';
 
 function App() {
   return (
@@ -21,17 +25,17 @@ function App() {
           toastOptions={{
             duration: 4000,
             style: {
-              background: "#1e293b",
-              color: "#f1f5f9",
-              borderRadius: "12px",
-              padding: "16px",
-              fontSize: "14px",
+              background: '#1e293b',
+              color: '#f1f5f9',
+              borderRadius: '12px',
+              padding: '16px',
+              fontSize: '14px',
             },
             success: {
-              iconTheme: { primary: "#22c55e", secondary: "#ffffff" },
+              iconTheme: { primary: '#22c55e', secondary: '#ffffff' },
             },
             error: {
-              iconTheme: { primary: "#ef4444", secondary: "#ffffff" },
+              iconTheme: { primary: '#ef4444', secondary: '#ffffff' },
             },
           }}
         />
@@ -45,11 +49,10 @@ function App() {
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/verify-email" element={<VerifyEmailPage />} />
             <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-            <Route
-              path="/reset-password/:token"
-              element={<ResetPasswordPage />}
-            />
+            <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
             <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/gigs" element={<GigsPage />} />
+            <Route path="/gigs/:id" element={<GigDetailPage />} />
           </Routes>
         </main>
 
