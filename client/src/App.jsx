@@ -15,6 +15,7 @@ import ResetPasswordPage from './pages/auth/ResetPasswordPage';
 import ProfilePage from './pages/profile/ProfilePage';
 import GigsPage from './pages/gigs/GigsPage';
 import GigDetailPage from './pages/gigs/GigDetailPage';
+import CreateGigPage from './pages/gigs/CreateGigPage';
 
 function App() {
   return (
@@ -53,6 +54,7 @@ function App() {
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/gigs" element={<GigsPage />} />
             <Route path="/gigs/:id" element={<GigDetailPage />} />
+            <Route path="/create-gig" element={<CreateGigPage />} />
           </Routes>
         </main>
 
