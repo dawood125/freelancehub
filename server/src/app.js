@@ -5,6 +5,7 @@ const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
 const gigRoutes = require('./routes/gigRoutes');
+const orderRoutes = require('./routes/orderRoutes');
 
 const errorHandler = require('./middleware/errorHandler');
 
@@ -29,6 +30,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/gigs', gigRoutes);
+app.use('/api/orders', orderRoutes);
 
 app.use((req, res) => {
   res.status(404).json({
