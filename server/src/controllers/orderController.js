@@ -11,7 +11,7 @@ const populateOrder = (query) => {
     .populate('gig', 'title slug images packages');
 };
 
-
+// ─── CREATE ORDER (now starts as pending_payment) ───
 const createOrder = catchAsync(async (req, res, next) => {
   const { gigId, packageType } = req.body;
   const buyerId = req.user._id;
@@ -25,7 +25,6 @@ const createOrder = catchAsync(async (req, res, next) => {
   }
 
   const gig = await Gig.findById(gigId);
-
   if (!gig) {
     return next(new AppError('Gig not found', 404));
   }
@@ -39,7 +38,6 @@ const createOrder = catchAsync(async (req, res, next) => {
   }
 
   const selectedPackage = gig.packages[packageType];
-
   if (!selectedPackage) {
     return next(new AppError('Selected package not found', 400));
   }
@@ -49,7 +47,7 @@ const createOrder = catchAsync(async (req, res, next) => {
   }
 
   const subtotal = selectedPackage.price;
-  const serviceFee = Math.round(subtotal * 0.10 * 100) / 100; 
+  const serviceFee = Math.round(subtotal * 0.10 * 100) / 100;
   const total = Math.round((subtotal + serviceFee) * 100) / 100;
   const sellerEarning = Math.round((subtotal - serviceFee) * 100) / 100;
 
@@ -60,7 +58,6 @@ const createOrder = catchAsync(async (req, res, next) => {
     gig: gig._id,
     seller: gig.seller,
     buyer: buyerId,
-
     package: {
       type: packageType,
       name: selectedPackage.name || packageType,
@@ -70,39 +67,31 @@ const createOrder = catchAsync(async (req, res, next) => {
       revisions: selectedPackage.revisions,
       features: selectedPackage.features
     },
-
-    pricing: {
-      subtotal,
-      serviceFee,
-      total,
-      sellerEarning
-    },
-
+    pricing: { subtotal, serviceFee, total, sellerEarning },
     revisions: {
       allowed: selectedPackage.revisions,
       used: 0
     },
-
     timeline: {
       createdAt: new Date(),
       expectedDeliveryAt
     },
-
-    status: 'pending_requirements'
+    // ★ Changed: starts as pending_payment (was pending_requirements)
+    status: 'pending_payment'
   });
 
-  gig.stats.orders += 1;
-  await gig.save({ validateBeforeSave: false });
+  // ★ Removed: gig.stats.orders increment (now happens after payment in webhook)
+
   const populatedOrder = await populateOrder(Order.findById(order._id));
 
   res.status(201).json({
     success: true,
-    message: 'Order created successfully!',
+    message: 'Order created! Please complete payment.',
     data: { order: populatedOrder }
   });
 });
 
-
+// ─── GET MY ORDERS ───
 const getMyOrders = catchAsync(async (req, res) => {
   const userId = req.user._id;
   const { role, status, page = 1, limit = 10 } = req.query;
@@ -121,7 +110,6 @@ const getMyOrders = catchAsync(async (req, res) => {
   }
 
   const skip = (parseInt(page) - 1) * parseInt(limit);
-
   const [orders, total] = await Promise.all([
     populateOrder(
       Order.find(query)
@@ -142,9 +130,9 @@ const getMyOrders = catchAsync(async (req, res) => {
   });
 });
 
+// ─── GET SINGLE ORDER ───
 const getOrder = catchAsync(async (req, res, next) => {
   const order = await populateOrder(Order.findById(req.params.id));
-
   if (!order) {
     return next(new AppError('Order not found', 404));
   }
@@ -160,21 +148,15 @@ const getOrder = catchAsync(async (req, res, next) => {
   });
 });
 
-
-
+// ─── SUBMIT REQUIREMENTS ───
 const submitRequirements = catchAsync(async (req, res, next) => {
   const order = await Order.findById(req.params.id);
-
-  if (!order) {
-    return next(new AppError('Order not found', 404));
-  }
-
+  if (!order) return next(new AppError('Order not found', 404));
   if (order.buyer.toString() !== req.user._id.toString()) {
     return next(new AppError('Only the buyer can submit requirements', 403));
   }
-
   if (order.status !== 'pending_requirements') {
-    return next(new AppError('Requirements have already been submitted', 400));
+    return next(new AppError('Requirements can only be submitted for paid orders awaiting requirements', 400));
   }
 
   order.requirements = req.body.requirements || [];
@@ -188,7 +170,6 @@ const submitRequirements = catchAsync(async (req, res, next) => {
   order.timeline.expectedDeliveryAt = expectedDeliveryAt;
 
   await order.save();
-
   const populatedOrder = await populateOrder(Order.findById(order._id));
 
   res.status(200).json({
@@ -198,27 +179,19 @@ const submitRequirements = catchAsync(async (req, res, next) => {
   });
 });
 
-
+// ─── DELIVER ORDER ───
 const deliverOrder = catchAsync(async (req, res, next) => {
   const order = await Order.findById(req.params.id);
-
-  if (!order) {
-    return next(new AppError('Order not found', 404));
-  }
-
+  if (!order) return next(new AppError('Order not found', 404));
   if (order.seller.toString() !== req.user._id.toString()) {
     return next(new AppError('Only the seller can deliver this order', 403));
   }
-
   if (!['in_progress', 'revision_requested'].includes(order.status)) {
     return next(new AppError(`Cannot deliver order with status: ${order.status}`, 400));
   }
 
   const { message } = req.body;
-
-  if (!message) {
-    return next(new AppError('Please provide a delivery message', 400));
-  }
+  if (!message) return next(new AppError('Please provide a delivery message', 400));
 
   order.deliveries.push({
     message,
@@ -235,7 +208,6 @@ const deliverOrder = catchAsync(async (req, res, next) => {
   order.autoCompleteAt = autoCompleteDate;
 
   await order.save();
-
   const populatedOrder = await populateOrder(Order.findById(order._id));
 
   res.status(200).json({
@@ -245,31 +217,22 @@ const deliverOrder = catchAsync(async (req, res, next) => {
   });
 });
 
-
+// ─── REQUEST REVISION ───
 const requestRevision = catchAsync(async (req, res, next) => {
   const order = await Order.findById(req.params.id);
-
-  if (!order) {
-    return next(new AppError('Order not found', 404));
-  }
-
+  if (!order) return next(new AppError('Order not found', 404));
   if (order.buyer.toString() !== req.user._id.toString()) {
     return next(new AppError('Only the buyer can request a revision', 403));
   }
-
   if (order.status !== 'delivered') {
     return next(new AppError('Can only request revision on delivered orders', 400));
   }
-
   if (order.revisions.allowed !== -1 && order.revisions.used >= order.revisions.allowed) {
     return next(new AppError('You have used all available revisions for this order', 400));
   }
 
   const { note } = req.body;
-
-  if (!note) {
-    return next(new AppError('Please provide a revision note explaining what needs to change', 400));
-  }
+  if (!note) return next(new AppError('Please provide a revision note explaining what needs to change', 400));
 
   const latestDelivery = order.deliveries[order.deliveries.length - 1];
   if (latestDelivery) {
@@ -279,10 +242,9 @@ const requestRevision = catchAsync(async (req, res, next) => {
 
   order.status = 'revision_requested';
   order.revisions.used += 1;
-  order.autoCompleteAt = undefined; 
+  order.autoCompleteAt = undefined;
 
   await order.save();
-
   const populatedOrder = await populateOrder(Order.findById(order._id));
 
   res.status(200).json({
@@ -292,19 +254,13 @@ const requestRevision = catchAsync(async (req, res, next) => {
   });
 });
 
-
-
+// ─── ACCEPT DELIVERY ───
 const acceptDelivery = catchAsync(async (req, res, next) => {
   const order = await Order.findById(req.params.id);
-
-  if (!order) {
-    return next(new AppError('Order not found', 404));
-  }
-
+  if (!order) return next(new AppError('Order not found', 404));
   if (order.buyer.toString() !== req.user._id.toString()) {
     return next(new AppError('Only the buyer can accept the delivery', 403));
   }
-
   if (order.status !== 'delivered') {
     return next(new AppError('Can only accept delivered orders', 400));
   }
@@ -340,29 +296,21 @@ const acceptDelivery = catchAsync(async (req, res, next) => {
   });
 });
 
+// ─── CANCEL ORDER ───
 const cancelOrder = catchAsync(async (req, res, next) => {
   const order = await Order.findById(req.params.id);
-
-  if (!order) {
-    return next(new AppError('Order not found', 404));
-  }
+  if (!order) return next(new AppError('Order not found', 404));
 
   const userId = req.user._id.toString();
-
   if (order.buyer.toString() !== userId && order.seller.toString() !== userId) {
     return next(new AppError('You do not have access to this order', 403));
   }
-
   if (['completed', 'cancelled'].includes(order.status)) {
     return next(new AppError(`Cannot cancel an order that is ${order.status}`, 400));
   }
 
   const { reason } = req.body;
-
-  if (!reason) {
-    return next(new AppError('Please provide a reason for cancellation', 400));
-  }
-
+  if (!reason) return next(new AppError('Please provide a reason for cancellation', 400));
 
   order.status = 'cancelled';
   order.timeline.cancelledAt = new Date();
@@ -377,9 +325,15 @@ const cancelOrder = catchAsync(async (req, res, next) => {
 
   await order.save();
 
-  await Gig.findByIdAndUpdate(order.gig, {
-    $inc: { 'stats.cancelledOrders': 1 }
-  });
+  // ★ Only track cancellation stat if order was paid (not just pending_payment)
+  if (order.payment?.status === 'succeeded') {
+    await Gig.findByIdAndUpdate(order.gig, {
+      $inc: { 'stats.cancelledOrders': 1 }
+    });
+
+    // TODO: Trigger Stripe refund here for paid orders
+    // await stripe.refunds.create({ payment_intent: order.payment.stripePaymentIntentId });
+  }
 
   const populatedOrder = await populateOrder(Order.findById(order._id));
 
@@ -390,8 +344,7 @@ const cancelOrder = catchAsync(async (req, res, next) => {
   });
 });
 
-
-
+// ─── ORDER STATS ───
 const getOrderStats = catchAsync(async (req, res) => {
   const userId = req.user._id;
 
@@ -406,7 +359,6 @@ const getOrderStats = catchAsync(async (req, res) => {
         }
       }
     ]),
-
     Order.aggregate([
       { $match: { seller: userId } },
       {
@@ -422,6 +374,7 @@ const getOrderStats = catchAsync(async (req, res) => {
   const formatStats = (stats) => {
     const result = {
       total: 0,
+      pending_payment: 0,
       pending_requirements: 0,
       in_progress: 0,
       delivered: 0,

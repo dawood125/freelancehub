@@ -18,6 +18,7 @@ import GigDetailPage from "./pages/gigs/GigDetailPage";
 import CreateGigPage from "./pages/gigs/CreateGigPage";
 import OrdersPage from "./pages/orders/OrdersPage";
 import OrderDetailPage from "./pages/orders/OrderDetailPage";
+import CheckoutPage from "./pages/checkout/CheckoutPage";
 
 function App() {
   return (
@@ -56,10 +57,15 @@ function App() {
               path="/reset-password/:token"
               element={<ResetPasswordPage />}
             />
+
             <Route path="/profile" element={<ProfilePage />} />
+
             <Route path="/gigs" element={<GigsPage />} />
             <Route path="/gigs/:id" element={<GigDetailPage />} />
             <Route path="/create-gig" element={<CreateGigPage />} />
+
+            <Route path="/checkout" element={<CheckoutPage />} />
+
             <Route path="/orders" element={<OrdersPage />} />
             <Route path="/orders/:id" element={<OrderDetailPage />} />
           </Routes>

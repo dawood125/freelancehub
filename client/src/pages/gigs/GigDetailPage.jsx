@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
 import {
@@ -15,7 +15,7 @@ import {
   FiArrowRight,
 } from "react-icons/fi";
 import gigService from "../../services/gigService";
-import orderService from '../../services/orderService';
+import orderService from "../../services/orderService";
 
 const GigDetailPage = () => {
   const { id } = useParams();
@@ -24,7 +24,6 @@ const GigDetailPage = () => {
   const [selectedPackage, setSelectedPackage] = useState("basic");
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const navigate = useNavigate();
-  const [isOrdering, setIsOrdering] = useState(false);
 
   useEffect(() => {
     fetchGig();
@@ -41,36 +40,22 @@ const GigDetailPage = () => {
     }
   };
 
-  const handleOrderClick = async () => {
-    const token = localStorage.getItem('token');
+  const handleOrderClick = () => {
+    const token = localStorage.getItem("token");
     if (!token) {
-      toast.error('Please login to place an order');
-      navigate('/login');
+      toast.error("Please login to place an order");
+      navigate("/login");
       return;
     }
 
-    const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
+    const currentUser = JSON.parse(localStorage.getItem("user") || "{}");
     if (currentUser.id === gig.seller?._id) {
-      toast.error('You cannot order your own gig');
+      toast.error("You cannot order your own gig");
       return;
     }
 
-    setIsOrdering(true);
-
-    try {
-      const response = await orderService.createOrder({
-        gigId: gig._id,
-        packageType: selectedPackage,
-      });
-
-      toast.success('Order placed successfully! 🎉');
-      navigate(`/orders/${response.data.order._id}`);
-    } catch (error) {
-      const message = error.response?.data?.message || 'Failed to place order';
-      toast.error(message);
-    } finally {
-      setIsOrdering(false);
-    }
+    // Navigate to checkout page (instead of creating order directly)
+    navigate(`/checkout?gig=${gig._id}&package=${selectedPackage}`);
   };
 
   if (isLoading) {
@@ -502,20 +487,10 @@ const GigDetailPage = () => {
                 {/* Order Button */}
                 <button
                   onClick={handleOrderClick}
-                  disabled={isOrdering}
-                  className="w-full py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-green-500/25 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2 text-sm"
+                  className="w-full py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-green-500/25 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 flex items-center justify-center gap-2 text-sm"
                 >
-                  {isOrdering ? (
-                    <>
-                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                      Processing...
-                    </>
-                  ) : (
-                    <>
-                      Continue (${currentPkg.price})
-                      <FiArrowRight className="w-4 h-4" />
-                    </>
-                  )}
+                  Continue (${currentPkg.price})
+                  <FiArrowRight className="w-4 h-4" />
                 </button>
 
                 {/* Contact Button */}

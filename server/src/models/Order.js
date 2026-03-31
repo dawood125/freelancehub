@@ -1,8 +1,7 @@
-
 const mongoose = require('mongoose');
 
 const orderSchema = new mongoose.Schema({
- 
+
   orderNumber: {
     type: String,
     unique: true
@@ -26,7 +25,6 @@ const orderSchema = new mongoose.Schema({
     required: [true, 'Order must have a buyer']
   },
 
- 
   package: {
     type: {
       type: String,
@@ -48,12 +46,23 @@ const orderSchema = new mongoose.Schema({
   },
 
   pricing: {
-    subtotal: { type: Number, required: true },      
-    serviceFee: { type: Number, required: true },     
-    total: { type: Number, required: true },          
-    sellerEarning: { type: Number, required: true }   
+    subtotal: { type: Number, required: true },
+    serviceFee: { type: Number, required: true },
+    total: { type: Number, required: true },
+    sellerEarning: { type: Number, required: true }
   },
 
+ 
+  payment: {
+    stripePaymentIntentId: String,
+    method: { type: String, default: 'card' },
+    status: {
+      type: String,
+      enum: ['pending', 'succeeded', 'failed', 'refunded'],
+      default: 'pending'
+    },
+    paidAt: Date
+  },
 
   requirements: [{
     question: String,
@@ -65,22 +74,24 @@ const orderSchema = new mongoose.Schema({
     default: false
   },
 
- 
+  
   status: {
     type: String,
     enum: [
-      'pending_requirements',  
-      'in_progress',           
-      'delivered',             
-      'revision_requested',    
-      'completed',             
-      'cancelled'              
+      'pending_payment',
+      'pending_requirements',
+      'in_progress',
+      'delivered',
+      'revision_requested',
+      'completed',
+      'cancelled'
     ],
-    default: 'pending_requirements'
+    default: 'pending_payment'
   },
 
   timeline: {
     createdAt: { type: Date, default: Date.now },
+    paidAt: Date,
     requirementsAt: Date,
     startedAt: Date,
     expectedDeliveryAt: Date,
@@ -112,8 +123,8 @@ const orderSchema = new mongoose.Schema({
   }],
 
   revisions: {
-    allowed: Number,      
-    used: {               
+    allowed: Number,
+    used: {
       type: Number,
       default: 0
     }
@@ -133,9 +144,7 @@ const orderSchema = new mongoose.Schema({
     resolvedAt: Date
   },
 
-
   autoCompleteAt: Date,
-
   buyerNote: String,
   sellerNote: String
 
@@ -145,12 +154,14 @@ const orderSchema = new mongoose.Schema({
   toObject: { virtuals: true }
 });
 
+
 orderSchema.index({ orderNumber: 1 });
 orderSchema.index({ seller: 1, status: 1 });
 orderSchema.index({ buyer: 1, status: 1 });
 orderSchema.index({ gig: 1 });
 orderSchema.index({ status: 1 });
 orderSchema.index({ createdAt: -1 });
+orderSchema.index({ 'payment.stripePaymentIntentId': 1 });
 
 orderSchema.virtual('isLate').get(function () {
   if (this.status === 'completed' || this.status === 'cancelled') {
@@ -166,7 +177,6 @@ orderSchema.virtual('daysRemaining').get(function () {
   const diff = deadline - now;
   return Math.ceil(diff / (1000 * 60 * 60 * 24));
 });
-
 
 orderSchema.pre('save', async function (next) {
   if (this.isNew && !this.orderNumber) {
