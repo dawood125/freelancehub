@@ -16,6 +16,7 @@ import {
 } from "react-icons/fi";
 import gigService from "../../services/gigService";
 import orderService from "../../services/orderService";
+import ReviewList from '../../components/reviews/ReviewList';
 
 const GigDetailPage = () => {
   const { id } = useParams();
@@ -409,6 +410,13 @@ const GigDetailPage = () => {
                 </table>
               </motion.div>
             )}
+
+            {/* Reviews Section */}
+            <ReviewList
+              gigId={gig._id}
+              averageRating={gig.ratings?.average || 0}
+              totalReviews={gig.ratings?.count || 0}
+            />
           </div>
 
           {/* ===== RIGHT COLUMN - Pricing + Seller Card ===== */}

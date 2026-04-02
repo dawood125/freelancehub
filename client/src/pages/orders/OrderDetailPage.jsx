@@ -8,9 +8,12 @@ import {
   FiFileText, FiDollarSign, FiStar
 } from 'react-icons/fi';
 import orderService from '../../services/orderService';
+import reviewService from '../../services/reviewService';
+import ReviewForm from '../../components/reviews/ReviewForm';
 
 // Status config
 const STATUS_CONFIG = {
+  pending_payment: { label: 'Awaiting Payment', color: 'text-yellow-600 bg-yellow-50 border-yellow-200', icon: '💳', step: 0 },
   pending_requirements: { label: 'Pending Requirements', color: 'text-amber-600 bg-amber-50 border-amber-200', icon: '⏳', step: 1 },
   in_progress: { label: 'In Progress', color: 'text-blue-600 bg-blue-50 border-blue-200', icon: '🔨', step: 2 },
   delivered: { label: 'Delivered', color: 'text-purple-600 bg-purple-50 border-purple-200', icon: '📦', step: 3 },
@@ -24,6 +27,10 @@ const OrderDetailPage = () => {
   const [order, setOrder] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState('');
+
+  // Review state
+  const [existingReview, setExistingReview] = useState(null);
+  const [reviewChecked, setReviewChecked] = useState(false);
 
   // Action form states
   const [showRequirementsForm, setShowRequirementsForm] = useState(false);
@@ -45,6 +52,17 @@ const OrderDetailPage = () => {
     try {
       const response = await orderService.getOrder(id);
       setOrder(response.data.order);
+
+      // Check if review already exists for completed orders
+      if (response.data.order.status === 'completed') {
+        try {
+          const reviewResponse = await reviewService.getOrderReview(id);
+          setExistingReview(reviewResponse.data.review);
+        } catch {
+          // Review not found — that's fine
+        }
+        setReviewChecked(true);
+      }
     } catch (error) {
       toast.error('Failed to load order');
     } finally {
@@ -139,6 +157,7 @@ const OrderDetailPage = () => {
     try {
       const response = await orderService.acceptDelivery(order._id);
       setOrder(response.data.order);
+      setReviewChecked(true); // show review form
       toast.success('Order completed! 🎉');
     } catch (error) {
       toast.error(error.response?.data?.message || 'Failed to accept');
@@ -163,6 +182,10 @@ const OrderDetailPage = () => {
     } finally {
       setActionLoading('');
     }
+  };
+
+  const handleReviewSubmitted = (review) => {
+    setExistingReview(review);
   };
 
   return (
@@ -220,6 +243,7 @@ const OrderDetailPage = () => {
               <div className="space-y-4">
                 {[
                   { label: 'Order Placed', date: order.timeline?.createdAt, done: true, icon: <FiPackage /> },
+                  { label: 'Payment Confirmed', date: order.timeline?.paidAt, done: order.status !== 'pending_payment', icon: <FiDollarSign /> },
                   { label: 'Requirements Submitted', date: order.timeline?.requirementsAt, done: order.requirementsSubmitted, icon: <FiFileText /> },
                   { label: 'Work Started', date: order.timeline?.startedAt, done: !!order.timeline?.startedAt, icon: <FiClock /> },
                   { label: 'Delivered', date: order.timeline?.deliveredAt, done: !!order.timeline?.deliveredAt, icon: <FiSend /> },
@@ -265,9 +289,7 @@ const OrderDetailPage = () => {
                       'border-gray-200 bg-gray-50/50'
                     }`}>
                       <div className="flex items-center justify-between mb-2">
-                        <span className="text-sm font-semibold text-gray-900">
-                          Delivery #{index + 1}
-                        </span>
+                        <span className="text-sm font-semibold text-gray-900">Delivery #{index + 1}</span>
                         <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
                           delivery.status === 'accepted' ? 'bg-green-100 text-green-700' :
                           delivery.status === 'revision_requested' ? 'bg-orange-100 text-orange-700' :
@@ -466,12 +488,69 @@ const OrderDetailPage = () => {
                   </>
                 )}
 
-                {/* Revision count */}
                 <p className="text-xs text-gray-400 mt-3 text-center">
                   Revisions used: {order.revisions?.used || 0} / {order.revisions?.allowed === -1 ? 'Unlimited' : order.revisions?.allowed}
                 </p>
               </motion.div>
             )}
+
+            {/* ===== REVIEW SECTION (completed orders, buyer only) ===== */}
+            {isBuyer && order.status === 'completed' && reviewChecked && !existingReview && (
+              <ReviewForm
+                orderId={order._id}
+                onReviewSubmitted={handleReviewSubmitted}
+              />
+            )}
+
+            {/* Show existing review */}
+            {existingReview && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-white rounded-2xl border border-green-200 p-6 shadow-sm"
+              >
+                <h3 className="font-bold text-gray-900 mb-3 flex items-center gap-2">
+                  <FiStar className="w-5 h-5 text-amber-500" />
+                  Your Review
+                </h3>
+
+                <div className="flex items-center gap-1 mb-2">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <FiStar
+                      key={star}
+                      className={`w-5 h-5 ${
+                        star <= existingReview.rating.overall
+                          ? 'text-amber-400 fill-amber-400'
+                          : 'text-gray-200'
+                      }`}
+                    />
+                  ))}
+                  <span className="text-sm font-bold text-amber-500 ml-1">
+                    {existingReview.rating.overall.toFixed(1)}
+                  </span>
+                </div>
+
+                <p className="text-sm text-gray-600 leading-relaxed mb-3">
+                  {existingReview.comment}
+                </p>
+
+                <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-gray-400">
+                  <span>Communication: <b className="text-gray-600">{existingReview.rating.communication}</b></span>
+                  <span>As Described: <b className="text-gray-600">{existingReview.rating.serviceAsDescribed}</b></span>
+                  <span>Recommend: <b className="text-gray-600">{existingReview.rating.recommendation}</b></span>
+                </div>
+
+                {existingReview.response?.content && (
+                  <div className="mt-4 p-3.5 bg-gray-50 rounded-xl border border-gray-100">
+                    <p className="text-xs font-semibold text-gray-500 mb-1">Seller&apos;s Response</p>
+                    <p className="text-sm text-gray-600">{existingReview.response.content}</p>
+                  </div>
+                )}
+
+                <p className="text-xs text-green-600 mt-3">✅ Review submitted</p>
+              </motion.div>
+            )}
+
           </div>
 
           {/* ===== RIGHT COLUMN ===== */}
