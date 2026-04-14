@@ -62,7 +62,7 @@ const OrdersPage = () => {
   const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
 
   return (
-    <div className="min-h-screen bg-slate-50 py-8">
+    <div className="min-h-screen bg-[color:var(--bg)] py-10">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Header */}
@@ -72,8 +72,8 @@ const OrdersPage = () => {
           className="flex items-center justify-between mb-8"
         >
           <div>
-            <h1 className="text-3xl font-extrabold text-gray-900">My Orders</h1>
-            <p className="text-gray-500 mt-1">{totalOrders} order{totalOrders !== 1 ? 's' : ''}</p>
+            <h1 className="text-3xl font-extrabold text-[color:var(--text-1)]">My Orders</h1>
+            <p className="text-[color:var(--text-2)] mt-1">{totalOrders} order{totalOrders !== 1 ? 's' : ''}</p>
           </div>
         </motion.div>
 
@@ -82,11 +82,11 @@ const OrdersPage = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.05 }}
-          className="bg-white rounded-2xl border border-gray-100 p-4 mb-6 shadow-sm"
+          className="glass-card rounded-2xl p-4 mb-6 shadow-sm"
         >
           <div className="flex flex-wrap items-center gap-3">
             {/* Role filter */}
-            <div className="flex items-center gap-1 bg-gray-100 rounded-xl p-1">
+            <div className="flex items-center gap-1 bg-[color:var(--surface-soft)] rounded-xl p-1 border border-[color:var(--line)]">
               {[
                 { value: '', label: 'All' },
                 { value: 'buyer', label: 'As Buyer' },
@@ -97,8 +97,8 @@ const OrdersPage = () => {
                   onClick={() => updateFilter('role', option.value)}
                   className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300 ${
                     currentRole === option.value
-                      ? 'bg-white text-gray-900 shadow-sm'
-                      : 'text-gray-500 hover:text-gray-700'
+                      ? 'bg-[color:var(--surface-card)] text-[color:var(--text-1)] shadow-sm'
+                      : 'text-[color:var(--text-2)] hover:text-[color:var(--text-1)]'
                   }`}
                 >
                   {option.label}
@@ -108,7 +108,7 @@ const OrdersPage = () => {
 
             {/* Status filter */}
             <div className="flex items-center gap-1.5 flex-wrap">
-              <FiFilter className="w-4 h-4 text-gray-400" />
+              <FiFilter className="w-4 h-4 text-[color:var(--text-muted)]" />
               {[
                 { value: '', label: 'All Status' },
                 { value: 'in_progress', label: 'Active' },
@@ -121,8 +121,8 @@ const OrdersPage = () => {
                   onClick={() => updateFilter('status', option.value)}
                   className={`px-3 py-1.5 text-xs font-medium rounded-full border transition-all duration-300 ${
                     currentStatus === option.value
-                      ? 'border-green-500 bg-green-50 text-green-700'
-                      : 'border-gray-200 text-gray-500 hover:border-gray-300'
+                      ? 'border-[color:var(--accent)] bg-[color:var(--surface-soft)] text-[color:var(--accent)]'
+                      : 'border-[color:var(--line)] text-[color:var(--text-2)] hover:border-[color:var(--accent)]'
                   }`}
                 >
                   {option.label}
@@ -136,7 +136,7 @@ const OrdersPage = () => {
         {isLoading ? (
           <div className="space-y-4">
             {[...Array(3)].map((_, i) => (
-              <div key={i} className="bg-white rounded-2xl border border-gray-100 p-6 animate-pulse">
+              <div key={i} className="ui-card p-6 animate-pulse">
                 <div className="flex gap-4">
                   <div className="w-20 h-16 bg-gray-200 rounded-xl" />
                   <div className="flex-1 space-y-2">
@@ -165,7 +165,7 @@ const OrdersPage = () => {
                 >
                   <Link
                     to={`/orders/${order._id}`}
-                    className="block bg-white rounded-2xl border border-gray-100 p-5 hover:shadow-lg hover:border-transparent hover:-translate-y-0.5 transition-all duration-300 group"
+                    className="block glass-card rounded-2xl p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 group"
                   >
                     <div className="flex items-start gap-4">
                       {/* Gig Image */}
@@ -183,11 +183,11 @@ const OrdersPage = () => {
                       <div className="flex-1 min-w-0">
                         <div className="flex items-start justify-between gap-3">
                           <div className="min-w-0">
-                            <h3 className="font-semibold text-gray-900 truncate group-hover:text-green-600 transition-colors">
+                            <h3 className="font-semibold text-[color:var(--text-1)] truncate group-hover:text-[color:var(--accent)] transition-colors">
                               {order.gig?.title || 'Gig unavailable'}
                             </h3>
-                            <div className="flex items-center gap-3 mt-1.5 text-sm text-gray-500">
-                              <span className="font-medium text-gray-400">#{order.orderNumber}</span>
+                            <div className="flex items-center gap-3 mt-1.5 text-sm text-[color:var(--text-2)]">
+                              <span className="font-medium text-[color:var(--text-muted)]">#{order.orderNumber}</span>
                               <span>•</span>
                               <span>{isBuyer ? 'Seller' : 'Buyer'}: {otherParty?.name}</span>
                               <span>•</span>
@@ -197,10 +197,10 @@ const OrdersPage = () => {
 
                           {/* Price */}
                           <div className="text-right flex-shrink-0">
-                            <p className="text-lg font-extrabold text-gray-900">
+                            <p className="text-lg font-extrabold text-[color:var(--text-1)]">
                               ${isBuyer ? order.pricing?.total : order.pricing?.sellerEarning}
                             </p>
-                            <p className="text-xs text-gray-400">
+                            <p className="text-xs text-[color:var(--text-muted)]">
                               {isBuyer ? 'Total paid' : 'Your earning'}
                             </p>
                           </div>
@@ -216,7 +216,7 @@ const OrdersPage = () => {
                             </span>
 
                             {/* Date */}
-                            <span className="text-xs text-gray-400 flex items-center gap-1">
+                            <span className="text-xs text-[color:var(--text-muted)] flex items-center gap-1">
                               <FiClock className="w-3 h-3" />
                               {new Date(order.createdAt).toLocaleDateString('en-US', {
                                 month: 'short', day: 'numeric', year: 'numeric'
@@ -224,7 +224,7 @@ const OrdersPage = () => {
                             </span>
                           </div>
 
-                          <FiArrowRight className="w-4 h-4 text-gray-300 group-hover:text-green-500 group-hover:translate-x-1 transition-all duration-300" />
+                          <FiArrowRight className="w-4 h-4 text-[color:var(--text-muted)] group-hover:text-[color:var(--accent)] group-hover:translate-x-1 transition-all duration-300" />
                         </div>
                       </div>
                     </div>
@@ -240,15 +240,15 @@ const OrdersPage = () => {
             className="text-center py-20"
           >
             <span className="text-6xl block mb-4">📦</span>
-            <h3 className="text-xl font-bold text-gray-900 mb-2">No orders yet</h3>
-            <p className="text-gray-500 mb-6">
+            <h3 className="text-xl font-bold text-[color:var(--text-1)] mb-2">No orders yet</h3>
+            <p className="text-[color:var(--text-2)] mb-6">
               {currentRole === 'seller'
                 ? 'You haven\'t received any orders yet.'
                 : 'You haven\'t placed any orders yet.'}
             </p>
             <Link
               to="/gigs"
-              className="px-6 py-2.5 bg-green-500 text-white font-medium rounded-xl hover:bg-green-600 transition-colors"
+              className="inline-flex px-6 py-2.5 ui-btn-primary font-medium transition-colors"
             >
               Browse Services
             </Link>

@@ -10,7 +10,7 @@ const StarInput = ({ label, value, onChange }) => {
 
   return (
     <div className="flex items-center justify-between">
-      <span className="text-sm text-gray-600">{label}</span>
+      <span className="text-sm text-[color:var(--text-2)]">{label}</span>
       <div className="flex gap-1">
         {[1, 2, 3, 4, 5].map((star) => (
           <button
@@ -25,7 +25,7 @@ const StarInput = ({ label, value, onChange }) => {
               className={`w-6 h-6 transition-colors ${
                 star <= (hover || value)
                   ? 'text-amber-400 fill-amber-400'
-                  : 'text-gray-300'
+                  : 'text-[color:var(--text-muted)]'
               }`}
             />
           </button>
@@ -98,19 +98,19 @@ const ReviewForm = ({ orderId, onReviewSubmitted }) => {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-white rounded-2xl border-2 border-amber-200 p-6 shadow-sm"
+      className="bg-[color:var(--surface-card)] rounded-2xl border border-[color:var(--line)] p-6 shadow-sm"
     >
-      <h3 className="font-bold text-gray-900 mb-1 flex items-center gap-2">
+      <h3 className="font-bold text-[color:var(--text-1)] mb-1 flex items-center gap-2">
         <FiStar className="w-5 h-5 text-amber-500" />
         Leave a Review
       </h3>
-      <p className="text-sm text-gray-500 mb-5">
+      <p className="text-sm text-[color:var(--text-2)] mb-5">
         Share your experience to help other buyers.
       </p>
 
       <form onSubmit={handleSubmit}>
         {/* Star ratings */}
-        <div className="space-y-3 mb-5 bg-gray-50 rounded-xl p-4">
+        <div className="space-y-3 mb-5 bg-[color:var(--surface-soft)] rounded-xl p-4 border border-[color:var(--line)]">
           {Object.entries(ratingLabels).map(([field, label]) => (
             <StarInput
               key={field}
@@ -128,9 +128,9 @@ const ReviewForm = ({ orderId, onReviewSubmitted }) => {
           placeholder="Tell us about your experience with this seller... (min 10 characters)"
           rows={4}
           maxLength={1000}
-          className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl text-sm outline-none focus:border-amber-400 resize-none mb-1"
+          className="w-full px-4 py-3 border border-[color:var(--line)] bg-[color:var(--surface-soft)] text-[color:var(--text-1)] rounded-xl text-sm outline-none focus:border-[color:var(--accent)] resize-none mb-1"
         />
-        <p className="text-xs text-gray-400 text-right mb-4">
+        <p className="text-xs text-[color:var(--text-muted)] text-right mb-4">
           {comment.length}/1000
         </p>
 
@@ -138,7 +138,7 @@ const ReviewForm = ({ orderId, onReviewSubmitted }) => {
         <button
           type="submit"
           disabled={isSubmitting || ratings.overall === 0}
-          className="w-full py-3 bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-amber-500/25 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2 text-sm"
+          className="w-full py-3 brand-gradient text-white font-bold rounded-xl hover:shadow-lg hover:shadow-indigo-500/25 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2 text-sm"
         >
           {isSubmitting ? (
             <>

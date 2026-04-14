@@ -34,12 +34,14 @@ const ForgotPasswordPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-slate-50">
+    <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-[color:var(--bg)] relative overflow-hidden">
+      <div className="absolute -top-28 -left-24 w-80 h-80 rounded-full blur-3xl opacity-40 pointer-events-none" style={{ background: 'rgba(var(--accent-rgb), 0.18)' }} />
+      <div className="absolute -bottom-28 -right-24 w-96 h-96 rounded-full blur-3xl opacity-40 pointer-events-none" style={{ background: 'rgba(var(--accent-2-rgb), 0.16)' }} />
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="w-full max-w-md"
+        className="w-full max-w-md relative z-10"
       >
         {/* Back button */}
         <Link
@@ -51,7 +53,7 @@ const ForgotPasswordPage = () => {
         </Link>
 
         {/* Card */}
-        <div className="bg-white rounded-3xl shadow-xl shadow-gray-200/50 border border-gray-100 p-8 sm:p-10">
+        <div className="glass-card rounded-3xl p-8 sm:p-10 shadow-xl">
           {!isEmailSent ? (
             <>
               {/* Icon */}
@@ -59,7 +61,8 @@ const ForgotPasswordPage = () => {
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ type: 'spring', stiffness: 200, delay: 0.2 }}
-                className="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl flex items-center justify-center"
+                className="w-20 h-20 mx-auto mb-6 rounded-2xl flex items-center justify-center"
+                style={{ background: 'color-mix(in srgb, rgb(var(--warn-rgb)) 16%, var(--surface-soft))' }}
               >
                 <HiOutlineLockClosed className="w-9 h-9 text-amber-600" />
               </motion.div>
@@ -145,7 +148,7 @@ const ForgotPasswordPage = () => {
                     setIsEmailSent(false);
                     setEmail('');
                   }}
-                  className="w-full py-3 text-sm font-semibold text-gray-700 bg-gray-100 rounded-xl hover:bg-gray-200 transition-all duration-300"
+                  className="w-full py-3 text-sm font-semibold text-[color:var(--text-2)] bg-[color:var(--surface-soft)] rounded-xl hover:bg-[color:var(--surface-card)] border border-[color:var(--line)] transition-all duration-300"
                 >
                   Try a different email
                 </button>

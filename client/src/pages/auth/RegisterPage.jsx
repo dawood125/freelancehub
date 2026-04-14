@@ -44,7 +44,7 @@ const RegisterPage = () => {
       { score: 0, label: '', color: '' },
       { score: 1, label: 'Weak', color: 'bg-red-500' },
       { score: 2, label: 'Fair', color: 'bg-orange-500' },
-      { score: 3, label: 'Good', color: 'bg-yellow-500' },
+      { score: 3, label: 'Good', color: 'bg-amber-500' },
       { score: 4, label: 'Strong', color: 'bg-green-500' },
     ];
 
@@ -110,41 +110,43 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex">
-      <div className="w-full lg:w-1/2 flex items-center justify-center px-4 sm:px-8 py-12">
+    <div className="min-h-screen flex bg-[color:var(--bg)]">
+      <div className="w-full lg:w-1/2 flex items-center justify-center px-4 sm:px-8 py-12 relative overflow-hidden">
+        <div className="absolute -top-24 -left-20 w-80 h-80 rounded-full blur-3xl opacity-40 pointer-events-none" style={{ background: 'rgba(var(--accent-rgb), 0.15)' }} />
+        <div className="absolute -bottom-24 right-0 w-96 h-96 rounded-full blur-3xl opacity-35 pointer-events-none" style={{ background: 'rgba(var(--accent-2-rgb), 0.14)' }} />
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="w-full max-w-md"
+          className="w-full max-w-md glass-card rounded-3xl p-8 sm:p-10 relative z-10"
         >
           <Link to="/" className="flex lg:hidden items-center space-x-2 mb-10 justify-center">
-            <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center">
+            <div className="w-10 h-10 brand-gradient rounded-xl flex items-center justify-center">
               <span className="text-white font-bold text-xl">F</span>
             </div>
-            <span className="text-2xl font-bold text-gray-900">
-              Freelance<span className="text-green-500">Hub</span>
+            <span className="text-2xl font-bold text-[color:var(--text-1)]">
+              Freelance<span className="text-[rgb(var(--accent-rgb))]">Hub</span>
             </span>
           </Link>
 
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            <h1 className="text-3xl font-bold text-[color:var(--text-1)] mb-2">
               Create your account
             </h1>
-            <p className="text-gray-500">
+            <p className="text-[color:var(--text-2)]">
               Already have an account?{' '}
-              <Link to="/login" className="text-green-600 font-semibold hover:text-green-700 transition-colors">
+              <Link to="/login" className="text-[rgb(var(--accent-rgb))] font-semibold hover:opacity-90 transition-opacity">
                 Sign in
               </Link>
             </p>
           </div>
 
           <div className="grid grid-cols-2 gap-3 mb-8">
-            <button className="flex items-center justify-center gap-2.5 px-4 py-3 bg-white border-2 border-gray-200 rounded-xl font-medium text-gray-700 hover:border-gray-300 hover:bg-gray-50 transition-all duration-300">
+            <button className="flex items-center justify-center gap-2.5 px-4 py-3 rounded-xl font-medium transition-all duration-300 border border-[color:var(--line)] bg-[color:var(--surface)] text-[color:var(--text-1)] hover:-translate-y-0.5 hover:shadow-[var(--shadow-sm)]">
               <FcGoogle className="w-5 h-5" />
               <span className="text-sm">Google</span>
             </button>
-            <button className="flex items-center justify-center gap-2.5 px-4 py-3 bg-white border-2 border-gray-200 rounded-xl font-medium text-gray-700 hover:border-gray-300 hover:bg-gray-50 transition-all duration-300">
+            <button className="flex items-center justify-center gap-2.5 px-4 py-3 rounded-xl font-medium transition-all duration-300 border border-[color:var(--line)] bg-[color:var(--surface)] text-[color:var(--text-1)] hover:-translate-y-0.5 hover:shadow-[var(--shadow-sm)]">
               <FaGithub className="w-5 h-5" />
               <span className="text-sm">GitHub</span>
             </button>
@@ -155,17 +157,17 @@ const RegisterPage = () => {
               <div className="w-full border-t border-gray-200" />
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="bg-slate-50 lg:bg-white px-4 text-gray-400">or register with email</span>
+              <span className="bg-[color:var(--surface)] px-4 text-[color:var(--text-3)]">or register with email</span>
             </div>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label htmlFor="name" className="block text-sm font-semibold text-gray-700 mb-2">
+              <label htmlFor="name" className="block text-sm font-semibold text-[color:var(--text-2)] mb-2">
                 Full Name
               </label>
               <div className="relative">
-                <FiUser className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <FiUser className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[color:var(--text-3)]" />
                 <input
                   id="name"
                   name="name"
@@ -173,17 +175,17 @@ const RegisterPage = () => {
                   value={formData.name}
                   onChange={handleChange}
                   placeholder="John Doe"
-                  className="w-full pl-12 pr-4 py-3.5 bg-white border-2 border-gray-200 rounded-xl text-gray-800 placeholder:text-gray-400 outline-none focus:border-green-500 transition-colors duration-300"
+                  className="ui-input w-full pl-12 pr-4 py-3.5"
                 />
               </div>
             </div>
 
             <div>
-              <label htmlFor="username" className="block text-sm font-semibold text-gray-700 mb-2">
+              <label htmlFor="username" className="block text-sm font-semibold text-[color:var(--text-2)] mb-2">
                 Username
               </label>
               <div className="relative">
-                <FiAtSign className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <FiAtSign className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[color:var(--text-3)]" />
                 <input
                   id="username"
                   name="username"
@@ -191,22 +193,22 @@ const RegisterPage = () => {
                   value={formData.username}
                   onChange={handleChange}
                   placeholder="johndoe"
-                  className="w-full pl-12 pr-4 py-3.5 bg-white border-2 border-gray-200 rounded-xl text-gray-800 placeholder:text-gray-400 outline-none focus:border-green-500 transition-colors duration-300"
+                  className="ui-input w-full pl-12 pr-4 py-3.5"
                 />
               </div>
               {formData.username && (
-                <p className="mt-1.5 text-xs text-gray-400">
-                  Your profile: freelancehub.com/<span className="text-green-600 font-medium">{formData.username.toLowerCase()}</span>
+                <p className="mt-1.5 text-xs text-[color:var(--text-3)]">
+                  Your profile: freelancehub.com/<span className="text-[rgb(var(--accent-rgb))] font-medium">{formData.username.toLowerCase()}</span>
                 </p>
               )}
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-2">
+              <label htmlFor="email" className="block text-sm font-semibold text-[color:var(--text-2)] mb-2">
                 Email address
               </label>
               <div className="relative">
-                <FiMail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <FiMail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[color:var(--text-3)]" />
                 <input
                   id="email"
                   name="email"
@@ -214,17 +216,17 @@ const RegisterPage = () => {
                   value={formData.email}
                   onChange={handleChange}
                   placeholder="you@example.com"
-                  className="w-full pl-12 pr-4 py-3.5 bg-white border-2 border-gray-200 rounded-xl text-gray-800 placeholder:text-gray-400 outline-none focus:border-green-500 transition-colors duration-300"
+                  className="ui-input w-full pl-12 pr-4 py-3.5"
                 />
               </div>
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-semibold text-gray-700 mb-2">
+              <label htmlFor="password" className="block text-sm font-semibold text-[color:var(--text-2)] mb-2">
                 Password
               </label>
               <div className="relative">
-                <FiLock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <FiLock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[color:var(--text-3)]" />
                 <input
                   id="password"
                   name="password"
@@ -232,12 +234,12 @@ const RegisterPage = () => {
                   value={formData.password}
                   onChange={handleChange}
                   placeholder="Min. 8 characters"
-                  className="w-full pl-12 pr-12 py-3.5 bg-white border-2 border-gray-200 rounded-xl text-gray-800 placeholder:text-gray-400 outline-none focus:border-green-500 transition-colors duration-300"
+                  className="ui-input w-full pl-12 pr-12 py-3.5"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-[color:var(--text-3)] hover:text-[color:var(--text-2)] transition-colors"
                 >
                   {showPassword ? <FiEyeOff className="w-5 h-5" /> : <FiEye className="w-5 h-5" />}
                 </button>
@@ -252,7 +254,7 @@ const RegisterPage = () => {
                         className={`h-1.5 flex-1 rounded-full transition-all duration-500 ${
                           level <= passwordStrength.score
                             ? passwordStrength.color
-                            : 'bg-gray-200'
+                            : 'bg-[color:var(--line)]'
                         }`}
                       />
                     ))}
@@ -260,7 +262,7 @@ const RegisterPage = () => {
                   <p className={`text-xs font-medium ${
                     passwordStrength.score <= 1 ? 'text-red-500' :
                     passwordStrength.score === 2 ? 'text-orange-500' :
-                    passwordStrength.score === 3 ? 'text-yellow-600' :
+                    passwordStrength.score === 3 ? 'text-amber-500' :
                     'text-green-500'
                   }`}>
                     {passwordStrength.label}
@@ -274,8 +276,8 @@ const RegisterPage = () => {
                       { test: /[!@#$%^&*(),.?":{}|<>]/.test(formData.password), text: 'One special character' },
                     ].map((req) => (
                       <div key={req.text} className="flex items-center gap-2">
-                        <FiCheck className={`w-3.5 h-3.5 ${req.test ? 'text-green-500' : 'text-gray-300'}`} />
-                        <span className={`text-xs ${req.test ? 'text-green-600' : 'text-gray-400'}`}>
+                        <FiCheck className={`w-3.5 h-3.5 ${req.test ? 'text-green-500' : 'text-[color:var(--text-3)]'}`} />
+                        <span className={`text-xs ${req.test ? 'text-green-500' : 'text-[color:var(--text-3)]'}`}>
                           {req.text}
                         </span>
                       </div>
@@ -292,18 +294,18 @@ const RegisterPage = () => {
                 className={`flex-shrink-0 w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all duration-300 mt-0.5 ${
                   agreeTerms
                     ? 'bg-green-500 border-green-500'
-                    : 'border-gray-300 hover:border-green-400'
+                    : 'border-[color:var(--line)] hover:border-green-400'
                 }`}
               >
                 {agreeTerms && <FiCheck className="w-3 h-3 text-white" />}
               </button>
-              <span className="text-sm text-gray-500">
+              <span className="text-sm text-[color:var(--text-2)]">
                 I agree to FreelanceHub&apos;s{' '}
-                <Link to="/terms" className="text-green-600 hover:text-green-700 font-medium">
+                <Link to="/terms" className="text-[rgb(var(--accent-rgb))] hover:opacity-90 font-medium">
                   Terms of Service
                 </Link>{' '}
                 and{' '}
-                <Link to="/privacy" className="text-green-600 hover:text-green-700 font-medium">
+                <Link to="/privacy" className="text-[rgb(var(--accent-rgb))] hover:opacity-90 font-medium">
                   Privacy Policy
                 </Link>
               </span>
@@ -312,7 +314,7 @@ const RegisterPage = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full flex items-center justify-center gap-2 py-3.5 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-green-500/30 transform hover:-translate-y-0.5 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none mt-6"
+              className="ui-btn-primary w-full flex items-center justify-center gap-2 py-3.5 text-sm disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none mt-6"
             >
               {isLoading ? (
                 <>
@@ -330,15 +332,16 @@ const RegisterPage = () => {
         </motion.div>
       </div>
 
-      <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900">
-        <div className="absolute top-20 right-20 w-72 h-72 bg-green-500/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-20 left-20 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl" />
-        <div className="absolute top-1/3 right-1/3 w-64 h-64 bg-teal-500/10 rounded-full blur-3xl" />
+      <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden border-l border-[color:var(--line)] bg-[color:var(--bg-soft)]">
+        <div className="absolute top-20 right-20 w-72 h-72 rounded-full blur-3xl bg-[rgba(var(--accent-rgb),0.18)]" />
+        <div className="absolute bottom-20 left-20 w-96 h-96 rounded-full blur-3xl bg-[rgba(var(--accent-2-rgb),0.16)]" />
+        <div className="absolute top-1/3 right-1/3 w-64 h-64 rounded-full blur-3xl bg-[rgba(var(--ok-rgb),0.12)]" />
 
         <div
-          className="absolute inset-0 opacity-[0.03]"
+          className="absolute inset-0 opacity-[0.1]"
           style={{
-            backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='32' height='32' fill='none' stroke='rgb(255 255 255 / 0.1)'%3e%3cpath d='M0 .5H31.5V32'/%3e%3c/svg%3e")`
+            backgroundImage: `linear-gradient(to right, color-mix(in srgb, var(--line) 65%, transparent) 1px, transparent 1px), linear-gradient(to bottom, color-mix(in srgb, var(--line) 65%, transparent) 1px, transparent 1px)`,
+            backgroundSize: '34px 34px'
           }}
         />
 
@@ -349,22 +352,22 @@ const RegisterPage = () => {
             transition={{ duration: 0.8 }}
           >
             <Link to="/" className="flex items-center space-x-2.5 mb-12">
-              <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg shadow-green-500/20">
+              <div className="w-12 h-12 brand-gradient rounded-xl flex items-center justify-center shadow-lg shadow-[rgba(var(--accent-rgb),0.35)]">
                 <span className="text-white font-bold text-2xl">F</span>
               </div>
-              <span className="text-3xl font-bold text-white">
-                Freelance<span className="text-green-500">Hub</span>
+              <span className="text-3xl font-bold text-[color:var(--text-1)]">
+                Freelance<span className="text-[rgb(var(--accent-rgb))]">Hub</span>
               </span>
             </Link>
 
-            <h2 className="text-4xl font-bold text-white mb-6 leading-tight">
+            <h2 className="text-4xl font-bold text-[color:var(--text-1)] mb-6 leading-tight">
               Start your journey as a
-              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-400">
+              <span className="block text-gradient">
                 top freelancer
               </span>
             </h2>
 
-            <p className="text-gray-400 text-lg mb-10 leading-relaxed max-w-md">
+            <p className="text-[color:var(--text-2)] text-lg mb-10 leading-relaxed max-w-md">
               Join thousands of skilled professionals who are earning and growing their careers on FreelanceHub.
             </p>
 
@@ -379,10 +382,10 @@ const RegisterPage = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.4 + index * 0.1 }}
-                  className="text-center p-4 rounded-2xl bg-white/5 border border-white/10"
+                  className="text-center p-4 rounded-2xl glass-card"
                 >
-                  <div className="text-2xl font-bold text-white">{stat.number}</div>
-                  <div className="text-gray-500 text-sm mt-1">{stat.label}</div>
+                  <div className="text-2xl font-bold text-[color:var(--text-1)]">{stat.number}</div>
+                  <div className="text-[color:var(--text-2)] text-sm mt-1">{stat.label}</div>
                 </motion.div>
               ))}
             </div>

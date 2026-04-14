@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FreelanceHub | Premium Talent Marketplace</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;family=Berkeley+Mono&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error-container": "#93000a",
+                        "primary-fixed-dim": "#c0c1ff",
+                        "on-surface": "#dfe2f1",
+                        "error": "#ffb4ab",
+                        "surface": "#0f131d",
+                        "on-tertiary-container": "#292c00",
+                        "on-error-container": "#ffdad6",
+                        "outline": "#908fa0",
+                        "primary": "#c0c1ff",
+                        "on-primary-fixed-variant": "#2f2ebe",
+                        "on-secondary-fixed": "#23005c",
+                        "background": "#0f131d",
+                        "on-error": "#690005",
+                        "on-tertiary": "#2f3300",
+                        "primary-container": "#8083ff",
+                        "on-surface-variant": "#c7c4d7",
+                        "primary-fixed": "#e1e0ff",
+                        "tertiary-fixed-dim": "#c3d000",
+                        "surface-tint": "#c0c1ff",
+                        "inverse-primary": "#494bd6",
+                        "on-tertiary-fixed": "#1b1d00",
+                        "secondary-fixed": "#e9ddff",
+                        "surface-container-high": "#262a35",
+                        "surface-container-highest": "#313540",
+                        "inverse-surface": "#dfe2f1",
+                        "tertiary-fixed": "#dfed1a",
+                        "tertiary-container": "#8e9800",
+                        "on-secondary": "#3c0091",
+                        "on-primary-fixed": "#07006c",
+                        "on-secondary-container": "#c4abff",
+                        "on-secondary-fixed-variant": "#5516be",
+                        "secondary": "#d0bcff",
+                        "surface-container": "#1c1f2a",
+                        "surface-bright": "#353944",
+                        "surface-variant": "#313540",
+                        "on-tertiary-fixed-variant": "#454a00",
+                        "outline-variant": "#464554",
+                        "on-primary-container": "#0d0096",
+                        "inverse-on-surface": "#2c303b",
+                        "on-primary": "#1000a9",
+                        "on-background": "#dfe2f1",
+                        "surface-container-low": "#171b26",
+                        "surface-dim": "#0f131d",
+                        "surface-container-lowest": "#0a0e18",
+                        "secondary-container": "#571bc1",
+                        "secondary-fixed-dim": "#d0bcff",
+                        "tertiary": "#c3d000"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Inter"],
+                        "mono": ["Berkeley Mono"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #0f131d; }
+        .glass-card {
+            background: rgba(49, 53, 64, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .hero-mesh {
+            background: radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.15) 0%, rgba(15, 19, 29, 0) 70%),
+                        radial-gradient(circle at 80% 20%, rgba(208, 188, 255, 0.1) 0%, rgba(15, 19, 29, 0) 50%);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body class="text-on-surface selection:bg-primary/30">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 bg-[#0f131d]/80 backdrop-blur-xl shadow-[0_8px_32px_0_rgba(192,193,255,0.04)]">
+<div class="flex justify-between items-center max-w-7xl mx-auto px-8 h-20">
+<div class="text-2xl font-bold tracking-tighter text-[#dfe2f1]">FreelanceHub</div>
+<nav class="hidden md:flex items-center gap-8 font-sans text-sm tracking-tight font-medium">
+<a class="text-[#c7c4d7] hover:text-[#dfe2f1] transition-colors" href="#">Find Talent</a>
+<a class="text-[#c7c4d7] hover:text-[#dfe2f1] transition-colors" href="#">Browse Gigs</a>
+<a class="text-[#c7c4d7] hover:text-[#dfe2f1] transition-colors" href="#">How it Works</a>
+</nav>
+<div class="flex items-center gap-6">
+<button class="text-[#c0c1ff] font-sans text-sm tracking-tight font-medium opacity-80 hover:opacity-100 transition-opacity">Sign In</button>
+<button class="bg-gradient-to-br from-primary to-secondary text-on-primary px-5 py-2 rounded-md font-sans text-sm tracking-tight font-bold scale-95 active:scale-90 transition-transform">Join</button>
+</div>
+</div>
+</header>
+<main class="relative pt-20">
+<!-- Hero Section -->
+<section class="relative min-h-[921px] flex flex-col items-center justify-center overflow-hidden hero-mesh px-6">
+<div class="absolute inset-0 z-0 opacity-40">
+<div class="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-[120px]"></div>
+<div class="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-secondary/10 rounded-full blur-[150px]"></div>
+</div>
+<div class="relative z-10 text-center max-w-4xl">
+<h1 class="text-5xl md:text-7xl font-bold tracking-tighter text-on-surface mb-6 leading-[1.1]">
+                    Find &amp; Hire <br/><span class="bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">Top Freelancers</span>
+</h1>
+<p class="text-on-surface-variant text-lg md:text-xl max-w-2xl mx-auto mb-12">
+                    Connect with the world's most elite talent pool. From AI specialists to editorial designers, build your dream team with liquid precision.
+                </p>
+<!-- Search Bar -->
+<div class="w-full max-w-3xl mx-auto mb-8">
+<div class="flex items-center bg-surface-container-high/60 backdrop-blur-xl p-2 rounded-xl shadow-2xl ring-1 ring-outline-variant/20">
+<div class="flex items-center px-4 gap-2 border-r border-outline-variant/20">
+<span class="material-symbols-outlined text-primary">category</span>
+<span class="text-sm font-medium text-on-surface whitespace-nowrap">All Categories</span>
+<span class="material-symbols-outlined text-on-surface-variant text-sm">expand_more</span>
+</div>
+<div class="flex-grow flex items-center px-4">
+<span class="material-symbols-outlined text-on-surface-variant mr-3">search</span>
+<input class="bg-transparent border-none focus:ring-0 w-full text-on-surface placeholder:text-on-surface-variant/50" placeholder="Search for 'UI Designer' or 'Python Expert'..." type="text"/>
+</div>
+<button class="bg-primary text-on-primary px-6 py-3 rounded-lg font-bold text-sm tracking-tight hover:brightness-110 transition-all">
+                            Search
+                        </button>
+</div>
+</div>
+<!-- Popular Categories -->
+<div class="flex flex-wrap justify-center gap-3">
+<span class="text-xs font-mono uppercase tracking-widest text-on-surface-variant self-center mr-4">Popular:</span>
+<button class="px-4 py-1.5 rounded-full bg-surface-container text-on-surface-variant border border-outline-variant/10 text-xs font-medium hover:bg-surface-container-high hover:text-primary transition-all">Development</button>
+<button class="px-4 py-1.5 rounded-full bg-surface-container text-on-surface-variant border border-outline-variant/10 text-xs font-medium hover:bg-surface-container-high hover:text-primary transition-all">Design</button>
+<button class="px-4 py-1.5 rounded-full bg-surface-container text-on-surface-variant border border-outline-variant/10 text-xs font-medium hover:bg-surface-container-high hover:text-primary transition-all">AI Services</button>
+<button class="px-4 py-1.5 rounded-full bg-surface-container text-on-surface-variant border border-outline-variant/10 text-xs font-medium hover:bg-surface-container-high hover:text-primary transition-all">Writing</button>
+</div>
+</div>
+<!-- Floating Testimonials (Asymmetric Layout) -->
+<div class="hidden xl:block absolute inset-0 pointer-events-none overflow-hidden">
+<div class="absolute top-[20%] left-[5%] glass-card p-6 rounded-2xl w-72 shadow-2xl transform -rotate-6 border border-white/5">
+<div class="flex items-center gap-3 mb-4">
+<img alt="Client" class="w-10 h-10 rounded-full object-cover" data-alt="professional woman smiling confidently with warm natural lighting and soft office background blur" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDrgqyqKnj1Ompua6300z3zAMx-b5N_O21IaWhnEfUAm9ZJy-5RN23ILgLTsx0740ri-SUVckHL_Ug9aiC_ssddHu-O48Nlou5jVG6SEPosxrAuZPfPwFeMCLt0aFbgzPbyExOI_7jrHce5fJMNZHg1c0i0H-q-mWk1tuctT6jLZ-2TiEs6fxqmyzjotOMWwFvDN7r0bTPFIrG59ViVwppjPbYvsGXXgQXfmRTXjcvH8-04Q7c8DeNHoHAZqKlYg56WfUZ3ZpAHgzw"/>
+<div>
+<p class="text-sm font-bold text-on-surface">Sarah J.</p>
+<p class="text-[10px] font-mono text-primary uppercase">CTO @ FlowState</p>
+</div>
+</div>
+<p class="text-sm text-on-surface-variant leading-relaxed">"Found a top-tier React dev in hours. The quality of talent here is unmatched."</p>
+</div>
+<div class="absolute bottom-[15%] right-[8%] glass-card p-6 rounded-2xl w-80 shadow-2xl transform rotate-3 border border-white/5">
+<div class="flex items-center gap-3 mb-4">
+<img alt="Freelancer" class="w-10 h-10 rounded-full object-cover" data-alt="modern creative professional man looking thoughtfully into distance with urban window light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAOGfm14L6iICmlNovpZvaxaMDvondSathEVbIcsS62xFGytdI2Jnf1HPMubwv8KBWYjBMjRtanrbPQeIsL8M-O-IkrHqF0O9ifyTrieBKUo_rnFzynf5hAJ1m_zk2lTcea-QXYlvyIQ6fdNMbQjYb4u4qeC-MmczG1lY_anRxWRl-bNnWly4IsLxE_lI-TJ3IUzJyHsfE9WcavkxBt1YeGSGVF59ns-ThPYPW42RabC7Anf_6TWIIO2dXnjltPaissZgm7n_Pd0oc"/>
+<div>
+<p class="text-sm font-bold text-on-surface">Alex Rivera</p>
+<div class="flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span>
+<p class="text-[10px] font-mono text-tertiary uppercase">Available Now</p>
+</div>
+</div>
+</div>
+<p class="text-sm text-on-surface-variant leading-relaxed">"High-value contracts and a seamless payment system. The best platform for experts."</p>
+<div class="mt-4 flex gap-2">
+<span class="px-2 py-0.5 rounded bg-white/5 text-[9px] font-mono text-on-surface-variant">Design</span>
+<span class="px-2 py-0.5 rounded bg-white/5 text-[9px] font-mono text-on-surface-variant">WebGL</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Trusted By -->
+<section class="py-20 bg-surface-container-low/30">
+<div class="max-w-7xl mx-auto px-8">
+<p class="text-center font-mono text-xs uppercase tracking-[0.3em] text-on-surface-variant/40 mb-12">Empowering teams at world-class companies</p>
+<div class="flex flex-wrap justify-center items-center gap-12 md:gap-24 opacity-30 grayscale hover:grayscale-0 transition-all duration-700">
+<img alt="Google" class="h-8 md:h-10 object-contain" data-alt="minimal grayscale corporate logo of a leading tech company" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBidKaGXUv6pTczhDbmNGr3TlX5e0zrCeWaWoIhDiDG-x5ihL7WNmYin_NYD9isd9QkpWvCbxU8UJPffK79mQ87wVoJx43E8yzSOtKA1_vK6VbLEnYvA7oRR7bL80UMYt0wKxfqXyDJplkLcNDJn9LS2H0o1dK56-_tvJ6ebv81PCNZQtL73kPbywizIb6USgHSJqrhlEQ554D0--KNR2Gr31pIfL7f7oLno9rF5iyicpRPEZIE1HhzVmGRPZRsfoc_3cjB3WWPnzQ"/>
+<img alt="Amazon" class="h-8 md:h-10 object-contain" data-alt="minimal grayscale corporate logo of a global e-commerce giant" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBhCXqq65iSyhRSAuzNv7qVVLEuYw0rrrp5Y5ypOLK5eFndsuOTVbglQbR25yWCImqMhktkNtNxnVF9WASD_eB-BUUH_n77rhyJGmZIEdUP-a8R9mQsUYYrQ0Vrq2IbaQosjsk4SkDq1WNkp-WkwwoPEx5vRB9BeUMdepiqCiRwyZTJlDYNVIME4gxjqjyCquyqAbvteLAUo5lwzyQ8NIrzbW5Hz2txK__GM3-tDhvGh39PbxPewJ0MZJml1lsStktURCYm6cMVnP0"/>
+<img alt="Netflix" class="h-6 md:h-8 object-contain" data-alt="minimal grayscale corporate logo of a major entertainment company" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDi4xxk2v1tE_ku3FgpetVJIggbS4MNWeyuXsnm3jzgc0g6incwJrASxvXRiHflag-s6zUmiH131IRmnrqSkNpQqpQW5mWCSP9X5vFOQduU1Bx_zSi_eYvVO8CcqEzAgnI5Y9PrwHL7IuYq8sbfLLU7gzxKDbm3XVeu_fXu4rqWLJHqRxWvl2Cz0GqGJKqEba38RLgR235GFbdboT-vwwaRjhda2CcwwqJnmOuE0u0J2ZYNrKKrUeMHChB0zvOlZnqUuXF7e8ZNTL0"/>
+<img alt="Slack" class="h-8 md:h-10 object-contain" data-alt="minimal grayscale corporate logo of a communication platform" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA8sNSVP7T5WAu3oq81KjItVKWcP-epYqw3DHfalPAPJJmMp-tZ2B9o7pWj7Ze8MgTLTX0XGK5_vRFbZNAGmC3aFsDZF1YE8QFyJoPwLkkJM2lv-2qnSyHc_k9SqCECzAjtX7m6ETLipjNg4Qy_kJ-2vBX5GUBX6fSicW_l67oussupyFTfTQa9gJjco5ZXyjd_1LWl6L88BkpOvfzVqOQr7MxYvDoQ_I2QrwclUrNlas3HelGWcUhESvuFtCfi37lQL1RmQpHgrgU"/>
+<img alt="Microsoft" class="h-8 md:h-10 object-contain" data-alt="minimal grayscale corporate logo of a software giant" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBoTQy1y8eBVKpdGK1-1M0_dVqFWPv5mJr5mUMRz12DiiderJNHiQBv8unpPo4FZBZ5SLHEnH-nwiBOkhvcVsyCZ9jF-6r_eR0Hah3BkgM9VwhABXg68LX_TA7FcYBeZRjzjBZXvVUugl-NIXcKdayGMSra9oiMFfsfCVn3oU1WnhkyLTuHyVQ71l8RK4WviWXg2q2bfIldP7wwESJmDiBMT2pDP6PyIZyxBZx7hyUYgZn4sxYS23UhmrIcn4G3b8Ecj8326jGGbWI"/>
+</div>
+</div>
+</section>
+<!-- Features Section (Bento Grid) -->
+<section class="py-32 px-8 max-w-7xl mx-auto">
+<div class="mb-20">
+<h2 class="text-3xl md:text-5xl font-bold tracking-tighter text-on-surface mb-6">Designed for <br/>High-Performance Teams</h2>
+<div class="h-1 w-24 bg-primary rounded-full"></div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+<!-- Large Featured Card -->
+<div class="md:col-span-8 glass-card rounded-3xl p-10 border border-white/5 relative overflow-hidden group">
+<div class="relative z-10">
+<div class="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center mb-8">
+<span class="material-symbols-outlined text-primary">verified_user</span>
+</div>
+<h3 class="text-2xl font-bold mb-4">Verified Professional Talent</h3>
+<p class="text-on-surface-variant max-w-md leading-relaxed mb-8">
+                            We don't just host profiles. We vet experts. Every freelancer undergoes a rigorous technical and soft-skill assessment to ensure they meet the FreelanceHub standard.
+                        </p>
+<ul class="space-y-4 font-mono text-xs text-on-surface-variant/80">
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-tertiary text-sm" data-weight="fill">check_circle</span>
+                                IDENTITY VERIFICATION
+                            </li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-tertiary text-sm" data-weight="fill">check_circle</span>
+                                PORTFOLIO AUTHENTICATION
+                            </li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-tertiary text-sm" data-weight="fill">check_circle</span>
+                                LIVE CODING ASSESSMENTS
+                            </li>
+</ul>
+</div>
+<div class="absolute top-0 right-0 w-1/2 h-full opacity-20 pointer-events-none transform translate-x-10 translate-y-10 group-hover:translate-x-5 transition-transform duration-1000">
+<img alt="Interface Preview" class="w-full h-full object-cover rounded-tl-3xl" data-alt="abstract close up of futuristic digital interface with glowing blue lines and data points" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBDGVKAA6Smt5gm36K3HCLq1Qs10u6-rrCuGYeyHKpuSSmL_TgcTxMhc0DssnhSeJcVoMl1LuNWKDdiqUd9bnICc1WAGZwDGaKgxPopYyRg_DfkwXDIx25qLb4bpupsCWdU_6lSmk4SoHCqpQJhvggV2OHRYyJVi6FhOTdnScCjHUhpAxVQ_61sDBV9Ou3f-YI-cCiRwd5VAMfB0hcFDZZfGY6MOucy55uJbQ1w-c1po1XUT_qR7bhj7Kz55YLUEt-ohrZti2bXrc"/>
+</div>
+</div>
+<!-- Side Card 1 -->
+<div class="md:col-span-4 bg-surface-container-low rounded-3xl p-8 border border-white/5 flex flex-col justify-between">
+<div>
+<div class="w-12 h-12 rounded-xl bg-secondary/20 flex items-center justify-center mb-8">
+<span class="material-symbols-outlined text-secondary">payments</span>
+</div>
+<h3 class="text-xl font-bold mb-4">Secure Milestone Payments</h3>
+<p class="text-on-surface-variant text-sm leading-relaxed">
+                            Funds are held in secure escrow. You only release payment when milestones are approved.
+                        </p>
+</div>
+<div class="mt-8 pt-8 border-t border-outline-variant/10">
+<p class="font-mono text-[10px] text-on-surface-variant/50">SECURED BY HUB-LOCK™ PROTOCOL</p>
+</div>
+</div>
+<!-- Side Card 2 -->
+<div class="md:col-span-4 bg-surface-container-low rounded-3xl p-8 border border-white/5 flex flex-col justify-between">
+<div>
+<div class="w-12 h-12 rounded-xl bg-tertiary/20 flex items-center justify-center mb-8">
+<span class="material-symbols-outlined text-tertiary">support_agent</span>
+</div>
+<h3 class="text-xl font-bold mb-4">Dedicated Expert Support</h3>
+<p class="text-on-surface-variant text-sm leading-relaxed">
+                            Human-led support 24/7. Whether you need help with a contract or finding a niche skill.
+                        </p>
+</div>
+<div class="mt-8">
+<div class="flex -space-x-3">
+<img alt="Agent" class="w-8 h-8 rounded-full border-2 border-surface" data-alt="portrait of a professional support agent in soft focus" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjOtXAjh_hpUhtx3DDs10akN64vql8qFaEzNyV91VXYj2KCXsOYUcuxHmokkAQXJhBTQICKR9uebCa3HUt7tC4OOLp7Tm5GXvp_ekdpOknyyp5dsDrfLwY1YK1H7PzS7K9U3MEDdqjzpQ_LO5HPX4vqxdlAl3d12F9ZOtpBU49o1Ix4wFzVQJimS0tLzA6SDxsoZd9SBsdmQrTCCeDpgEm5Eu4eI54E-MgzwtFlpgF38vlAGbsa4ba4lu76N5hTTf8K8K4iVBr2uQ"/>
+<img alt="Agent" class="w-8 h-8 rounded-full border-2 border-surface" data-alt="portrait of a diverse customer service manager" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD8CrXbL-H0xvE8Wsamj5Brkn6EmKwaVz_KdYUrUeb0RrqxMfXrDz0Tpz6ObLUUEPOr8Ct6pLN07iAnc_R2UnxoEJ0H8txDRfrnzZzC-8ts1j1uniKF6n5TQqMSwZ17ZAbxkcq2eFtfvfefRXuisy3GQ8K8jBrIc_sW28BVwY1xETIA6VtLTlKawX7oHPaPkzl-mz9DhU4NQfO-_QChcN7AvTln6H1DFWHp1rzZWgZkmxms6DSt7152qUItE3HcTJYvbOlE83tjEzE"/>
+<div class="w-8 h-8 rounded-full border-2 border-surface bg-surface-container flex items-center justify-center text-[10px] font-bold">+12</div>
+</div>
+</div>
+</div>
+<!-- Small Grid Content -->
+<div class="md:col-span-8 glass-card rounded-3xl p-10 border border-white/5 grid grid-cols-1 sm:grid-cols-2 gap-10">
+<div>
+<span class="material-symbols-outlined text-primary mb-4">bolt</span>
+<h4 class="font-bold mb-2">Instant Matching</h4>
+<p class="text-on-surface-variant text-xs">AI-driven matching algorithm finds the best fit for your stack in seconds.</p>
+</div>
+<div>
+<span class="material-symbols-outlined text-primary mb-4">language</span>
+<h4 class="font-bold mb-2">Global Coverage</h4>
+<p class="text-on-surface-variant text-xs">Work with talent across 150+ countries with localized tax handling.</p>
+</div>
+<div>
+<span class="material-symbols-outlined text-primary mb-4">analytics</span>
+<h4 class="font-bold mb-2">Time Tracking</h4>
+<p class="text-on-surface-variant text-xs">Transparent hourly tracking with automated screenshots and logs.</p>
+</div>
+<div>
+<span class="material-symbols-outlined text-primary mb-4">groups</span>
+<h4 class="font-bold mb-2">Team Hubs</h4>
+<p class="text-on-surface-variant text-xs">Organize your freelancers into specific project-based functional units.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- CTA Section -->
+<section class="py-32 relative overflow-hidden">
+<div class="absolute inset-0 bg-primary/5 -skew-y-3 pointer-events-none"></div>
+<div class="max-w-4xl mx-auto px-8 relative z-10 text-center">
+<h2 class="text-4xl md:text-6xl font-bold tracking-tighter text-on-surface mb-8">Ready to Scale Your Vision?</h2>
+<p class="text-on-surface-variant text-lg mb-12">Join 10,000+ companies already building the future with FreelanceHub.</p>
+<div class="flex flex-col sm:flex-row gap-4 justify-center">
+<button class="bg-gradient-to-br from-primary to-secondary text-on-primary px-10 py-4 rounded-xl font-bold text-lg shadow-xl hover:shadow-primary/20 transition-all">Hire Talent</button>
+<button class="bg-surface-container-highest/60 backdrop-blur-xl border border-outline-variant/30 text-on-surface px-10 py-4 rounded-xl font-bold text-lg hover:bg-surface-container-highest transition-all">Start Freelancing</button>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full border-t border-[#464554]/15 bg-[#0f131d]">
+<div class="max-w-7xl mx-auto px-8 py-16 grid grid-cols-2 md:grid-cols-4 gap-12">
+<div class="col-span-2 md:col-span-1">
+<div class="text-lg font-bold text-[#dfe2f1] mb-6">FreelanceHub</div>
+<p class="text-xs font-mono tracking-widest text-[#c7c4d7] opacity-80">© 2024 FreelanceHub. Liquid Precision Design.</p>
+</div>
+<div>
+<h4 class="text-[10px] font-mono uppercase tracking-[0.2em] text-[#dfe2f1] mb-6">Company</h4>
+<nav class="flex flex-col gap-4">
+<a class="font-mono text-xs uppercase tracking-widest text-[#c7c4d7] hover:text-[#c0c1ff] transition-colors" href="#">About</a>
+<a class="font-mono text-xs uppercase tracking-widest text-[#c7c4d7] hover:text-[#c0c1ff] transition-colors" href="#">Careers</a>
+<a class="font-mono text-xs uppercase tracking-widest text-[#c7c4d7] hover:text-[#c0c1ff] transition-colors" href="#">Support</a>
+</nav>
+</div>
+<div>
+<h4 class="text-[10px] font-mono uppercase tracking-[0.2em] text-[#dfe2f1] mb-6">Legal</h4>
+<nav class="flex flex-col gap-4">
+<a class="font-mono text-xs uppercase tracking-widest text-[#c7c4d7] hover:text-[#c0c1ff] transition-colors" href="#">Privacy</a>
+<a class="font-mono text-xs uppercase tracking-widest text-[#c7c4d7] hover:text-[#c0c1ff] transition-colors" href="#">Terms</a>
+</nav>
+</div>
+<div>
+<h4 class="text-[10px] font-mono uppercase tracking-[0.2em] text-[#dfe2f1] mb-6">Connect</h4>
+<div class="flex gap-4">
+<a class="text-[#c7c4d7] hover:text-[#c0c1ff] transition-colors" href="#">
+<svg class="w-5 h-5 fill-current" viewbox="0 0 24 24"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.84 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"></path></svg>
+</a>
+<a class="text-[#c7c4d7] hover:text-[#c0c1ff] transition-colors" href="#">
+<svg class="w-5 h-5 fill-current" viewbox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12c0 5.302 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.43.372.82 1.102.82 2.222 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.298 24 12c0-6.627-5.373-12-12-12"></path></svg>
+</a>
+</div>
+</div>
+</div>
+</footer>
+</body></html>

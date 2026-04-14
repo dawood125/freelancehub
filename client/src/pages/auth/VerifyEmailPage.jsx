@@ -129,12 +129,14 @@ const VerifyEmailPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-slate-50">
+    <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-[color:var(--bg)] relative overflow-hidden">
+      <div className="absolute -top-28 -left-20 w-80 h-80 rounded-full blur-3xl opacity-40 pointer-events-none" style={{ background: 'rgba(var(--accent-rgb), 0.18)' }} />
+      <div className="absolute -bottom-28 -right-20 w-96 h-96 rounded-full blur-3xl opacity-40 pointer-events-none" style={{ background: 'rgba(var(--accent-2-rgb), 0.18)' }} />
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="w-full max-w-md"
+        className="w-full max-w-md relative z-10"
       >
         <Link
           to="/register"
@@ -144,12 +146,13 @@ const VerifyEmailPage = () => {
           Back to register
         </Link>
 
-        <div className="bg-white rounded-3xl shadow-xl shadow-gray-200/50 border border-gray-100 p-8 sm:p-10">
+        <div className="glass-card rounded-3xl shadow-xl p-8 sm:p-10">
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ type: 'spring', stiffness: 200, delay: 0.2 }}
-            className="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl flex items-center justify-center"
+            className="w-20 h-20 mx-auto mb-6 rounded-2xl flex items-center justify-center"
+            style={{ background: 'color-mix(in srgb, rgb(var(--accent-rgb)) 16%, var(--surface-soft))' }}
           >
             <FiMail className="w-9 h-9 text-green-600" />
           </motion.div>

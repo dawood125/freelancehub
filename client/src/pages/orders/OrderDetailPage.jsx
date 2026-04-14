@@ -189,11 +189,11 @@ const OrderDetailPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 py-8">
+    <div className="min-h-screen bg-[color:var(--bg)] py-10">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Back Link */}
-        <Link to="/orders" className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 mb-6 transition-colors">
+        <Link to="/orders" className="inline-flex items-center gap-1.5 text-sm text-[color:var(--text-2)] hover:text-[color:var(--accent)] mb-6 transition-colors">
           ← Back to orders
         </Link>
 
@@ -205,12 +205,12 @@ const OrderDetailPage = () => {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm"
+              className="ui-card p-6"
             >
               <div className="flex items-start justify-between mb-4">
                 <div>
-                  <p className="text-sm text-gray-400 font-medium mb-1">Order #{order.orderNumber}</p>
-                  <h1 className="text-xl font-bold text-gray-900">
+                  <p className="text-sm text-[color:var(--text-muted)] font-medium mb-1">Order #{order.orderNumber}</p>
+                  <h1 className="text-xl font-bold text-[color:var(--text-1)]">
                     {order.gig?.title || 'Gig unavailable'}
                   </h1>
                 </div>
@@ -222,12 +222,12 @@ const OrderDetailPage = () => {
               {/* Participants */}
               <div className="flex items-center gap-6 text-sm">
                 <div className="flex items-center gap-2">
-                  <span className="text-gray-400">Buyer:</span>
-                  <span className="font-medium text-gray-900">{order.buyer?.name} {isBuyer && '(You)'}</span>
+                  <span className="text-[color:var(--text-muted)]">Buyer:</span>
+                  <span className="font-medium text-[color:var(--text-1)]">{order.buyer?.name} {isBuyer && '(You)'}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-gray-400">Seller:</span>
-                  <span className="font-medium text-gray-900">{order.seller?.name} {isSeller && '(You)'}</span>
+                  <span className="text-[color:var(--text-muted)]">Seller:</span>
+                  <span className="font-medium text-[color:var(--text-1)]">{order.seller?.name} {isSeller && '(You)'}</span>
                 </div>
               </div>
             </motion.div>
@@ -237,9 +237,9 @@ const OrderDetailPage = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.05 }}
-              className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm"
+              className="ui-card p-6"
             >
-              <h3 className="font-bold text-gray-900 mb-5">Order Timeline</h3>
+              <h3 className="font-bold text-[color:var(--text-1)] mb-5">Order Timeline</h3>
               <div className="space-y-4">
                 {[
                   { label: 'Order Placed', date: order.timeline?.createdAt, done: true, icon: <FiPackage /> },
@@ -251,16 +251,16 @@ const OrderDetailPage = () => {
                 ].map((item, index) => (
                   <div key={index} className="flex items-start gap-4">
                     <div className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center ${
-                      item.done ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-400'
+                      item.done ? 'bg-green-100 text-[color:var(--accent)]' : 'bg-[color:var(--surface-soft)] text-[color:var(--text-muted)]'
                     }`}>
                       {item.icon}
                     </div>
                     <div className="flex-1 pt-1.5">
-                      <p className={`text-sm font-medium ${item.done ? 'text-gray-900' : 'text-gray-400'}`}>
+                      <p className={`text-sm font-medium ${item.done ? 'text-[color:var(--text-1)]' : 'text-[color:var(--text-muted)]'}`}>
                         {item.label}
                       </p>
                       {item.date && (
-                        <p className="text-xs text-gray-400 mt-0.5">
+                        <p className="text-xs text-[color:var(--text-muted)] mt-0.5">
                           {new Date(item.date).toLocaleString('en-US', {
                             month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit'
                           })}
@@ -278,9 +278,9 @@ const OrderDetailPage = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
-                className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm"
+                className="ui-card p-6"
               >
-                <h3 className="font-bold text-gray-900 mb-4">Deliveries ({order.deliveries.length})</h3>
+                <h3 className="font-bold text-[color:var(--text-1)] mb-4">Deliveries ({order.deliveries.length})</h3>
                 <div className="space-y-4">
                   {order.deliveries.map((delivery, index) => (
                     <div key={index} className={`p-4 rounded-xl border ${
@@ -289,7 +289,7 @@ const OrderDetailPage = () => {
                       'border-gray-200 bg-gray-50/50'
                     }`}>
                       <div className="flex items-center justify-between mb-2">
-                        <span className="text-sm font-semibold text-gray-900">Delivery #{index + 1}</span>
+                        <span className="text-sm font-semibold text-[color:var(--text-1)]">Delivery #{index + 1}</span>
                         <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
                           delivery.status === 'accepted' ? 'bg-green-100 text-green-700' :
                           delivery.status === 'revision_requested' ? 'bg-orange-100 text-orange-700' :
@@ -298,8 +298,8 @@ const OrderDetailPage = () => {
                           {delivery.status === 'pending' ? 'Awaiting Review' : delivery.status.replace('_', ' ')}
                         </span>
                       </div>
-                      <p className="text-sm text-gray-600 leading-relaxed">{delivery.message}</p>
-                      <p className="text-xs text-gray-400 mt-2">
+                      <p className="text-sm text-[color:var(--text-2)] leading-relaxed">{delivery.message}</p>
+                      <p className="text-xs text-[color:var(--text-muted)] mt-2">
                         {new Date(delivery.deliveredAt).toLocaleString()}
                       </p>
                       {delivery.revisionNote && (
@@ -321,13 +321,13 @@ const OrderDetailPage = () => {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-white rounded-2xl border-2 border-amber-200 p-6 shadow-sm"
+                className="glass-card rounded-2xl border-2 border-amber-200 p-6 shadow-sm"
               >
-                <h3 className="font-bold text-gray-900 mb-1 flex items-center gap-2">
+                <h3 className="font-bold text-[color:var(--text-1)] mb-1 flex items-center gap-2">
                   <FiAlertCircle className="w-5 h-5 text-amber-500" />
                   Submit Your Requirements
                 </h3>
-                <p className="text-sm text-gray-500 mb-4">Tell the seller what you need so they can start working.</p>
+                <p className="text-sm text-[color:var(--text-2)] mb-4">Tell the seller what you need so they can start working.</p>
 
                 <div className="space-y-3 mb-4">
                   {requirementsInput.map((req, index) => (
@@ -341,7 +341,7 @@ const OrderDetailPage = () => {
                           setRequirementsInput(updated);
                         }}
                         placeholder="Requirement topic (e.g., Website purpose)"
-                        className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm outline-none focus:border-green-500"
+                        className="w-full px-3 py-2 ui-input rounded-lg text-sm"
                       />
                       <textarea
                         value={req.answer}
@@ -352,7 +352,7 @@ const OrderDetailPage = () => {
                         }}
                         placeholder="Your answer..."
                         rows={2}
-                        className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm outline-none focus:border-green-500 resize-none"
+                        className="w-full px-3 py-2 ui-input rounded-lg text-sm resize-none"
                       />
                     </div>
                   ))}
@@ -386,25 +386,25 @@ const OrderDetailPage = () => {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-white rounded-2xl border-2 border-blue-200 p-6 shadow-sm"
+                className="glass-card rounded-2xl border-2 border-blue-200 p-6 shadow-sm"
               >
                 {!showDeliveryForm ? (
                   <button
                     onClick={() => setShowDeliveryForm(true)}
-                    className="w-full py-3.5 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-green-500/25 transition-all duration-300 flex items-center justify-center gap-2"
+                    className="w-full py-3.5 ui-btn-primary text-white font-bold transition-all duration-300 flex items-center justify-center gap-2"
                   >
                     <FiSend className="w-5 h-5" />
                     Deliver Your Work
                   </button>
                 ) : (
                   <>
-                    <h3 className="font-bold text-gray-900 mb-3">Deliver Your Work</h3>
+                    <h3 className="font-bold text-[color:var(--text-1)] mb-3">Deliver Your Work</h3>
                     <textarea
                       value={deliveryMessage}
                       onChange={(e) => setDeliveryMessage(e.target.value)}
                       placeholder="Describe what you're delivering. Include any instructions for the buyer..."
                       rows={4}
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl text-sm outline-none focus:border-green-500 resize-none mb-4"
+                      className="w-full px-4 py-3 ui-input text-sm resize-none mb-4"
                     />
                     <div className="flex gap-3 justify-end">
                       <button
@@ -436,17 +436,17 @@ const OrderDetailPage = () => {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-white rounded-2xl border-2 border-purple-200 p-6 shadow-sm"
+                className="glass-card rounded-2xl border-2 border-purple-200 p-6 shadow-sm"
               >
-                <h3 className="font-bold text-gray-900 mb-1">Review Delivery</h3>
-                <p className="text-sm text-gray-500 mb-4">Check the delivery above and accept or request changes.</p>
+                <h3 className="font-bold text-[color:var(--text-1)] mb-1">Review Delivery</h3>
+                <p className="text-sm text-[color:var(--text-2)] mb-4">Check the delivery above and accept or request changes.</p>
 
                 {!showRevisionForm ? (
                   <div className="flex gap-3">
                     <button
                       onClick={handleAccept}
                       disabled={actionLoading === 'accept'}
-                      className="flex-1 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-green-500/25 transition-all duration-300 disabled:opacity-50 flex items-center justify-center gap-2 text-sm"
+                      className="flex-1 py-3 ui-btn-primary text-white font-bold transition-all duration-300 disabled:opacity-50 flex items-center justify-center gap-2 text-sm"
                     >
                       {actionLoading === 'accept' ? (
                         <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -470,7 +470,7 @@ const OrderDetailPage = () => {
                       onChange={(e) => setRevisionNote(e.target.value)}
                       placeholder="Explain what changes you need..."
                       rows={3}
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl text-sm outline-none focus:border-orange-400 resize-none mb-3"
+                      className="w-full px-4 py-3 ui-input text-sm resize-none mb-3"
                     />
                     <div className="flex gap-3 justify-end">
                       <button onClick={() => setShowRevisionForm(false)} className="px-5 py-2.5 text-gray-600 font-medium rounded-xl hover:bg-gray-100 text-sm">
@@ -488,7 +488,7 @@ const OrderDetailPage = () => {
                   </>
                 )}
 
-                <p className="text-xs text-gray-400 mt-3 text-center">
+                <p className="text-xs text-[color:var(--text-muted)] mt-3 text-center">
                   Revisions used: {order.revisions?.used || 0} / {order.revisions?.allowed === -1 ? 'Unlimited' : order.revisions?.allowed}
                 </p>
               </motion.div>
@@ -507,9 +507,9 @@ const OrderDetailPage = () => {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-white rounded-2xl border border-green-200 p-6 shadow-sm"
+                className="glass-card rounded-2xl border border-green-200 p-6 shadow-sm"
               >
-                <h3 className="font-bold text-gray-900 mb-3 flex items-center gap-2">
+                <h3 className="font-bold text-[color:var(--text-1)] mb-3 flex items-center gap-2">
                   <FiStar className="w-5 h-5 text-amber-500" />
                   Your Review
                 </h3>
@@ -530,20 +530,20 @@ const OrderDetailPage = () => {
                   </span>
                 </div>
 
-                <p className="text-sm text-gray-600 leading-relaxed mb-3">
+                <p className="text-sm text-[color:var(--text-2)] leading-relaxed mb-3">
                   {existingReview.comment}
                 </p>
 
-                <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-gray-400">
-                  <span>Communication: <b className="text-gray-600">{existingReview.rating.communication}</b></span>
-                  <span>As Described: <b className="text-gray-600">{existingReview.rating.serviceAsDescribed}</b></span>
-                  <span>Recommend: <b className="text-gray-600">{existingReview.rating.recommendation}</b></span>
+                <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-[color:var(--text-muted)]">
+                  <span>Communication: <b className="text-[color:var(--text-2)]">{existingReview.rating.communication}</b></span>
+                  <span>As Described: <b className="text-[color:var(--text-2)]">{existingReview.rating.serviceAsDescribed}</b></span>
+                  <span>Recommend: <b className="text-[color:var(--text-2)]">{existingReview.rating.recommendation}</b></span>
                 </div>
 
                 {existingReview.response?.content && (
                   <div className="mt-4 p-3.5 bg-gray-50 rounded-xl border border-gray-100">
-                    <p className="text-xs font-semibold text-gray-500 mb-1">Seller&apos;s Response</p>
-                    <p className="text-sm text-gray-600">{existingReview.response.content}</p>
+                    <p className="text-xs font-semibold text-[color:var(--text-muted)] mb-1">Seller&apos;s Response</p>
+                    <p className="text-sm text-[color:var(--text-2)]">{existingReview.response.content}</p>
                   </div>
                 )}
 
@@ -560,25 +560,25 @@ const OrderDetailPage = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm"
+              className="ui-card p-6"
             >
-              <h3 className="font-bold text-gray-900 mb-4">Order Summary</h3>
+              <h3 className="font-bold text-[color:var(--text-1)] mb-4">Order Summary</h3>
               <div className="space-y-3">
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-500">Package</span>
-                  <span className="font-semibold text-gray-900 capitalize">{order.package?.type}</span>
+                  <span className="text-[color:var(--text-2)]">Package</span>
+                  <span className="font-semibold text-[color:var(--text-1)] capitalize">{order.package?.type}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-500">Price</span>
-                  <span className="font-semibold text-gray-900">${order.pricing?.subtotal}</span>
+                  <span className="text-[color:var(--text-2)]">Price</span>
+                  <span className="font-semibold text-[color:var(--text-1)]">${order.pricing?.subtotal}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-500">Service Fee</span>
-                  <span className="font-semibold text-gray-900">${order.pricing?.serviceFee}</span>
+                  <span className="text-[color:var(--text-2)]">Service Fee</span>
+                  <span className="font-semibold text-[color:var(--text-1)]">${order.pricing?.serviceFee}</span>
                 </div>
-                <div className="border-t border-gray-100 pt-3 flex justify-between">
-                  <span className="font-bold text-gray-900">Total</span>
-                  <span className="font-extrabold text-gray-900 text-lg">${order.pricing?.total}</span>
+                <div className="border-t border-[color:var(--line)] pt-3 flex justify-between">
+                  <span className="font-bold text-[color:var(--text-1)]">Total</span>
+                  <span className="font-extrabold text-[color:var(--text-1)] text-lg">${order.pricing?.total}</span>
                 </div>
               </div>
             </motion.div>
@@ -588,24 +588,24 @@ const OrderDetailPage = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.15 }}
-              className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm"
+              className="ui-card p-6"
             >
-              <h3 className="font-bold text-gray-900 mb-4">Delivery Details</h3>
+              <h3 className="font-bold text-[color:var(--text-1)] mb-4">Delivery Details</h3>
               <div className="space-y-3 text-sm">
                 <div className="flex items-center justify-between">
-                  <span className="text-gray-500 flex items-center gap-1.5"><FiClock className="w-4 h-4" /> Delivery Time</span>
-                  <span className="font-semibold text-gray-900">{order.package?.deliveryDays} days</span>
+                  <span className="text-[color:var(--text-2)] flex items-center gap-1.5"><FiClock className="w-4 h-4" /> Delivery Time</span>
+                  <span className="font-semibold text-[color:var(--text-1)]">{order.package?.deliveryDays} days</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-gray-500 flex items-center gap-1.5"><FiRefreshCw className="w-4 h-4" /> Revisions</span>
-                  <span className="font-semibold text-gray-900">
+                  <span className="text-[color:var(--text-2)] flex items-center gap-1.5"><FiRefreshCw className="w-4 h-4" /> Revisions</span>
+                  <span className="font-semibold text-[color:var(--text-1)]">
                     {order.revisions?.used || 0} / {order.revisions?.allowed === -1 ? '∞' : order.revisions?.allowed}
                   </span>
                 </div>
                 {order.timeline?.expectedDeliveryAt && (
                   <div className="flex items-center justify-between">
-                    <span className="text-gray-500">Due Date</span>
-                    <span className="font-semibold text-gray-900">
+                    <span className="text-[color:var(--text-2)]">Due Date</span>
+                    <span className="font-semibold text-[color:var(--text-1)]">
                       {new Date(order.timeline.expectedDeliveryAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                     </span>
                   </div>
@@ -623,19 +623,19 @@ const OrderDetailPage = () => {
                 {!showCancelForm ? (
                   <button
                     onClick={() => setShowCancelForm(true)}
-                    className="w-full py-3 text-red-500 font-medium border-2 border-red-200 rounded-xl hover:bg-red-50 transition-all duration-300 text-sm"
+                    className="w-full py-3 text-[color:rgb(var(--danger-rgb))] font-medium border border-red-200 rounded-xl hover:bg-red-50 transition-all duration-300 text-sm"
                   >
                     Cancel Order
                   </button>
                 ) : (
-                  <div className="bg-white rounded-2xl border-2 border-red-200 p-5">
+                  <div className="glass-card rounded-2xl border-2 border-red-200 p-5">
                     <h4 className="font-bold text-red-600 text-sm mb-2">Cancel this order?</h4>
                     <textarea
                       value={cancelReason}
                       onChange={(e) => setCancelReason(e.target.value)}
                       placeholder="Reason for cancellation..."
                       rows={2}
-                      className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm outline-none focus:border-red-400 resize-none mb-3"
+                      className="w-full px-3 py-2 ui-input rounded-lg text-sm resize-none mb-3"
                     />
                     <div className="flex gap-2">
                       <button onClick={() => setShowCancelForm(false)} className="flex-1 py-2 text-gray-600 font-medium rounded-lg hover:bg-gray-100 text-sm">

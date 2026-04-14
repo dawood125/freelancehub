@@ -120,7 +120,7 @@ const CheckoutForm = ({ gig, packageType }) => {
         {/* Back link */}
         <Link
           to={`/gigs/${gig._id}`}
-          className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-green-600 transition-colors mb-6"
+          className="inline-flex items-center gap-2 text-sm text-[color:var(--text-2)] hover:text-[color:var(--accent)] transition-colors mb-6"
         >
           <FiArrowLeft className="w-4 h-4" />
           Back to gig
@@ -129,7 +129,7 @@ const CheckoutForm = ({ gig, packageType }) => {
         <motion.h1
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-8"
+          className="text-2xl sm:text-3xl font-extrabold text-[color:var(--text-1)] mb-8"
         >
           Checkout
         </motion.h1>
@@ -143,8 +143,8 @@ const CheckoutForm = ({ gig, packageType }) => {
             className="lg:col-span-3 space-y-6"
           >
             {/* Gig Summary Card */}
-            <div className="bg-white rounded-2xl border border-gray-100 p-6">
-              <h2 className="text-lg font-bold text-gray-900 mb-4">
+            <div className="ui-card p-6">
+              <h2 className="text-lg font-bold text-[color:var(--text-1)] mb-4">
                 Order Summary
               </h2>
 
@@ -161,33 +161,33 @@ const CheckoutForm = ({ gig, packageType }) => {
                   </div>
                 )}
                 <div className="min-w-0">
-                  <h3 className="font-semibold text-gray-900 text-sm leading-snug line-clamp-2">
+                  <h3 className="font-semibold text-[color:var(--text-1)] text-sm leading-snug line-clamp-2">
                     {gig.title}
                   </h3>
-                  <p className="text-xs text-gray-500 mt-1">
+                  <p className="text-xs text-[color:var(--text-2)] mt-1">
                     by {seller.name || "Seller"}
                   </p>
                 </div>
               </div>
 
               {/* Package details */}
-              <div className="bg-gray-50 rounded-xl p-4 space-y-3">
+              <div className="bg-[color:var(--surface-soft)] rounded-xl p-4 space-y-3 border border-[color:var(--line)]">
                 <div className="flex justify-between items-center">
-                  <span className="text-sm font-bold text-gray-900 capitalize">
+                  <span className="text-sm font-bold text-[color:var(--text-1)] capitalize">
                     {packageType} Package
                   </span>
-                  <span className="text-sm font-extrabold text-gray-900">
+                  <span className="text-sm font-extrabold text-[color:var(--text-1)]">
                     ${subtotal.toFixed(2)}
                   </span>
                 </div>
 
                 {selectedPkg.description && (
-                  <p className="text-xs text-gray-500 leading-relaxed">
+                  <p className="text-xs text-[color:var(--text-2)] leading-relaxed">
                     {selectedPkg.description}
                   </p>
                 )}
 
-                <div className="flex items-center gap-4 text-xs text-gray-500">
+                <div className="flex items-center gap-4 text-xs text-[color:var(--text-2)]">
                   <span className="flex items-center gap-1">
                     <FiClock className="w-3.5 h-3.5" />
                     {selectedPkg.deliveryDays}-day delivery
@@ -206,7 +206,7 @@ const CheckoutForm = ({ gig, packageType }) => {
                     {selectedPkg.features.map((feature, idx) => (
                       <div key={idx} className="flex items-center gap-2">
                         <FiCheck className="w-3.5 h-3.5 text-green-500 flex-shrink-0" />
-                        <span className="text-xs text-gray-600">{feature}</span>
+                        <span className="text-xs text-[color:var(--text-2)]">{feature}</span>
                       </div>
                     ))}
                   </div>
@@ -215,31 +215,31 @@ const CheckoutForm = ({ gig, packageType }) => {
             </div>
 
             {/* Pricing Breakdown */}
-            <div className="bg-white rounded-2xl border border-gray-100 p-6">
-              <h2 className="text-lg font-bold text-gray-900 mb-4">
+            <div className="ui-card p-6">
+              <h2 className="text-lg font-bold text-[color:var(--text-1)] mb-4">
                 Price Details
               </h2>
 
               <div className="space-y-3">
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">
+                  <span className="text-[color:var(--text-2)]">
                     Subtotal ({packageType} package)
                   </span>
-                  <span className="text-gray-900 font-medium">
+                  <span className="text-[color:var(--text-1)] font-medium">
                     ${subtotal.toFixed(2)}
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Service fee (10%)</span>
-                  <span className="text-gray-900 font-medium">
+                  <span className="text-[color:var(--text-2)]">Service fee (10%)</span>
+                  <span className="text-[color:var(--text-1)] font-medium">
                     ${serviceFee.toFixed(2)}
                   </span>
                 </div>
-                <div className="border-t border-gray-100 pt-3 flex justify-between">
-                  <span className="text-base font-bold text-gray-900">
+                <div className="border-t border-[color:var(--line)] pt-3 flex justify-between">
+                  <span className="text-base font-bold text-[color:var(--text-1)]">
                     Total
                   </span>
-                  <span className="text-base font-extrabold text-gray-900">
+                  <span className="text-base font-extrabold text-[color:var(--text-1)]">
                     ${total.toFixed(2)}
                   </span>
                 </div>
@@ -254,20 +254,20 @@ const CheckoutForm = ({ gig, packageType }) => {
             transition={{ delay: 0.1 }}
             className="lg:col-span-2"
           >
-            <div className="bg-white rounded-2xl border border-gray-100 p-6 lg:sticky lg:top-24">
+            <div className="glass-card rounded-2xl p-6 lg:sticky lg:top-24">
               <div className="flex items-center gap-2 mb-5">
                 <FiLock className="w-5 h-5 text-green-600" />
-                <h2 className="text-lg font-bold text-gray-900">
+                <h2 className="text-lg font-bold text-[color:var(--text-1)]">
                   Payment Details
                 </h2>
               </div>
 
               {/* Stripe Card Element */}
               <div className="mb-5">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-[color:var(--text-2)] mb-2">
                   Card Information
                 </label>
-                <div className="border border-gray-200 rounded-xl p-4 focus-within:border-green-500 focus-within:ring-1 focus-within:ring-green-500 transition-all">
+                <div className="border border-[color:var(--line)] bg-[color:var(--surface-soft)] rounded-xl p-4 focus-within:border-[color:var(--accent)] focus-within:ring-1 focus-within:ring-[color:var(--accent)] transition-all">
                   <CardElement
                     options={CARD_ELEMENT_OPTIONS}
                     onChange={(e) => setCardComplete(e.complete)}
@@ -295,7 +295,7 @@ const CheckoutForm = ({ gig, packageType }) => {
               </button>
 
               {/* Security notice */}
-              <div className="mt-4 flex items-start gap-2 text-xs text-gray-400">
+              <div className="mt-4 flex items-start gap-2 text-xs text-[color:var(--text-muted)]">
                 <FiShield className="w-4 h-4 flex-shrink-0 mt-0.5" />
                 <p>
                   Your payment is secured by Stripe. We never store your card
@@ -379,7 +379,7 @@ const CheckoutPage = () => {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="w-8 h-8 border-3 border-green-500/30 border-t-green-500 rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-gray-500 text-sm">Loading checkout...</p>
+          <p className="text-[color:var(--text-2)] text-sm">Loading checkout...</p>
         </div>
       </div>
     );
@@ -390,12 +390,12 @@ const CheckoutPage = () => {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <span className="text-6xl block mb-4">😕</span>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+          <h2 className="text-2xl font-bold text-[color:var(--text-1)] mb-2">
             Something went wrong
           </h2>
           <Link
             to="/gigs"
-            className="text-green-600 font-medium hover:text-green-700"
+            className="text-[color:var(--accent)] font-medium hover:opacity-80"
           >
             ← Browse services
           </Link>
@@ -405,7 +405,7 @@ const CheckoutPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-[color:var(--bg)]">
       <Elements stripe={stripePromise}>
         <CheckoutForm gig={gig} packageType={packageType} />
       </Elements>

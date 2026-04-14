@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Berkeley+Mono&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "tertiary-fixed-dim": "#c3d000",
+            "surface-tint": "#c0c1ff",
+            "inverse-primary": "#494bd6",
+            "on-tertiary-fixed": "#1b1d00",
+            "surface-container-highest": "#313540",
+            "surface-container-high": "#262a35",
+            "secondary-fixed": "#e9ddff",
+            "inverse-surface": "#dfe2f1",
+            "tertiary-fixed": "#dfed1a",
+            "tertiary-container": "#8e9800",
+            "on-tertiary": "#2f3300",
+            "on-error": "#690005",
+            "primary-container": "#8083ff",
+            "on-surface-variant": "#c7c4d7",
+            "primary-fixed": "#e1e0ff",
+            "outline": "#908fa0",
+            "on-error-container": "#ffdad6",
+            "primary": "#c0c1ff",
+            "on-primary-fixed-variant": "#2f2ebe",
+            "on-secondary-fixed": "#23005c",
+            "background": "#0f131d",
+            "error-container": "#93000a",
+            "primary-fixed-dim": "#c0c1ff",
+            "on-surface": "#dfe2f1",
+            "error": "#ffb4ab",
+            "surface": "#0f131d",
+            "on-tertiary-container": "#292c00",
+            "secondary-fixed-dim": "#d0bcff",
+            "secondary-container": "#571bc1",
+            "tertiary": "#c3d000",
+            "on-primary-container": "#0d0096",
+            "inverse-on-surface": "#2c303b",
+            "on-primary": "#1000a9",
+            "on-background": "#dfe2f1",
+            "surface-container-low": "#171b26",
+            "surface-dim": "#0f131d",
+            "surface-container-lowest": "#0a0e18",
+            "surface-container": "#1c1f2a",
+            "surface-bright": "#353944",
+            "surface-variant": "#313540",
+            "on-tertiary-fixed-variant": "#454a00",
+            "outline-variant": "#464554",
+            "on-secondary": "#3c0091",
+            "on-primary-fixed": "#07006c",
+            "on-secondary-container": "#c4abff",
+            "on-secondary-fixed-variant": "#5516be",
+            "secondary": "#d0bcff"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "fontFamily": {
+            "headline": ["Inter"],
+            "body": ["Inter"],
+            "label": ["Inter"]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    .glass-card {
+      background: rgba(49, 53, 64, 0.6);
+      backdrop-filter: blur(12px);
+    }
+    .text-glow {
+      text-shadow: 0 0 12px rgba(192, 193, 255, 0.3);
+    }
+    body {
+      background-color: #0f131d;
+    }
+  </style>
+</head>
+<body class="font-body text-on-surface">
+<!-- TopNavBar Implementation -->
+<header class="fixed top-0 w-full z-50 bg-[#0f131d]/80 backdrop-blur-xl border-b border-white/5 shadow-[0_8px_32px_0_rgba(192,193,255,0.04)]">
+<nav class="flex items-center justify-between px-6 h-16 w-full max-w-[1440px] mx-auto">
+<div class="flex items-center gap-8">
+<span class="text-xl font-bold tracking-tighter text-slate-100 font-headline">FreelanceHub</span>
+<!-- Search Bar: on_left logic from JSON -->
+<div class="hidden lg:flex items-center bg-surface-container-high rounded-lg px-4 py-1.5 w-96 border border-outline-variant/20">
+<span class="material-symbols-outlined text-outline text-sm mr-2">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm text-on-surface w-full placeholder:text-on-surface-variant/50" placeholder="What service are you looking for?" type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-x-6">
+<div class="hidden md:flex items-center gap-x-6 font-['Inter'] font-semibold tracking-tight text-sm">
+<a class="text-indigo-300 border-b-2 border-indigo-500 pb-1" href="#">Discover</a>
+<a class="text-slate-400 hover:text-slate-200 transition-colors" href="#">Orders</a>
+<a class="text-slate-400 hover:text-slate-200 transition-colors" href="#">Messages</a>
+<a class="text-slate-400 hover:text-slate-200 transition-colors" href="#">Wallet</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-slate-400 hover:text-slate-200 font-semibold text-sm transition-all active:scale-95 duration-150">Sign In</button>
+<button class="bg-gradient-to-br from-primary to-secondary text-on-primary font-bold px-5 py-2 rounded-lg text-sm transition-all hover:brightness-110 active:scale-95 duration-150">Join</button>
+</div>
+</div>
+</nav>
+</header>
+<div class="pt-16 flex min-h-screen">
+<!-- SideNavBar Implementation (Filters) -->
+<aside class="hidden md:flex flex-col p-6 gap-y-4 h-screen w-72 sticky top-16 left-0 bg-[#171b26] tonal-shift overflow-y-auto">
+<div class="mb-6">
+<div class="flex items-center justify-between mb-1">
+<h2 class="text-on-surface font-headline font-bold text-lg">Filters</h2>
+<button class="font-['Berkeley_Mono'] text-[10px] uppercase tracking-widest text-primary hover:underline transition-all">Clear All</button>
+</div>
+<p class="text-on-surface-variant text-xs">Refine your search results</p>
+</div>
+<!-- Filter Items from JSON tab_labels & tab_icons -->
+<div class="space-y-2">
+<div class="group cursor-pointer bg-indigo-500/10 text-indigo-300 border-r-2 border-indigo-500 p-3 rounded-l-md flex items-center gap-3 transition-transform hover:translate-x-1">
+<span class="material-symbols-outlined text-lg" data-icon="payments">payments</span>
+<span class="font-['Berkeley_Mono'] text-xs uppercase tracking-widest">Budget</span>
+<span class="material-symbols-outlined ml-auto text-xs">expand_more</span>
+</div>
+<div class="p-4 bg-surface-container/30 rounded-lg mb-4">
+<div class="flex justify-between text-[10px] font-['Berkeley_Mono'] text-outline mb-2">
+<span>$5</span>
+<span>$10,000+</span>
+</div>
+<div class="h-1 bg-surface-container-highest rounded-full relative">
+<div class="absolute inset-y-0 left-0 right-1/4 bg-primary rounded-full"></div>
+<div class="absolute -top-1.5 left-0 w-4 h-4 bg-primary rounded-full border-2 border-surface shadow-lg"></div>
+<div class="absolute -top-1.5 right-1/4 w-4 h-4 bg-primary rounded-full border-2 border-surface shadow-lg"></div>
+</div>
+</div>
+<div class="group cursor-pointer text-slate-500 hover:bg-white/5 p-3 rounded-md flex items-center gap-3 transition-transform hover:translate-x-1">
+<span class="material-symbols-outlined text-lg" data-icon="schedule">schedule</span>
+<span class="font-['Berkeley_Mono'] text-xs uppercase tracking-widest">Delivery Time</span>
+<span class="material-symbols-outlined ml-auto text-xs">chevron_right</span>
+</div>
+<div class="group cursor-pointer text-slate-500 hover:bg-white/5 p-3 rounded-md flex items-center gap-3 transition-transform hover:translate-x-1">
+<span class="material-symbols-outlined text-lg" data-icon="verified_user">verified_user</span>
+<span class="font-['Berkeley_Mono'] text-xs uppercase tracking-widest">Seller Level</span>
+<span class="material-symbols-outlined ml-auto text-xs">chevron_right</span>
+</div>
+<div class="group cursor-pointer text-slate-500 hover:bg-white/5 p-3 rounded-md flex items-center gap-3 transition-transform hover:translate-x-1">
+<span class="material-symbols-outlined text-lg" data-icon="star">star</span>
+<span class="font-['Berkeley_Mono'] text-xs uppercase tracking-widest">Rating</span>
+<span class="material-symbols-outlined ml-auto text-xs">chevron_right</span>
+</div>
+</div>
+<div class="mt-auto p-4 glass-card rounded-xl border border-outline-variant/10">
+<p class="text-xs text-on-surface-variant leading-relaxed italic">
+          "The best freelancers I've ever hired were found through these precision filters."
+        </p>
+<div class="mt-2 flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-primary-container"></div>
+<span class="font-['Berkeley_Mono'] text-[10px] text-primary">CEO @ FutureTech</span>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 p-8 overflow-y-auto">
+<!-- Breadcrumbs & Header -->
+<nav class="flex items-center gap-2 text-xs text-on-surface-variant font-['Berkeley_Mono'] mb-6 uppercase tracking-widest">
+<a class="hover:text-primary" href="#">Marketplace</a>
+<span class="material-symbols-outlined text-[10px]">chevron_right</span>
+<a class="hover:text-primary" href="#">Development</a>
+<span class="material-symbols-outlined text-[10px]">chevron_right</span>
+<span class="text-on-surface">Web Applications</span>
+</nav>
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
+<div>
+<h1 class="text-4xl font-extrabold tracking-tighter text-on-surface mb-2 font-headline">Web Applications</h1>
+<p class="text-on-surface-variant max-w-xl">Find top-tier developers to build high-performance, scalable web solutions with the precision of ethereal execution.</p>
+</div>
+<div class="flex items-center gap-4 bg-surface-container px-4 py-2 rounded-lg border border-outline-variant/10">
+<span class="text-[10px] font-['Berkeley_Mono'] uppercase tracking-widest text-outline">Sort By:</span>
+<select class="bg-transparent border-none text-xs font-semibold text-primary focus:ring-0 p-0 pr-6">
+<option>Best Selling</option>
+<option>Newest Arrivals</option>
+<option>Price: Low to High</option>
+</select>
+</div>
+</div>
+<div class="mb-6 flex items-center justify-between">
+<span class="font-['Berkeley_Mono'] text-xs text-on-surface-variant">1,240 <span class="text-outline">Results found</span></span>
+<div class="flex gap-2">
+<span class="px-3 py-1 rounded-full bg-tertiary-fixed-dim/10 text-tertiary-fixed-dim text-[10px] font-bold border border-tertiary-fixed-dim/20">AVAILABLE NOW</span>
+</div>
+</div>
+<!-- Bento Grid Layout for Gig Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<!-- Gig Card 1 -->
+<article class="group relative bg-surface-container-low rounded-xl overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(99,102,241,0.15)]">
+<div class="relative aspect-video overflow-hidden">
+<img alt="Web dashboard design" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="high-end minimalist software dashboard UI design on a dark screen with vibrant indigo and purple accents" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCNXGUI8tEw4TSYJKKkjP0ZSH-0mh4ajIpMdEKt-8fo5y-3aq9GevrAaXA4l1gFzOm_xekVl0v9UC_oA18Vg7awNl75xQLVGxDrebyFlZaRDPUL6gaM8UsMoGm2IylmGL0jnk1lXzRlpgFq3smFG3SWIdRVERC_N_aPMuQ4UZNn_f0jlNxa2otbrNHPyzB5xlN4w7PPfFQxF-lqUVor6ruT53y181uD28vX9GdMmME9Ov0w2yrFabhBfJqzwkYWxBTIuS0uqoDiVbs"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background/90 to-transparent"></div>
+<button class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full glass-card text-on-surface hover:text-red-400 transition-colors">
+<span class="material-symbols-outlined text-sm">favorite</span>
+</button>
+<div class="absolute bottom-4 left-4 flex items-center gap-2">
+<div class="relative">
+<img alt="Seller Avatar" class="w-8 h-8 rounded-full border border-primary/30" data-alt="professional portrait of a confident male software engineer in a modern workspace with soft lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBXaz5BjreWvTl2AavhtmwlGSkn2guOdYF1YDSC-QRbS46qOGcruyxq6nlT1wBy2Jto-PDBWHPpZ1_w5UmmWvYK6WN36dIyFOhBkthDJ1DBY7mYUtbflal_jz98eikc5TZ5OA4XleNKtjeiOW3IM4WsWxUUrXeAs52UWhSwxMGaIuRSXqQOxvnFazMsKLxmoOTIjeIts4mwQt7TLsdXfnHNroNrmN94TXr1zTHcnKNGuGmfH5cT1emFaJa9mgcpYa9HQYWqvRQ8rAE"/>
+<div class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-tertiary rounded-full border-2 border-surface"></div>
+</div>
+<div class="flex flex-col">
+<span class="text-[10px] font-bold text-on-surface leading-none">Alex Rivera</span>
+<span class="text-[8px] font-['Berkeley_Mono'] text-primary uppercase">Top Rated</span>
+</div>
+</div>
+</div>
+<div class="p-5">
+<h3 class="text-sm font-semibold text-on-surface line-clamp-2 mb-3 leading-snug group-hover:text-primary transition-colors">I will design and develop a high-performance SaaS dashboard with Next.js</h3>
+<div class="flex items-center gap-1 mb-4">
+<span class="material-symbols-outlined text-tertiary text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-xs font-bold text-on-surface">4.9</span>
+<span class="text-[10px] text-on-surface-variant font-['Berkeley_Mono']">(245)</span>
+</div>
+<div class="flex items-center justify-between pt-4 border-t border-white/5">
+<span class="material-symbols-outlined text-outline text-lg">more_horiz</span>
+<div class="text-right">
+<p class="text-[10px] font-['Berkeley_Mono'] text-on-surface-variant uppercase tracking-tighter">Starting At</p>
+<p class="text-lg font-bold text-on-surface">$1,200</p>
+</div>
+</div>
+</div>
+</article>
+<!-- Gig Card 2 -->
+<article class="group relative bg-surface-container-low rounded-xl overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(99,102,241,0.15)]">
+<div class="relative aspect-video overflow-hidden">
+<img alt="Code editor" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="close-up of elegant code on a dark screen with ethereal glowing synthwave colors and soft bokeh" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAlHqmDLpABRHyrZbWpkbEermO16bKn83elLYY5pSS5Bm_XdnwT4rom1fKBWbEhXYFoyzkL9cHaYT2DoXjYNNLjefCskEc7gYSVQE-Df-qU3ilI7Kc_Lj87s-WVekPD4VmT7Xj0Az9tHxpbfyAilSIbjexlL0Kqs7kBVW5ytmrETjq-RhQIxo0ti0k2I__pbqKxfRTJy9Zhc-mVjrnkX8C8WyObNDaF1udDJlpwsvVu45HY_Sal3rp7XpZmIsXdcd08e6X_AZJzIO0"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background/90 to-transparent"></div>
+<button class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full glass-card text-on-surface hover:text-red-400 transition-colors">
+<span class="material-symbols-outlined text-sm">favorite</span>
+</button>
+<div class="absolute bottom-4 left-4 flex items-center gap-2">
+<div class="relative">
+<img alt="Seller Avatar" class="w-8 h-8 rounded-full border border-primary/30" data-alt="professional portrait of a female creative tech lead with natural lighting and blurred office background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCl-wFLF3Kg_g0yM8tBaIuEY8bXyQmag5wxX9FyaXh-ojV5Kxu2Qi-PIAwYQbWZYGBZBqGZkORmbywWC2mew6863ue5K0dFogdFmXUP9XU_2zhVhVjESAh9tUJdkD-wnE8f5CpnDVbsV50WATXpEhP5DiTuXZlPxcskZNTQ28RqCIYfZ-I_Xsmw0FLlUXRyYgQpZvEpPTz4SZhxo1XmQF1yjhJhaMbvkxYPx7_koJNNnjP15JvhYUADc4jXyUtmXFjLvIeIXw2WxYk"/>
+<div class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-tertiary rounded-full border-2 border-surface"></div>
+</div>
+<div class="flex flex-col">
+<span class="text-[10px] font-bold text-on-surface leading-none">Sarah Chen</span>
+<span class="text-[8px] font-['Berkeley_Mono'] text-primary uppercase">Level 2 Seller</span>
+</div>
+</div>
+</div>
+<div class="p-5">
+<h3 class="text-sm font-semibold text-on-surface line-clamp-2 mb-3 leading-snug group-hover:text-primary transition-colors">I will build custom API integrations and backend architecture using Node.js</h3>
+<div class="flex items-center gap-1 mb-4">
+<span class="material-symbols-outlined text-tertiary text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-xs font-bold text-on-surface">5.0</span>
+<span class="text-[10px] text-on-surface-variant font-['Berkeley_Mono']">(112)</span>
+</div>
+<div class="flex items-center justify-between pt-4 border-t border-white/5">
+<span class="material-symbols-outlined text-outline text-lg">more_horiz</span>
+<div class="text-right">
+<p class="text-[10px] font-['Berkeley_Mono'] text-on-surface-variant uppercase tracking-tighter">Starting At</p>
+<p class="text-lg font-bold text-on-surface">$850</p>
+</div>
+</div>
+</div>
+</article>
+<!-- Gig Card 3 -->
+<article class="group relative bg-surface-container-low rounded-xl overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(99,102,241,0.15)]">
+<div class="relative aspect-video overflow-hidden">
+<img alt="E-commerce site" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="ultra-modern luxury fashion e-commerce website layout with clean typography and high-end aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAlBTpKQ8rghfoATpK4e1Mt_1u48i1vI8Rf0DovkQ59yHoUF2I1NXlynF2PiUWgj7fjQM9NxBsuzrls2vOh_ZyTOnb4OhITGC0AczLHhuzhfn2DfPVwspm2JlqFI1vwJKeaqsNP80nTwiQhTZHXTrtWco8Uj0eIZuYP1fNKnkvPxg51XZBAsikPUKZkcBCONOiOGDgO8GYMVCWPQ0k-sD2u6GPXbJGcFygZa-zVlIk26EWwcf9sW7xSNpRm4dopXYXJHwO8xooiQgM"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background/90 to-transparent"></div>
+<button class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full glass-card text-on-surface hover:text-red-400 transition-colors">
+<span class="material-symbols-outlined text-sm">favorite</span>
+</button>
+<div class="absolute bottom-4 left-4 flex items-center gap-2">
+<div class="relative">
+<img alt="Seller Avatar" class="w-8 h-8 rounded-full border border-primary/30" data-alt="studio headshot of a friendly male developer wearing glasses with neutral grey background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDTK1yGMleprwEwbbVXJQpj1qjsMtXHxqnj6FSeWvmn19tuPjFo_2nuNklR5SLKVUrpKhnwOr8o3nnD32Heue0KVvXSQKDuBMT9cHDPjY52_3LifOiGM1Upz4dHdK8lrtA8810J5ySgvdz6bvxz9qJJytFgZ-9SjVB3c4dB9hi1QHQ6-xCa9EDVnrnnaShus9rpUhj6Z7xiropIOwRt8xpuEqT3Dai27CVFx2z564Mhtsji5zGZxlMXraw_LqxY3sHPievKdWP4d1M"/>
+</div>
+<div class="flex flex-col">
+<span class="text-[10px] font-bold text-on-surface leading-none">Marcus Thorne</span>
+<span class="text-[8px] font-['Berkeley_Mono'] text-primary uppercase">Pro Verified</span>
+</div>
+</div>
+</div>
+<div class="p-5">
+<h3 class="text-sm font-semibold text-on-surface line-clamp-2 mb-3 leading-snug group-hover:text-primary transition-colors">I will create a bespoke headless e-commerce store with Shopify and React</h3>
+<div class="flex items-center gap-1 mb-4">
+<span class="material-symbols-outlined text-tertiary text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-xs font-bold text-on-surface">4.8</span>
+<span class="text-[10px] text-on-surface-variant font-['Berkeley_Mono']">(89)</span>
+</div>
+<div class="flex items-center justify-between pt-4 border-t border-white/5">
+<span class="material-symbols-outlined text-outline text-lg">more_horiz</span>
+<div class="text-right">
+<p class="text-[10px] font-['Berkeley_Mono'] text-on-surface-variant uppercase tracking-tighter">Starting At</p>
+<p class="text-lg font-bold text-on-surface">$2,400</p>
+</div>
+</div>
+</div>
+</article>
+<!-- Gig Card 4 -->
+<article class="group relative bg-surface-container-low rounded-xl overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(99,102,241,0.15)]">
+<div class="relative aspect-video overflow-hidden">
+<img alt="Mobile app design" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="sleek mobile app interface for a fitness tracker showing dynamic data visualizations and dark mode theme" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFWRpflpoGO1MHt85_rEmmWbKz8eu4PsvYwwhiM2SZz2ZBNy_ZXPnWiZ_EWvn14ZEDd7TICVwBPtV0h7d7DZLTzKMrab4xJTmSqpjcjfqavQETrYJieh1Rn2kqi-dVLffRm2kEQ-irxK4-8nRPzUfLDPj-PmsViMXKEHz8Sorfa2meKbGYNZ0XS7fbeeTlihfOBLUIitMGd-MzGOj2F_OmNw-eDwhRb0wh7IWMPtB9zCRqmBfd5RxBvsFoc0O5-J1im_1BP6OKD5Q"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background/90 to-transparent"></div>
+<button class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full glass-card text-on-surface hover:text-red-400 transition-colors">
+<span class="material-symbols-outlined text-sm">favorite</span>
+</button>
+<div class="absolute bottom-4 left-4 flex items-center gap-2">
+<div class="relative">
+<img alt="Seller Avatar" class="w-8 h-8 rounded-full border border-primary/30" data-alt="creative female professional in a modern light-filled studio looking towards the camera" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBn8zBgI-iXfsFhpr0DQg01H0H7ORz65XX_1WLWEVwhWCYnaBgS3z1dcj8hZ3tMTSD-bO1vlmjrzxDqzvKkGV7D8UzLz3qh62ZgoMy0cFIkqL_FucuV-cHC0EyJ_VA-k_vp5tErz0yczF-0v9vsHpiMkcSS5bG0bHd3EZV9LEkFfVbTVqTT9pIJrAtSvHmSySzePGpvA50ybnb1h03TIpQyxChD6nvsOVZ6qjWSLRCZwBserjaPfjFKIi8V5oSlJHsEfnzJozucgD0"/>
+</div>
+<div class="flex flex-col">
+<span class="text-[10px] font-bold text-on-surface leading-none">Elena Vos</span>
+<span class="text-[8px] font-['Berkeley_Mono'] text-primary uppercase">Level 1 Seller</span>
+</div>
+</div>
+</div>
+<div class="p-5">
+<h3 class="text-sm font-semibold text-on-surface line-clamp-2 mb-3 leading-snug group-hover:text-primary transition-colors">I will develop a cross-platform mobile app using Flutter for iOS and Android</h3>
+<div class="flex items-center gap-1 mb-4">
+<span class="material-symbols-outlined text-tertiary text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-xs font-bold text-on-surface">4.9</span>
+<span class="text-[10px] text-on-surface-variant font-['Berkeley_Mono']">(56)</span>
+</div>
+<div class="flex items-center justify-between pt-4 border-t border-white/5">
+<span class="material-symbols-outlined text-outline text-lg">more_horiz</span>
+<div class="text-right">
+<p class="text-[10px] font-['Berkeley_Mono'] text-on-surface-variant uppercase tracking-tighter">Starting At</p>
+<p class="text-lg font-bold text-on-surface">$1,500</p>
+</div>
+</div>
+</div>
+</article>
+<!-- Gig Card 5 -->
+<article class="group relative bg-surface-container-low rounded-xl overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(99,102,241,0.15)]">
+<div class="relative aspect-video overflow-hidden">
+<img alt="Server room" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="cinematic view of data center server racks with blue and magenta ambient lighting and glowing tech indicators" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD2Sh2RDqx0EkHH2WxpPPY-JgWxWFEkEqfbd70WVe_XWp9PN1ujNJbRGcgYeWYIj2sxHSLK3WbL0Eyx8RJDMKBUmLVD1E67NgRVUI39b7uE1GxBve9FX9xd6o0OMujmC7egut2NS0c6tyFfsjzp-Alfur5gaX8guzPimJEqe1hrwT7RmKY2-NwzQbBq_d-pC-jtBtZhXjlsrpV_BR-dm2Mr5qkrss6GDC_KINjX3BWRv5oyM_WM6tjw9B8XFB2XXSOogPpFFGK_3jg"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background/90 to-transparent"></div>
+<button class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full glass-card text-on-surface hover:text-red-400 transition-colors">
+<span class="material-symbols-outlined text-sm">favorite</span>
+</button>
+<div class="absolute bottom-4 left-4 flex items-center gap-2">
+<div class="relative">
+<img alt="Seller Avatar" class="w-8 h-8 rounded-full border border-primary/30" data-alt="professional male profile photo with warm studio lighting and neutral background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBmcq1QwBPDgCJ8jTlhqga_I-FwSxN_H-P9FAUXOpfck8h73LFpyrBeFsuYQUGX6Ms5c51xzw9FeeHxheMS1f3wwyz22tpfvkxNLV49uYvQKC7w6wf3VGGpf9Kgb63nDVzcDzFft-Vc-_teOWg-YurlndlKaP-s9RdVHvgZL39Tu1Q14JQLsK5DAfHV2uOApWGAkbYHJmH3CyMEb7uOG0qgQcWDvxvnec6qA081hFBeB0aCNBXfsdodUvNDSc-BN2u59iwNYPfgejI"/>
+</div>
+<div class="flex flex-col">
+<span class="text-[10px] font-bold text-on-surface leading-none">James Miller</span>
+<span class="text-[8px] font-['Berkeley_Mono'] text-primary uppercase">Expert</span>
+</div>
+</div>
+</div>
+<div class="p-5">
+<h3 class="text-sm font-semibold text-on-surface line-clamp-2 mb-3 leading-snug group-hover:text-primary transition-colors">I will optimize your cloud infrastructure for maximum scalability and speed</h3>
+<div class="flex items-center gap-1 mb-4">
+<span class="material-symbols-outlined text-tertiary text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-xs font-bold text-on-surface">5.0</span>
+<span class="text-[10px] text-on-surface-variant font-['Berkeley_Mono']">(34)</span>
+</div>
+<div class="flex items-center justify-between pt-4 border-t border-white/5">
+<span class="material-symbols-outlined text-outline text-lg">more_horiz</span>
+<div class="text-right">
+<p class="text-[10px] font-['Berkeley_Mono'] text-on-surface-variant uppercase tracking-tighter">Starting At</p>
+<p class="text-lg font-bold text-on-surface">$500</p>
+</div>
+</div>
+</div>
+</article>
+<!-- Gig Card 6 -->
+<article class="group relative bg-surface-container-low rounded-xl overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(99,102,241,0.15)]">
+<div class="relative aspect-video overflow-hidden">
+<img alt="Data analysis" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="abstract data visualization with glowing points of light and futuristic architectural lines on a dark background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDtFC-Ir9TT5zwWwtHEW4hynrSeoxsiTvmjKgr135TAzUx_9WXgvDTYtIybOFqkE33svI3rT6ZPxWQOna5GTk2JXjB5hUg6Dq6OTlY3pK2xFVL-I_flxECDcYsnM0yV2znaZi3JFkCNs3ORPSD5o1LL1hCCnv8hynBFkk3_pVZzw3iX3J0557wAG_wRzZYYyf7nUlGCaAtmXisNVJSn05-Bg1O9Co4DX9QIqmJaq60jqDujlOYZ1Atlz4EVMAbKKBGigIJhfUY87gk"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background/90 to-transparent"></div>
+<button class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full glass-card text-on-surface hover:text-red-400 transition-colors">
+<span class="material-symbols-outlined text-sm">favorite</span>
+</button>
+<div class="absolute bottom-4 left-4 flex items-center gap-2">
+<div class="relative">
+<img alt="Seller Avatar" class="w-8 h-8 rounded-full border border-primary/30" data-alt="portrait of a focused professional woman in a tech environment with soft directional lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6sFLyfXySnN6QEAFOK5Lan9q7Z1S4xs16AVr8cD4h0joOU-2XU8JVfhqwkT4s5jQUiSYuX26vHVOogJ-HnR_mnPhUGKWk_WRmvMOYGEwZ_ch-72hU42qJfQA4y6OgZhAeMEOZUn9jNya-qQ3HP0EhzozmDji2tfTgGIzhR9slGP8i37TTWqZas9bD9tP6sEW5M33kd3Q7LUuwfHwWVd5YHKJyqTkAt8MCWsUXmxoB2OOCspl5BZV3td1ErOVgJ3b2piDuc1z-oRU"/>
+<div class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-tertiary rounded-full border-2 border-surface"></div>
+</div>
+<div class="flex flex-col">
+<span class="text-[10px] font-bold text-on-surface leading-none">Linda Park</span>
+<span class="text-[8px] font-['Berkeley_Mono'] text-primary uppercase">Top Rated</span>
+</div>
+</div>
+</div>
+<div class="p-5">
+<h3 class="text-sm font-semibold text-on-surface line-clamp-2 mb-3 leading-snug group-hover:text-primary transition-colors">I will build an AI-powered data visualization tool for your business intelligence</h3>
+<div class="flex items-center gap-1 mb-4">
+<span class="material-symbols-outlined text-tertiary text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-xs font-bold text-on-surface">4.9</span>
+<span class="text-[10px] text-on-surface-variant font-['Berkeley_Mono']">(192)</span>
+</div>
+<div class="flex items-center justify-between pt-4 border-t border-white/5">
+<span class="material-symbols-outlined text-outline text-lg">more_horiz</span>
+<div class="text-right">
+<p class="text-[10px] font-['Berkeley_Mono'] text-on-surface-variant uppercase tracking-tighter">Starting At</p>
+<p class="text-lg font-bold text-on-surface">$2,100</p>
+</div>
+</div>
+</div>
+</article>
+</div>
+<!-- Pagination / Load More -->
+<div class="mt-16 flex flex-col items-center">
+<button class="bg-surface-container-high hover:bg-surface-container-highest border border-outline-variant/20 text-on-surface font-semibold px-12 py-4 rounded-xl transition-all active:scale-95">
+          Load more services
+        </button>
+<p class="mt-6 text-[10px] font-['Berkeley_Mono'] text-outline uppercase tracking-widest">Showing 6 of 1,240 results</p>
+</div>
+</main>
+</div>
+<!-- BottomNavBar suppression logic: Only show for top-level on mobile -->
+<div class="md:hidden fixed bottom-0 left-0 right-0 bg-surface/90 backdrop-blur-xl border-t border-white/5 px-6 py-3 flex justify-between items-center z-50">
+<button class="flex flex-col items-center gap-1 text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">explore</span>
+<span class="text-[10px] font-bold">Discover</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-on-surface-variant hover:text-on-surface">
+<span class="material-symbols-outlined">assignment</span>
+<span class="text-[10px]">Orders</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-on-surface-variant hover:text-on-surface">
+<span class="material-symbols-outlined">chat_bubble</span>
+<span class="text-[10px]">Messages</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-on-surface-variant hover:text-on-surface">
+<span class="material-symbols-outlined">account_balance_wallet</span>
+<span class="text-[10px]">Wallet</span>
+</button>
+</div>
+</body></html>

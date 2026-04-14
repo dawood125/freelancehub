@@ -372,7 +372,7 @@ const CreateGigPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 py-8">
+    <div className="min-h-screen bg-[color:var(--bg)] py-10">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* ===== HEADER ===== */}
@@ -381,8 +381,8 @@ const CreateGigPage = () => {
           animate={{ opacity: 1, y: 0 }}
           className="mb-8"
         >
-          <h1 className="text-3xl font-extrabold text-gray-900">Create a New Gig</h1>
-          <p className="text-gray-500 mt-1">Fill in the details to list your service</p>
+          <h1 className="text-3xl font-extrabold text-[color:var(--text-1)]">Create a New Gig</h1>
+          <p className="text-[color:var(--text-2)] mt-1">Fill in the details to list your service</p>
         </motion.div>
 
         {/* ===== PROGRESS BAR ===== */}
@@ -390,7 +390,7 @@ const CreateGigPage = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.05 }}
-          className="bg-white rounded-2xl border border-gray-100 p-6 mb-8 shadow-sm"
+          className="glass-card rounded-2xl p-6 mb-8 shadow-sm"
         >
           <div className="flex items-center justify-between">
             {STEPS.map((step, index) => (
@@ -443,7 +443,7 @@ const CreateGigPage = () => {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -20 }}
             transition={{ duration: 0.3 }}
-            className="bg-white rounded-2xl border border-gray-100 p-6 sm:p-8 shadow-sm"
+            className="ui-card p-6 sm:p-8"
           >
             {currentStep === 1 && (
               <StepOverview

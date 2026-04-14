@@ -102,7 +102,7 @@ const GigDetailPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50 py-8">
+    <div className="min-h-screen bg-[color:var(--bg)] py-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* ===== LEFT COLUMN - Main Content ===== */}
@@ -111,11 +111,11 @@ const GigDetailPage = () => {
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="flex items-center gap-2 text-sm text-gray-500"
+              className="flex items-center gap-2 text-sm text-[color:var(--text-2)]"
             >
               <Link
                 to="/gigs"
-                className="hover:text-green-600 transition-colors"
+                className="hover:text-[color:var(--accent)] transition-colors"
               >
                 Services
               </Link>
@@ -128,7 +128,7 @@ const GigDetailPage = () => {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.05 }}
-              className="text-2xl sm:text-3xl font-extrabold text-gray-900 leading-tight"
+              className="text-2xl sm:text-3xl font-extrabold text-[color:var(--text-1)] leading-tight"
             >
               {gig.title}
             </motion.h1>
@@ -155,7 +155,7 @@ const GigDetailPage = () => {
                     {seller.name?.charAt(0).toUpperCase()}
                   </div>
                 )}
-                <span className="font-semibold text-gray-900 group-hover:text-green-600 transition-colors">
+                <span className="font-semibold text-[color:var(--text-1)] group-hover:text-[color:var(--accent)] transition-colors">
                   {seller.name}
                 </span>
               </Link>
@@ -165,7 +165,7 @@ const GigDetailPage = () => {
                 <span className="font-bold text-amber-500">
                   {gig.ratings?.average?.toFixed(1) || "New"}
                 </span>
-                <span className="text-gray-400 text-sm">
+                <span className="text-[color:var(--text-muted)] text-sm">
                   ({gig.ratings?.count || 0} reviews)
                 </span>
               </div>
@@ -244,23 +244,23 @@ const GigDetailPage = () => {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="bg-white rounded-2xl border border-gray-100 p-6 sm:p-8"
+              className="ui-card p-6 sm:p-8"
             >
-              <h2 className="text-xl font-bold text-gray-900 mb-4">
+              <h2 className="text-xl font-bold text-[color:var(--text-1)] mb-4">
                 About This Service
               </h2>
-              <p className="text-gray-600 leading-relaxed whitespace-pre-line">
+              <p className="text-[color:var(--text-2)] leading-relaxed whitespace-pre-line">
                 {gig.description}
               </p>
 
               {/* Tags */}
               {gig.tags && gig.tags.length > 0 && (
-                <div className="flex flex-wrap gap-2 mt-6 pt-6 border-t border-gray-100">
+                <div className="flex flex-wrap gap-2 mt-6 pt-6 border-t border-[color:var(--line)]">
                   {gig.tags.map((tag) => (
                     <Link
                       key={tag}
                       to={`/gigs?search=${tag}`}
-                      className="px-3 py-1.5 bg-gray-50 text-gray-600 text-xs font-medium rounded-lg border border-gray-200 hover:border-green-300 hover:text-green-600 hover:bg-green-50 transition-all duration-300"
+                      className="px-3 py-1.5 bg-[color:var(--surface-soft)] text-[color:var(--text-2)] text-xs font-medium rounded-lg border border-[color:var(--line)] hover:border-[color:var(--accent)] hover:text-[color:var(--accent)] transition-all duration-300"
                     >
                       #{tag}
                     </Link>
@@ -275,19 +275,19 @@ const GigDetailPage = () => {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.25 }}
-                className="bg-white rounded-2xl border border-gray-100 p-6 sm:p-8"
+                className="ui-card p-6 sm:p-8"
               >
-                <h2 className="text-xl font-bold text-gray-900 mb-5">FAQ</h2>
+                <h2 className="text-xl font-bold text-[color:var(--text-1)] mb-5">FAQ</h2>
                 <div className="space-y-4">
                   {gig.faqs.map((faq, index) => (
                     <div
                       key={index}
-                      className="border-b border-gray-100 pb-4 last:border-0 last:pb-0"
+                      className="border-b border-[color:var(--line)] pb-4 last:border-0 last:pb-0"
                     >
-                      <h4 className="font-semibold text-gray-900 mb-2">
+                      <h4 className="font-semibold text-[color:var(--text-1)] mb-2">
                         {faq.question}
                       </h4>
-                      <p className="text-gray-500 text-sm leading-relaxed">
+                      <p className="text-[color:var(--text-2)] text-sm leading-relaxed">
                         {faq.answer}
                       </p>
                     </div>
@@ -303,21 +303,21 @@ const GigDetailPage = () => {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
-                className="bg-white rounded-2xl border border-gray-100 p-6 sm:p-8 overflow-x-auto"
+                className="ui-card p-6 sm:p-8 overflow-x-auto"
               >
-                <h2 className="text-xl font-bold text-gray-900 mb-5">
+                <h2 className="text-xl font-bold text-[color:var(--text-1)] mb-5">
                   Compare Packages
                 </h2>
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b border-gray-100">
-                      <th className="text-left py-3 pr-4 text-gray-500 font-medium">
+                    <tr className="border-b border-[color:var(--line)]">
+                      <th className="text-left py-3 pr-4 text-[color:var(--text-muted)] font-medium">
                         Package
                       </th>
                       {packageTabs.map((tab) => (
                         <th
                           key={tab.key}
-                          className="text-center py-3 px-3 font-bold text-gray-900"
+                          className="text-center py-3 px-3 font-bold text-[color:var(--text-1)]"
                         >
                           {tab.label}
                         </th>
@@ -325,34 +325,34 @@ const GigDetailPage = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    <tr className="border-b border-gray-50">
-                      <td className="py-3 pr-4 text-gray-500">Price</td>
+                    <tr className="border-b border-[color:var(--line)]">
+                      <td className="py-3 pr-4 text-[color:var(--text-2)]">Price</td>
                       {packageTabs.map((tab) => (
                         <td
                           key={tab.key}
-                          className="text-center py-3 px-3 font-extrabold text-gray-900"
+                          className="text-center py-3 px-3 font-extrabold text-[color:var(--text-1)]"
                         >
                           ${packages[tab.key]?.price}
                         </td>
                       ))}
                     </tr>
-                    <tr className="border-b border-gray-50">
-                      <td className="py-3 pr-4 text-gray-500">Delivery</td>
+                    <tr className="border-b border-[color:var(--line)]">
+                      <td className="py-3 pr-4 text-[color:var(--text-2)]">Delivery</td>
                       {packageTabs.map((tab) => (
                         <td
                           key={tab.key}
-                          className="text-center py-3 px-3 text-gray-700"
+                          className="text-center py-3 px-3 text-[color:var(--text-2)]"
                         >
                           {packages[tab.key]?.deliveryDays} days
                         </td>
                       ))}
                     </tr>
-                    <tr className="border-b border-gray-50">
-                      <td className="py-3 pr-4 text-gray-500">Revisions</td>
+                    <tr className="border-b border-[color:var(--line)]">
+                      <td className="py-3 pr-4 text-[color:var(--text-2)]">Revisions</td>
                       {packageTabs.map((tab) => (
                         <td
                           key={tab.key}
-                          className="text-center py-3 px-3 text-gray-700"
+                          className="text-center py-3 px-3 text-[color:var(--text-2)]"
                         >
                           {packages[tab.key]?.revisions === -1
                             ? "Unlimited"
@@ -369,8 +369,8 @@ const GigDetailPage = () => {
                         );
                       });
                       return [...allFeatures].map((feature) => (
-                        <tr key={feature} className="border-b border-gray-50">
-                          <td className="py-3 pr-4 text-gray-500">{feature}</td>
+                        <tr key={feature} className="border-b border-[color:var(--line)]">
+                          <td className="py-3 pr-4 text-[color:var(--text-2)]">{feature}</td>
                           {packageTabs.map((tab) => (
                             <td key={tab.key} className="text-center py-3 px-3">
                               {(packages[tab.key]?.features || []).includes(
@@ -378,7 +378,7 @@ const GigDetailPage = () => {
                               ) ? (
                                 <FiCheck className="w-5 h-5 text-green-500 mx-auto" />
                               ) : (
-                                <span className="text-gray-300">—</span>
+                                <span className="text-[color:var(--text-muted)]">—</span>
                               )}
                             </td>
                           ))}
@@ -398,7 +398,7 @@ const GigDetailPage = () => {
                             className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 ${
                               selectedPackage === tab.key
                                 ? "bg-green-500 text-white shadow-lg shadow-green-500/25"
-                                : "bg-gray-100 text-gray-700 hover:bg-green-50 hover:text-green-600"
+                                : "bg-[color:var(--surface-soft)] text-[color:var(--text-2)] hover:text-[color:var(--accent)]"
                             }`}
                           >
                             Select
@@ -426,18 +426,18 @@ const GigDetailPage = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.15 }}
-              className="bg-white rounded-2xl border border-gray-100 shadow-xl shadow-gray-200/50 overflow-hidden lg:sticky lg:top-24"
+              className="glass-card rounded-2xl shadow-xl overflow-hidden lg:sticky lg:top-24"
             >
               {/* Package Tabs */}
-              <div className="flex border-b border-gray-100">
+              <div className="flex border-b border-[color:var(--line)]">
                 {packageTabs.map((tab) => (
                   <button
                     key={tab.key}
                     onClick={() => setSelectedPackage(tab.key)}
                     className={`flex-1 py-3.5 text-sm font-bold text-center transition-all duration-300 relative ${
                       selectedPackage === tab.key
-                        ? "text-green-600"
-                        : "text-gray-500 hover:text-gray-700"
+                        ? "text-[color:var(--accent)]"
+                        : "text-[color:var(--text-2)] hover:text-[color:var(--text-1)]"
                     }`}
                   >
                     {tab.label}
@@ -455,24 +455,24 @@ const GigDetailPage = () => {
               <div className="p-5">
                 {/* Price */}
                 <div className="flex items-baseline justify-between mb-3">
-                  <h3 className="text-2xl font-extrabold text-gray-900">
+                  <h3 className="text-2xl font-extrabold text-[color:var(--text-1)]">
                     ${currentPkg.price}
                   </h3>
                 </div>
 
                 {/* Description */}
-                <p className="text-gray-500 text-sm mb-4 leading-relaxed line-clamp-3">
+                <p className="text-[color:var(--text-2)] text-sm mb-4 leading-relaxed line-clamp-3">
                   {currentPkg.description}
                 </p>
 
                 {/* Details */}
-                <div className="flex items-center gap-4 text-sm text-gray-600 mb-4">
+                <div className="flex items-center gap-4 text-sm text-[color:var(--text-2)] mb-4">
                   <span className="flex items-center gap-1.5">
-                    <FiClock className="w-4 h-4 text-gray-400" />
+                    <FiClock className="w-4 h-4 text-[color:var(--text-muted)]" />
                     {currentPkg.deliveryDays}d delivery
                   </span>
                   <span className="flex items-center gap-1.5">
-                    <FiRefreshCw className="w-4 h-4 text-gray-400" />
+                    <FiRefreshCw className="w-4 h-4 text-[color:var(--text-muted)]" />
                     {currentPkg.revisions === -1
                       ? "∞"
                       : currentPkg.revisions}{" "}
@@ -486,7 +486,7 @@ const GigDetailPage = () => {
                     {currentPkg.features.map((feature, idx) => (
                       <div key={idx} className="flex items-center gap-2.5">
                         <FiCheck className="w-4 h-4 text-green-500 flex-shrink-0" />
-                        <span className="text-sm text-gray-700">{feature}</span>
+                        <span className="text-sm text-[color:var(--text-2)]">{feature}</span>
                       </div>
                     ))}
                   </div>
@@ -502,14 +502,8 @@ const GigDetailPage = () => {
                 </button>
 
                 {/* Contact Button */}
-                <button className="w-full mt-2.5 py-2.5 text-gray-700 font-semibold border-2 border-gray-200 rounded-xl hover:border-green-500 hover:text-green-600 transition-all duration-300 flex items-center justify-center gap-2 text-sm">
+                <button className="w-full mt-2.5 py-2.5 text-[color:var(--text-2)] font-semibold border border-[color:var(--line)] rounded-xl hover:border-[color:var(--accent)] hover:text-[color:var(--accent)] transition-all duration-300 flex items-center justify-center gap-2 text-sm">
                   <FiMessageSquare className="w-5 h-5" />
-                  Contact Seller
-                </button>
-
-                {/* Contact Button */}
-                <button className="w-full mt-2.5 py-2.5 text-gray-700 font-semibold border-2 border-gray-200 rounded-xl hover:border-green-500 hover:text-green-600 transition-all duration-300 flex items-center justify-center gap-2 text-sm">
-                  <FiMessageSquare className="w-4 h-4" />
                   Contact Seller
                 </button>
               </div>
@@ -522,7 +516,7 @@ const GigDetailPage = () => {
                       const el = document.getElementById("compare-packages");
                       if (el) el.scrollIntoView({ behavior: "smooth" });
                     }}
-                    className="w-full text-center text-xs text-gray-400 hover:text-green-600 transition-colors"
+                    className="w-full text-center text-xs text-[color:var(--text-muted)] hover:text-[color:var(--accent)] transition-colors"
                   >
                     Compare all packages ↓
                   </button>
@@ -535,9 +529,9 @@ const GigDetailPage = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.25 }}
-              className="bg-white rounded-2xl border border-gray-100 p-6"
+              className="ui-card p-6"
             >
-              <h3 className="text-lg font-bold text-gray-900 mb-4">
+              <h3 className="text-lg font-bold text-[color:var(--text-1)] mb-4">
                 About the Seller
               </h3>
 
@@ -557,11 +551,11 @@ const GigDetailPage = () => {
                   </div>
                 )}
                 <div>
-                  <h4 className="font-bold text-gray-900 group-hover:text-green-600 transition-colors">
+                  <h4 className="font-bold text-[color:var(--text-1)] group-hover:text-[color:var(--accent)] transition-colors">
                     {seller.name}
                   </h4>
                   {seller.title && (
-                    <p className="text-sm text-gray-500">{seller.title}</p>
+                    <p className="text-sm text-[color:var(--text-2)]">{seller.title}</p>
                   )}
                 </div>
               </Link>
@@ -591,12 +585,12 @@ const GigDetailPage = () => {
                 ].map((stat) => (
                   <div
                     key={stat.label}
-                    className="bg-gray-50 rounded-xl p-2.5 text-center"
+                    className="bg-[color:var(--surface-soft)] rounded-xl p-2.5 text-center"
                   >
-                    <p className="text-[10px] text-gray-400 font-medium mb-0.5">
+                    <p className="text-[10px] text-[color:var(--text-muted)] font-medium mb-0.5">
                       {stat.label}
                     </p>
-                    <p className="text-sm font-bold text-gray-900 capitalize">
+                    <p className="text-sm font-bold text-[color:var(--text-1)] capitalize">
                       {stat.value}
                     </p>
                   </div>
@@ -606,13 +600,13 @@ const GigDetailPage = () => {
               {/* Seller Details */}
               <div className="space-y-2 text-sm">
                 {seller.location?.country && (
-                  <div className="flex items-center gap-2 text-gray-500">
+                  <div className="flex items-center gap-2 text-[color:var(--text-2)]">
                     <FiMapPin className="w-4 h-4" />
                     {seller.location.city && `${seller.location.city}, `}
                     {seller.location.country}
                   </div>
                 )}
-                <div className="flex items-center gap-2 text-gray-500">
+                <div className="flex items-center gap-2 text-[color:var(--text-2)]">
                   <FiCalendar className="w-4 h-4" />
                   Member since{" "}
                   {new Date(seller.createdAt).toLocaleDateString("en-US", {
@@ -623,7 +617,7 @@ const GigDetailPage = () => {
               </div>
 
               {seller.bio && (
-                <p className="text-sm text-gray-500 mt-4 pt-4 border-t border-gray-100 leading-relaxed line-clamp-4">
+                <p className="text-sm text-[color:var(--text-2)] mt-4 pt-4 border-t border-[color:var(--line)] leading-relaxed line-clamp-4">
                   {seller.bio}
                 </p>
               )}

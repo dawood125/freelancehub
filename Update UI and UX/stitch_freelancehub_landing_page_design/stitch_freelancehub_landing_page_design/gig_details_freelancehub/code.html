@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LUXE | Gig Details</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;family=Berkeley+Mono&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline": "#908fa0",
+                        "secondary-fixed-dim": "#d0bcff",
+                        "on-primary-fixed": "#07006c",
+                        "on-primary-container": "#0d0096",
+                        "on-surface-variant": "#c7c4d7",
+                        "secondary": "#d0bcff",
+                        "on-secondary": "#3c0091",
+                        "on-tertiary-fixed": "#1b1d00",
+                        "background": "#0f131d",
+                        "surface-container-highest": "#313540",
+                        "on-primary-fixed-variant": "#2f2ebe",
+                        "surface-bright": "#353944",
+                        "surface-tint": "#c0c1ff",
+                        "primary-container": "#8083ff",
+                        "inverse-on-surface": "#2c303b",
+                        "on-primary": "#1000a9",
+                        "surface-container-low": "#171b26",
+                        "surface-container-high": "#262a35",
+                        "secondary-container": "#571bc1",
+                        "surface-container-lowest": "#0a0e18",
+                        "primary-fixed-dim": "#c0c1ff",
+                        "surface": "#0f131d",
+                        "primary-fixed": "#e1e0ff",
+                        "tertiary-fixed": "#dfed1a",
+                        "tertiary-container": "#8e9800",
+                        "tertiary": "#c3d000",
+                        "on-secondary-fixed": "#23005c",
+                        "inverse-primary": "#494bd6",
+                        "surface-variant": "#313540",
+                        "tertiary-fixed-dim": "#c3d000",
+                        "on-error-container": "#ffdad6",
+                        "on-surface": "#dfe2f1",
+                        "outline-variant": "#464554",
+                        "secondary-fixed": "#e9ddff",
+                        "on-tertiary": "#2f3300",
+                        "error": "#ffb4ab",
+                        "on-tertiary-container": "#292c00",
+                        "on-secondary-container": "#c4abff",
+                        "error-container": "#93000a",
+                        "on-secondary-fixed-variant": "#5516be",
+                        "surface-container": "#1c1f2a",
+                        "on-error": "#690005",
+                        "inverse-surface": "#dfe2f1",
+                        "on-background": "#dfe2f1",
+                        "primary": "#c0c1ff",
+                        "surface-dim": "#0f131d",
+                        "on-tertiary-fixed-variant": "#454a00"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(49, 53, 64, 0.4);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(70, 69, 84, 0.15);
+        }
+        .text-gradient {
+            background: linear-gradient(135deg, #c0c1ff 0%, #d0bcff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .primary-gradient {
+            background: linear-gradient(135deg, #6366F1 0%, #a855f7 100%);
+        }
+        body {
+            background-color: #0f131d;
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="text-on-surface">
+<!-- Top Navigation Bar -->
+<header class="fixed top-0 w-full z-50 bg-[#0f131d]/80 backdrop-blur-xl shadow-[0_4px_40px_-15px_rgba(192,193,255,0.04)]">
+<nav class="flex justify-between items-center px-8 h-20 w-full max-w-[1440px] mx-auto">
+<div class="flex items-center gap-12">
+<span class="text-2xl font-black text-[#dfe2f1] tracking-tighter">LUXE</span>
+<div class="hidden md:flex items-center gap-8 text-[#c7c4d7] font-['Inter'] tracking-tight">
+<a class="text-[#c0c1ff] font-semibold border-b-2 border-[#c0c1ff] pb-1" href="#">Explore</a>
+<a class="hover:text-[#dfe2f1] transition-colors" href="#">Projects</a>
+<a class="hover:text-[#dfe2f1] transition-colors" href="#">Messages</a>
+<a class="hover:text-[#dfe2f1] transition-colors" href="#">Saved</a>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<button class="primary-gradient text-white px-6 py-2.5 rounded-lg font-semibold scale-95 active:scale-90 transition-transform">Post a Gig</button>
+<div class="flex items-center gap-4 text-[#c7c4d7]">
+<span class="material-symbols-outlined hover:text-[#dfe2f1] cursor-pointer">notifications</span>
+<span class="material-symbols-outlined hover:text-[#dfe2f1] cursor-pointer">account_circle</span>
+</div>
+</div>
+</nav>
+</header>
+<main class="pt-32 pb-20 px-8 max-w-[1440px] mx-auto">
+<div class="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-12 items-start">
+<!-- LEFT COLUMN (65%) -->
+<section class="space-y-10">
+<!-- Gig Title & Identity -->
+<div class="space-y-6">
+<h1 class="text-4xl md:text-5xl font-bold tracking-tight text-on-surface leading-tight">
+                        I will design a high-performance SaaS dashboard with a premium dark theme
+                    </h1>
+<div class="flex items-center gap-4 py-2 border-y border-outline-variant/10">
+<img class="w-12 h-12 rounded-full object-cover" data-alt="close-up portrait of a professional male designer with a kind smile and modern glasses, soft studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBPNrnhk-CpHPYyhKMwy7xU4k6zLoD5RfP_gUxObFTpcv1N-p3-tlUv7vkrYDbsZeQyyTMaJQW3XNpndG7xcRUihgy35r35tITaRLrIz-DuE6pbdoMsxRS7mLuKFUq-ns2nM7ptkTGJsEddoI1jFUrHJjF_IE3J4P-Egkbwn6fiap2Kpl2NqrzkRuI8QxWMK27wjSyS6qiMZDCTDkna1IqJ3eeuvExppc-CrQWM9rWlGA2KnDTlCdVwojO9vC4hzW3EjQFzyPZ1idI"/>
+<div class="flex-1">
+<div class="flex items-center gap-2">
+<span class="font-bold text-on-surface">Alex Rivera</span>
+<span class="text-xs px-2 py-0.5 rounded bg-tertiary-container text-on-tertiary-container font-bold uppercase tracking-wider">Top Rated</span>
+</div>
+<div class="flex items-center gap-3 mt-1">
+<div class="flex items-center text-primary">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-['Berkeley_Mono'] text-sm ml-1 font-bold">4.9</span>
+<span class="text-on-surface-variant text-xs ml-1">(215 reviews)</span>
+</div>
+<span class="text-outline-variant">|</span>
+<div class="flex items-center gap-1.5">
+<span class="w-5 h-3.5 bg-blue-900 rounded-sm overflow-hidden flex flex-col">
+<span class="h-1/3 bg-red-600"></span>
+<span class="h-1/3 bg-white"></span>
+<span class="h-1/3 bg-blue-800"></span>
+</span>
+<span class="text-xs text-on-surface-variant font-medium">USA</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span>
+<span class="text-xs text-tertiary font-bold tracking-wide">ONLINE</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Image Gallery -->
+<div class="space-y-4">
+<div class="aspect-[16/10] w-full rounded-xl overflow-hidden bg-surface-container shadow-2xl relative">
+<img class="w-full h-full object-cover" data-alt="high-fidelity dark mode dashboard UI design with vibrant glowing charts, glassmorphism sidebar, and crisp typography" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBgyiIBh2JusjHeOp1G7j-_XyX8EYYUwgh-sCNpjyk422sSF-CeUswOZ5c1uZuqdPCD1OccRY_FHAy0Kol4ds0ouYba_P2jx5c-3njr3n_ZSthVXH4dUiT6moILt6pILv1TmEz1jL5kwtTQgMP39F1jaXHd4avVtyoR5UBfV5q_5Y4Vb63uRbjxnJqT-hnI6vksW6FYTaK0oeAv19UeTSWohXU0m8T-_lJNgoWxTMJmAn5OIS7AtRUOOelfhhuB-AK1FT1ZuHx4Ls4"/>
+</div>
+<div class="grid grid-cols-5 gap-4">
+<div class="aspect-square rounded-lg overflow-hidden border-2 border-primary cursor-pointer ring-4 ring-primary/10">
+<img class="w-full h-full object-cover" data-alt="dark dashboard analytics overview screen with purple and indigo data visualizations" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBTsneF3QgYnQHq5sZSNj-vTPz3loScqABwq0cBNxZM80Y6f1WmuqQ5VDVRHhLRmLmU2go9Wi4vzF_c8FhQdAEhBV-xKyYduUOFuNjErqCvh-xNYYJ0i5TP6VfeQHFob0QDgcmxZQWTKZbNFVmacd86IO-uhWE_ihpsrOpWhc5qq5mPSpq35aE88kS_OW3uGMgSLeoWeNz54KtDq6Mjk7yUW6jHGRbRj3ybqWeq4UvBhZz7OyUyr2uhrwWdZFFRelx155ksQ8gNEnM"/>
+</div>
+<div class="aspect-square rounded-lg overflow-hidden border border-outline-variant/20 hover:border-primary/50 transition-all cursor-pointer">
+<img class="w-full h-full object-cover" data-alt="complex user management table design with glassmorphism effects and clean iconography" src="https://lh3.googleusercontent.com/aida-public/AB6AXuACAzEtlWTiRpQNVuoawQrDK_tGvHcAxPm9jSukUqS7Xu6bjvgFvq_Nm27TtZbA9vokNBzi9cU_1TiZqgnWkiJkVM-NEzS7KQIx9xcqOVcqrb9wJDr7LgA_53VcTRlrEygDVOanNVsM7lC3kBSb0BI7msn0plSjgIheMaVu58iTPddXHTXIo1Id9GcpXPtjd_Xl_1u1w2u4XZURnRk36HTgQ6rqv3nWD6WHSpUFI9UY0DeBVJ_pF4MnWHw2xjx4XSx9Kc1MSkDj_8Q"/>
+</div>
+<div class="aspect-square rounded-lg overflow-hidden border border-outline-variant/20 hover:border-primary/50 transition-all cursor-pointer">
+<img class="w-full h-full object-cover" data-alt="mobile responsive dashboard design showing financial metrics on a dark background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBur4sb3xKSlvxz93QA9KCw5BYiIzWl6cJDpmU1ehrAlsDyXLOhL05NzklrdeFmQWJr86lHeVwKjkiDG8LLwPDfIMSdTvqyIUp_Hg8QqK23BDlWtPh2WcPqKBMgyu1y63z8eOhNrmuILpa6JMvNrg7GuBfyTasD_t1K6eqvKA7Zy7UWUf1yAjuj91MK0irl07HClRq6kW1VOFMbUW_vHDzrOKBsz1TMOJSJtdgY53U-Gkne-7OeoYtxctO3NUKkUU8HBh7J8tCSMMc"/>
+</div>
+<div class="aspect-square rounded-lg overflow-hidden border border-outline-variant/20 hover:border-primary/50 transition-all cursor-pointer">
+<img class="w-full h-full object-cover" data-alt="settings and profile page design for a premium SaaS application" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCG9IxtY7Q5ZhXCMT23HRsw1REceoyJgc6G4RgLyimwn5ng5RdFm5M76oY-IOwx5Pc_fNwsyy3fVeTeV5VtNSEGpvwPMxkFWe_aQjncDBGH2bHlG3ukz9NYXzhDgIVXCSHpumbYZlgUS1Px59Q1YLrZlRaxHwFY9q0jwPYymKsLDq1w4NTTtbjxPXBjEE3aoCEVEowAL4dW_0_NcvCBCK-zpoPfbQnywvjKWtMhx69uHNODP--4kIZjQhOmE3Lvp2U3W2mnYk8DLWQ"/>
+</div>
+<div class="aspect-square rounded-lg overflow-hidden border border-outline-variant/20 hover:border-primary/50 transition-all cursor-pointer flex items-center justify-center bg-surface-container-high relative">
+<img class="w-full h-full object-cover opacity-40" data-alt="dark themed design system components library showing buttons and inputs" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBX3m16xiI1EsGJpItqLRyJrQje-AvDvtSp6jeGzunnNIAosub27WzvYkt5yso7CHgftY4vg1j-R8P9ySJ2IvDL1x5Ep1r3CEJ7VNajeRfb8HArwaPitQV-KGN3UmeBZn4z2vy8gEh4Rp9TYjxWDfifKpDp_S4B20viCXZ1wb2g_X_1Ztk-0h1nqhLLuQTfOU-bS2xcl-oSWvcyhx6YzWQwN6bBRptlKWXKaQhybwRop93yDSEa7J9UQ0_xZMYGpX1m2lQoJvTFhzo"/>
+<span class="absolute inset-0 flex items-center justify-center font-['Berkeley_Mono'] text-sm">+12</span>
+</div>
+</div>
+</div>
+<!-- Tabbed Content Area -->
+<div class="space-y-8">
+<div class="flex gap-10 border-b border-outline-variant/15 text-sm font-semibold tracking-wider uppercase">
+<button class="pb-4 border-b-2 border-primary text-primary">Description</button>
+<button class="pb-4 text-on-surface-variant hover:text-on-surface transition-colors">FAQ</button>
+<button class="pb-4 text-on-surface-variant hover:text-on-surface transition-colors">Reviews</button>
+</div>
+<div class="space-y-6 text-on-surface-variant leading-relaxed text-lg max-w-3xl">
+<p>I specialize in creating immersive, high-performance SaaS experiences that don't just look beautiful but drive user retention. My design philosophy balances "The Ethereal Executive" aesthetic—clean, authoritative layouts with deep tonal depth and liquid precision.</p>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8 py-4">
+<div class="space-y-4">
+<h4 class="text-on-surface font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">auto_awesome</span>
+                                    Core Services
+                                </h4>
+<ul class="space-y-3 font-['Inter'] text-base">
+<li class="flex items-start gap-3">
+<span class="text-primary mt-1">•</span>
+<span>Full end-to-end UI/UX design for complex web applications.</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="text-primary mt-1">•</span>
+<span>Interactive high-fidelity prototypes in Figma.</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="text-primary mt-1">•</span>
+<span>Scalable design systems with tokens and reusable components.</span>
+</li>
+</ul>
+</div>
+<div class="space-y-4">
+<h4 class="text-on-surface font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">inventory_2</span>
+                                    What You Get
+                                </h4>
+<ul class="space-y-3 font-['Inter'] text-base">
+<li class="flex items-start gap-3">
+<span class="text-primary mt-1">•</span>
+<span>Source Figma files with organized layers.</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="text-primary mt-1">•</span>
+<span>Responsive designs (Desktop, Tablet, Mobile).</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="text-primary mt-1">•</span>
+<span>Development-ready handoff documentation.</span>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<!-- Reviews Section -->
+<div class="space-y-8 pt-8">
+<h3 class="text-2xl font-bold flex items-center gap-3">
+                        Client Reviews
+                        <span class="font-['Berkeley_Mono'] text-sm text-on-surface-variant font-normal">215 Verified</span>
+</h3>
+<div class="space-y-4">
+<!-- Review Card 1 -->
+<div class="p-6 rounded-xl bg-surface-container-low border border-outline-variant/10">
+<div class="flex justify-between items-start mb-4">
+<div class="flex gap-4">
+<img class="w-12 h-12 rounded-full object-cover" data-alt="portrait of a young woman tech entrepreneur, professional headshot" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBY0abh1iVN-YcMy9JzW3nYZ69IggxpBgdgQ0CaWzXElrcHCX5JmUxYAKzm0hEQm5_xC6W49fhLap0XAbNJMBBtVuaGVBkiJdzCMXSSh88FqVKYcFn66j6S9B-XtH8WnoOxJPsxp_3lzCQ1AgMPKkLcoXgp5Z4T0e7vv9y6xVY4Sjbiltb5Ch7r4bJNKg6O6lvHoG13RHk-5Do-Ysn76LGy83jBavY_dDBU-pi1YXRS9LEGq5sUi2NnwLgoV-I1SI8UBDyBlOxj2QM"/>
+<div>
+<h5 class="font-bold text-on-surface">Sarah Jenkins</h5>
+<p class="text-xs text-on-surface-variant font-['Berkeley_Mono']">CEO, FlowState AI</p>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<div class="flex text-tertiary">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<span class="text-xs text-on-surface-variant mt-1">2 weeks ago</span>
+</div>
+</div>
+<p class="text-on-surface-variant leading-relaxed">Alex delivered beyond my expectations. The dark theme he designed feels incredibly premium and sophisticated. Our users have already commented on how much easier the interface is to navigate. Highly recommended for complex SaaS projects!</p>
+</div>
+<!-- Review Card 2 -->
+<div class="p-6 rounded-xl bg-surface-container-low border border-outline-variant/10">
+<div class="flex justify-between items-start mb-4">
+<div class="flex gap-4">
+<img class="w-12 h-12 rounded-full object-cover" data-alt="professional man in a grey suit, headshot for a corporate profile" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBwc2EnBonyF3S9rD65q7eAd5GfjLyFrwdMVbYq559wlSHS6h2QIZFpA_Zs9Cv9uc04frNfujgyruI8wwWiibxpfc07hLiD4FyJxRs7fWQox3bLL0tdkNY-OuLLQXkTxjfZ6hT-j82IQwAAI4a0CLNlcl4kD1KTiHIzdQLk3vRxtMNDJhx2qsyXzEldtQATUiLgXXqLZwpHAFjA6P6gmi6RT9MCu_GsOERv1Z64GK5LvPtFKj6GtM725YzYfFLviZ_roUQ74pUYQjE"/>
+<div>
+<h5 class="font-bold text-on-surface">Marcus Thorne</h5>
+<p class="text-xs text-on-surface-variant font-['Berkeley_Mono']">Product Lead, Nexus</p>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<div class="flex text-tertiary">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<span class="text-xs text-on-surface-variant mt-1">1 month ago</span>
+</div>
+</div>
+<p class="text-on-surface-variant leading-relaxed">A true professional. The attention to detail in the design system is something I haven't seen before from freelance designers. This will save our dev team weeks of work.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- RIGHT COLUMN (35%, sticky) -->
+<aside class="space-y-8 lg:sticky lg:top-28">
+<!-- Package Comparison Card -->
+<div class="glass-card rounded-2xl overflow-hidden shadow-2xl">
+<div class="grid grid-cols-3 border-b border-outline-variant/10 text-center font-semibold text-sm">
+<button class="py-4 hover:bg-surface-container/50 transition-colors text-on-surface-variant">Basic</button>
+<button class="py-4 bg-surface-container-highest/40 text-primary border-b-2 border-primary">Standard</button>
+<button class="py-4 hover:bg-surface-container/50 transition-colors text-on-surface-variant">Premium</button>
+</div>
+<div class="p-8 space-y-6">
+<div class="flex justify-between items-center">
+<h3 class="text-xl font-bold">Advanced SaaS Design</h3>
+<span class="text-2xl font-['Berkeley_Mono'] font-bold text-gradient">$1,200</span>
+</div>
+<p class="text-on-surface-variant text-sm leading-relaxed">
+                            Up to 5 complex dashboard screens with custom components and interactive prototyping for your high-end application.
+                        </p>
+<div class="flex gap-4 text-sm font-['Berkeley_Mono'] text-on-surface-variant py-2 border-y border-outline-variant/10">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-lg">schedule</span>
+                                7 Days
+                            </div>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-lg">cached</span>
+                                3 Revisions
+                            </div>
+</div>
+<ul class="space-y-4">
+<li class="flex items-center gap-3 text-sm">
+<span class="material-symbols-outlined text-primary text-xl" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                                Full UI Design
+                            </li>
+<li class="flex items-center gap-3 text-sm">
+<span class="material-symbols-outlined text-primary text-xl" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                                Source Files
+                            </li>
+<li class="flex items-center gap-3 text-sm">
+<span class="material-symbols-outlined text-primary text-xl" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                                Commercial Use
+                            </li>
+<li class="flex items-center gap-3 text-sm">
+<span class="material-symbols-outlined text-primary text-xl" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                                Responsive Design
+                            </li>
+</ul>
+<div class="space-y-3 pt-4">
+<button class="w-full primary-gradient py-4 rounded-xl font-bold text-on-surface shadow-lg hover:brightness-110 active:scale-[0.98] transition-all flex items-center justify-center gap-2">
+                                Continue
+                                <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+<button class="w-full py-4 rounded-xl font-bold text-on-surface-variant border border-outline-variant/30 hover:bg-surface-container-highest/20 transition-colors">
+                                Contact Seller
+                            </button>
+</div>
+</div>
+</div>
+<!-- Seller Profile Card -->
+<div class="p-8 rounded-2xl bg-surface-container-low border border-outline-variant/10 space-y-6">
+<div class="flex flex-col items-center text-center space-y-4">
+<div class="relative">
+<img class="w-24 h-24 rounded-full object-cover border-4 border-surface-container-high ring-4 ring-primary/20" data-alt="professional male designer portrait in a high-key studio setting, minimal background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAK21-wsGL4utHVkLEIw65wKcpLMk68aYM0FwW_rsakXjD9_7Xzlzi9MInOTf7OlZJjUNylDl2oH6LW6a7RxFLBE1n-KjET1kK7Sv3CyZ5GX-WP4v077B7wXBrjQO3tKvGX_LD3DOQbYy9Yf2NXDPnUjTBG0RePsQNr5ZcPNiX6MeOuEBTvaxjqsCfDb_5BrxCM7xy4S9qG172Fn_EIL-abGGnk2iLfIbFvxSFAJhrrCgIvoMLX9Yyx8Vz_t5tTjF2Lmj7PubDjSEk"/>
+<span class="absolute bottom-1 right-1 w-5 h-5 bg-tertiary border-4 border-surface-container-low rounded-full"></span>
+</div>
+<div>
+<h4 class="text-xl font-bold">Alex Rivera</h4>
+<p class="text-on-surface-variant text-sm mt-1">UX/UI Architect &amp; Product Strategist</p>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-y-4 text-xs font-['Berkeley_Mono'] uppercase tracking-widest text-on-surface-variant">
+<div>
+<span class="block opacity-50 mb-1">From</span>
+<span class="text-on-surface font-bold">United States</span>
+</div>
+<div>
+<span class="block opacity-50 mb-1">Member Since</span>
+<span class="text-on-surface font-bold">Nov 2021</span>
+</div>
+<div>
+<span class="block opacity-50 mb-1">Avg. Response</span>
+<span class="text-on-surface font-bold">2 Hours</span>
+</div>
+<div>
+<span class="block opacity-50 mb-1">Last Delivery</span>
+<span class="text-on-surface font-bold">1 Day</span>
+</div>
+</div>
+<div class="pt-6 border-t border-outline-variant/10">
+<span class="text-xs text-on-surface-variant font-['Berkeley_Mono'] uppercase tracking-widest block mb-3">Languages</span>
+<div class="flex flex-wrap gap-2">
+<span class="px-3 py-1 bg-surface-container text-on-surface text-xs font-medium rounded-full">English — Native</span>
+<span class="px-3 py-1 bg-surface-container text-on-surface text-xs font-medium rounded-full">Spanish — Fluent</span>
+</div>
+</div>
+</div>
+</aside>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full py-12 border-t border-[#464554]/15 bg-[#0f131d]">
+<div class="flex flex-col items-center justify-center gap-6 w-full px-8">
+<span class="text-lg font-bold text-[#dfe2f1]">LUXE</span>
+<div class="flex gap-8 text-[#c7c4d7] font-['Berkeley_Mono'] text-xs tracking-widest uppercase">
+<a class="hover:text-[#6366F1] transition-colors" href="#">Privacy</a>
+<a class="hover:text-[#6366F1] transition-colors" href="#">Terms</a>
+<a class="hover:text-[#6366F1] transition-colors" href="#">Support</a>
+<a class="hover:text-[#6366F1] transition-colors" href="#">Careers</a>
+</div>
+<p class="text-[#c7c4d7] font-['Berkeley_Mono'] text-xs tracking-widest uppercase opacity-80">
+                © 2024 LUXE Premium Marketplace. All rights reserved.
+            </p>
+</div>
+</footer>
+</body></html>

@@ -19,8 +19,8 @@ const GigCard = ({ gig }) => {
   const deliveryDays = gig.packages?.basic?.deliveryDays || 0;
 
   return (
-    <div className="group bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-xl hover:shadow-gray-200/50 hover:border-transparent hover:-translate-y-1 transition-all duration-500">
-      <div className="relative aspect-[4/3] overflow-hidden bg-gray-100">
+    <div className="group bg-[color:var(--surface-card)] rounded-2xl border border-[color:var(--line)] overflow-hidden hover:shadow-[0_20px_35px_rgba(15,23,42,0.16)] hover:border-[color:var(--accent)] hover:-translate-y-1 transition-all duration-500">
+      <div className="relative aspect-[4/3] overflow-hidden bg-[color:var(--surface-soft)]">
         {currentImage ? (
           <img
             src={currentImage}
@@ -28,7 +28,7 @@ const GigCard = ({ gig }) => {
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
           />
         ) : (
-          <div className="w-full h-full bg-gradient-to-br from-green-100 to-emerald-100 flex items-center justify-center">
+          <div className="w-full h-full bg-[linear-gradient(135deg,rgba(88,101,242,0.14),rgba(151,113,255,0.12))] flex items-center justify-center">
             <span className="text-4xl">🎨</span>
           </div>
         )}
@@ -44,8 +44,8 @@ const GigCard = ({ gig }) => {
                 }}
                 className={`w-2 h-2 rounded-full transition-all duration-300 ${
                   idx === imageIndex
-                    ? 'bg-white w-5'
-                    : 'bg-white/60 hover:bg-white/80'
+                    ? 'brand-gradient w-5'
+                    : 'bg-[color:var(--surface-card)]/70 hover:bg-[color:var(--surface-card)]'
                 }`}
               />
             ))}
@@ -57,11 +57,11 @@ const GigCard = ({ gig }) => {
             e.preventDefault();
             setIsLiked(!isLiked);
           }}
-          className="absolute top-3 right-3 w-9 h-9 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white transition-all duration-300 shadow-sm"
+          className="absolute top-3 right-3 w-9 h-9 bg-[color:var(--surface-card)]/90 backdrop-blur-sm border border-[color:var(--line)] rounded-full flex items-center justify-center hover:bg-[color:var(--surface-soft)] transition-all duration-300 shadow-sm"
         >
           <FiHeart
             className={`w-4 h-4 transition-colors duration-300 ${
-              isLiked ? 'fill-red-500 text-red-500' : 'text-gray-600'
+              isLiked ? 'fill-rose-500 text-rose-500' : 'text-[color:var(--text-2)]'
             }`}
           />
         </button>
@@ -81,15 +81,14 @@ const GigCard = ({ gig }) => {
             </div>
           )}
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-semibold text-gray-900 truncate">{sellerName}</p>
-            <p className="text-xs text-gray-400 capitalize">
+            <p className="text-sm font-semibold text-[color:var(--text-1)] truncate">{sellerName}</p>
+            <p className="text-xs text-[color:var(--text-muted)] capitalize">
               {sellerLevel.replace('-', ' ')} Seller
             </p>
           </div>
         </div>
 
-  
-        <h3 className="text-[15px] font-medium text-gray-800 leading-snug mb-3 line-clamp-2 group-hover:text-green-600 transition-colors duration-300">
+        <h3 className="text-[15px] font-medium text-[color:var(--text-1)] leading-snug mb-3 line-clamp-2 group-hover:text-[color:var(--accent)] transition-colors duration-300">
           {gig.title}
         </h3>
 
@@ -98,19 +97,19 @@ const GigCard = ({ gig }) => {
           <span className="text-sm font-bold text-amber-500">
             {gig.ratings?.average?.toFixed(1) || 'New'}
           </span>
-          <span className="text-xs text-gray-400">
+          <span className="text-xs text-[color:var(--text-muted)]">
             ({gig.ratings?.count || 0})
           </span>
         </div>
 
-        <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-          <div className="flex items-center gap-1.5 text-xs text-gray-400">
-            <FiClock className="w-3.5 h-3.5" />
+        <div className="flex items-center justify-between pt-4 border-t border-[color:var(--line)]">
+          <div className="flex items-center gap-1.5 text-xs text-[color:var(--text-muted)]">
+            <FiClock className="w-3.5 h-3.5 text-[color:var(--accent)]" />
             {deliveryDays} day{deliveryDays !== 1 ? 's' : ''} delivery
           </div>
           <div className="text-right">
-            <p className="text-[10px] text-gray-400 uppercase tracking-wider font-medium">Starting at</p>
-            <p className="text-lg font-extrabold text-gray-900">${startingPrice}</p>
+            <p className="text-[10px] text-[color:var(--text-muted)] uppercase tracking-[0.12em] font-semibold">Starting at</p>
+            <p className="text-lg font-extrabold text-[color:var(--text-1)]">${startingPrice}</p>
           </div>
         </div>
       </Link>

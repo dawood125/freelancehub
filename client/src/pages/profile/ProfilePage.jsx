@@ -161,14 +161,14 @@ const ProfilePage = () => {
   if (!user) return null;
 
   return (
-    <div className="min-h-screen bg-slate-50 py-8">
+    <div className="min-h-screen bg-[color:var(--bg)] py-10">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* ===== PROFILE HEADER CARD ===== */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="bg-white rounded-3xl shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden mb-6"
+          className="glass-card rounded-3xl shadow-xl overflow-hidden mb-6"
         >
           {/* Banner */}
           <div className="h-40 bg-gradient-to-r from-green-500 via-emerald-500 to-teal-500 relative">
@@ -177,7 +177,7 @@ const ProfilePage = () => {
             {/* Edit button */}
             <button
               onClick={() => setIsEditing(!isEditing)}
-              className="absolute top-4 right-4 px-4 py-2 bg-white/20 backdrop-blur-sm text-white text-sm font-medium rounded-xl hover:bg-white/30 transition-all duration-300 flex items-center gap-2"
+              className="absolute top-4 right-4 px-4 py-2 bg-black/20 backdrop-blur-sm text-white text-sm font-medium rounded-xl hover:bg-black/30 transition-all duration-300 flex items-center gap-2"
             >
               {isEditing ? (
                 <>
@@ -197,7 +197,7 @@ const ProfilePage = () => {
           <div className="px-8 pb-8 -mt-16 relative">
             {/* Avatar */}
             <div className="relative inline-block mb-4">
-              <div className="w-32 h-32 rounded-2xl border-4 border-white shadow-xl overflow-hidden bg-gray-100">
+              <div className="w-32 h-32 rounded-2xl border-4 border-[color:var(--surface)] shadow-xl overflow-hidden bg-[color:var(--bg-soft)]">
                 {user.avatar?.url ? (
                   <img
                     src={user.avatar.url}
@@ -205,7 +205,7 @@ const ProfilePage = () => {
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  <div className="w-full h-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center text-white text-4xl font-bold">
+                  <div className="w-full h-full brand-gradient flex items-center justify-center text-white text-4xl font-bold">
                     {user.name?.charAt(0)?.toUpperCase()}
                   </div>
                 )}
@@ -220,7 +220,7 @@ const ProfilePage = () => {
 
               {/* Camera button */}
               {isEditing && (
-                <label className="absolute bottom-1 right-1 w-10 h-10 bg-green-500 rounded-xl flex items-center justify-center text-white cursor-pointer hover:bg-green-600 transition-colors shadow-lg">
+                <label className="absolute bottom-1 right-1 w-10 h-10 bg-[rgb(var(--accent-rgb))] rounded-xl flex items-center justify-center text-white cursor-pointer hover:opacity-90 transition-opacity shadow-lg">
                   <FiCamera className="w-5 h-5" />
                   <input
                     type="file"
@@ -236,41 +236,41 @@ const ProfilePage = () => {
             {isEditing ? (
               <div className="space-y-4 max-w-lg">
                 <div>
-                  <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Name</label>
+                  <label className="block text-xs font-semibold text-[color:var(--text-3)] uppercase tracking-wider mb-1.5">Name</label>
                   <input
                     type="text"
                     value={editData.name}
                     onChange={(e) => handleChange('name', e.target.value)}
-                    className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl outline-none focus:border-green-500 transition-colors text-gray-900 font-medium"
+                    className="ui-input w-full px-4 py-2.5 font-medium"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Username</label>
+                  <label className="block text-xs font-semibold text-[color:var(--text-3)] uppercase tracking-wider mb-1.5">Username</label>
                   <input
                     type="text"
                     value={editData.username}
                     onChange={(e) => handleChange('username', e.target.value)}
-                    className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl outline-none focus:border-green-500 transition-colors text-gray-900"
+                    className="ui-input w-full px-4 py-2.5"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Professional Title</label>
+                  <label className="block text-xs font-semibold text-[color:var(--text-3)] uppercase tracking-wider mb-1.5">Professional Title</label>
                   <input
                     type="text"
                     value={editData.title}
                     onChange={(e) => handleChange('title', e.target.value)}
                     placeholder="e.g., Full Stack Developer"
-                    className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl outline-none focus:border-green-500 transition-colors text-gray-900"
+                    className="ui-input w-full px-4 py-2.5"
                   />
                 </div>
               </div>
             ) : (
               <>
-                <h1 className="text-2xl font-extrabold text-gray-900">{user.name}</h1>
-                <p className="text-gray-500 text-sm">@{user.username}</p>
+                <h1 className="text-2xl font-extrabold text-[color:var(--text-1)]">{user.name}</h1>
+                <p className="text-[color:var(--text-2)] text-sm">@{user.username}</p>
                 {user.title && (
-                  <p className="text-gray-700 font-medium mt-1 flex items-center gap-2">
-                    <FiBriefcase className="w-4 h-4 text-gray-400" />
+                  <p className="text-[color:var(--text-2)] font-medium mt-1 flex items-center gap-2">
+                    <FiBriefcase className="w-4 h-4 text-[color:var(--text-muted)]" />
                     {user.title}
                   </p>
                 )}
@@ -278,7 +278,7 @@ const ProfilePage = () => {
             )}
 
             {/* Meta info */}
-            <div className="flex flex-wrap items-center gap-4 mt-4 text-sm text-gray-500">
+            <div className="flex flex-wrap items-center gap-4 mt-4 text-sm text-[color:var(--text-2)]">
               {user.location?.country && (
                 <span className="flex items-center gap-1.5">
                   <FiMapPin className="w-4 h-4" />
@@ -302,13 +302,13 @@ const ProfilePage = () => {
             <div className="flex items-center gap-2 mt-4">
               <span className={`px-3 py-1 text-xs font-semibold rounded-full ${
                 user.currentRole === 'freelancer'
-                  ? 'bg-green-50 text-green-700 border border-green-200'
-                  : 'bg-blue-50 text-blue-700 border border-blue-200'
+                  ? 'bg-[rgba(var(--accent-rgb),0.12)] text-green-600 border border-[rgba(var(--accent-rgb),0.28)]'
+                  : 'bg-[rgba(var(--accent-2-rgb),0.14)] text-blue-500 border border-[rgba(var(--accent-2-rgb),0.28)]'
               }`}>
                 {user.currentRole === 'freelancer' ? '💼 Freelancer' : '👤 Client'}
               </span>
               {user.freelancerProfile?.level && user.currentRole === 'freelancer' && (
-                <span className="px-3 py-1 text-xs font-semibold rounded-full bg-amber-50 text-amber-700 border border-amber-200">
+                <span className="px-3 py-1 text-xs font-semibold rounded-full bg-[rgba(var(--warn-rgb),0.13)] text-amber-500 border border-[rgba(var(--warn-rgb),0.28)]">
                   <HiOutlineSparkles className="w-3 h-3 inline mr-1" />
                   {user.freelancerProfile.level.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
                 </span>
@@ -327,9 +327,9 @@ const ProfilePage = () => {
             className="lg:col-span-2 space-y-6"
           >
             {/* Bio */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-              <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                <FiEdit3 className="w-5 h-5 text-gray-400" />
+            <div className="ui-card p-6">
+              <h3 className="text-lg font-bold text-[color:var(--text-1)] mb-4 flex items-center gap-2">
+                <FiEdit3 className="w-5 h-5 text-[color:var(--text-muted)]" />
                 About Me
               </h3>
               {isEditing ? (
@@ -339,19 +339,19 @@ const ProfilePage = () => {
                   placeholder="Tell clients about yourself, your experience, and what makes you unique..."
                   rows={5}
                   maxLength={1000}
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl outline-none focus:border-green-500 transition-colors text-gray-700 resize-none"
+                  className="ui-input w-full px-4 py-3 resize-none"
                 />
               ) : (
-                <p className="text-gray-600 leading-relaxed">
+                <p className="text-[color:var(--text-2)] leading-relaxed">
                   {user.bio || 'No bio added yet. Click "Edit Profile" to add one!'}
                 </p>
               )}
             </div>
 
             {/* Skills */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-              <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                <HiOutlineAcademicCap className="w-5 h-5 text-gray-400" />
+            <div className="ui-card p-6">
+              <h3 className="text-lg font-bold text-[color:var(--text-1)] mb-4 flex items-center gap-2">
+                <HiOutlineAcademicCap className="w-5 h-5 text-[color:var(--text-muted)]" />
                 Skills
               </h3>
               {isEditing ? (
@@ -360,12 +360,12 @@ const ProfilePage = () => {
                     {(editData.freelancerProfile?.skills || []).map(skill => (
                       <span
                         key={skill}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-green-50 text-green-700 text-sm font-medium rounded-lg border border-green-200"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[rgba(var(--accent-rgb),0.12)] text-[rgb(var(--accent-rgb))] text-sm font-medium rounded-lg border border-[rgba(var(--accent-rgb),0.26)]"
                       >
                         {skill}
                         <button
                           onClick={() => handleSkillRemove(skill)}
-                          className="text-green-400 hover:text-red-500 transition-colors"
+                          className="text-[rgb(var(--accent-rgb))] hover:text-red-500 transition-colors"
                         >
                           <FiX className="w-3.5 h-3.5" />
                         </button>
@@ -376,9 +376,9 @@ const ProfilePage = () => {
                     type="text"
                     placeholder="Type a skill and press Enter..."
                     onKeyDown={handleSkillAdd}
-                    className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl outline-none focus:border-green-500 transition-colors text-gray-700 text-sm"
+                    className="ui-input w-full px-4 py-2.5 text-sm"
                   />
-                  <p className="text-xs text-gray-400 mt-1.5">Press Enter to add. Max 15 skills.</p>
+                  <p className="text-xs text-[color:var(--text-3)] mt-1.5">Press Enter to add. Max 15 skills.</p>
                 </div>
               ) : (
                 <div className="flex flex-wrap gap-2">
@@ -386,13 +386,13 @@ const ProfilePage = () => {
                     user.freelancerProfile.skills.map(skill => (
                       <span
                         key={skill}
-                        className="px-3 py-1.5 bg-gray-50 text-gray-700 text-sm font-medium rounded-lg border border-gray-200"
+                        className="px-3 py-1.5 bg-[color:var(--bg-soft)] text-[color:var(--text-2)] text-sm font-medium rounded-lg border border-[color:var(--line)]"
                       >
                         {skill}
                       </span>
                     ))
                   ) : (
-                    <p className="text-gray-400 text-sm">No skills added yet.</p>
+                    <p className="text-[color:var(--text-muted)] text-sm">No skills added yet.</p>
                   )}
                 </div>
               )}
@@ -400,30 +400,30 @@ const ProfilePage = () => {
 
             {/* Location (Edit mode) */}
             {isEditing && (
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                  <FiMapPin className="w-5 h-5 text-gray-400" />
+              <div className="ui-card p-6">
+                <h3 className="text-lg font-bold text-[color:var(--text-1)] mb-4 flex items-center gap-2">
+                  <FiMapPin className="w-5 h-5 text-[color:var(--text-muted)]" />
                   Location
                 </h3>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Country</label>
+                    <label className="block text-xs font-semibold text-[color:var(--text-3)] uppercase tracking-wider mb-1.5">Country</label>
                     <input
                       type="text"
                       value={editData.location?.country || ''}
                       onChange={(e) => handleChange('location.country', e.target.value)}
                       placeholder="e.g., Pakistan"
-                      className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl outline-none focus:border-green-500 transition-colors text-gray-900"
+                      className="ui-input w-full px-4 py-2.5"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">City</label>
+                    <label className="block text-xs font-semibold text-[color:var(--text-3)] uppercase tracking-wider mb-1.5">City</label>
                     <input
                       type="text"
                       value={editData.location?.city || ''}
                       onChange={(e) => handleChange('location.city', e.target.value)}
                       placeholder="e.g., Lahore"
-                      className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl outline-none focus:border-green-500 transition-colors text-gray-900"
+                      className="ui-input w-full px-4 py-2.5"
                     />
                   </div>
                 </div>
@@ -432,9 +432,9 @@ const ProfilePage = () => {
 
             {/* Role Switching (Edit mode) */}
             {isEditing && (
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                  <FiGlobe className="w-5 h-5 text-gray-400" />
+              <div className="ui-card p-6">
+                <h3 className="text-lg font-bold text-[color:var(--text-1)] mb-4 flex items-center gap-2">
+                  <FiGlobe className="w-5 h-5 text-[color:var(--text-muted)]" />
                   Current Role
                 </h3>
                 <div className="grid grid-cols-2 gap-3">
@@ -444,13 +444,13 @@ const ProfilePage = () => {
                       onClick={() => handleChange('currentRole', role)}
                       className={`p-4 rounded-xl border-2 text-left transition-all duration-300 ${
                         editData.currentRole === role
-                          ? 'border-green-500 bg-green-50'
-                          : 'border-gray-200 hover:border-gray-300'
+                          ? 'border-green-500 bg-[rgba(var(--accent-rgb),0.1)]'
+                          : 'border-[color:var(--line)] hover:border-[color:var(--line-strong)]'
                       }`}
                     >
                       <span className="text-2xl mb-2 block">{role === 'client' ? '👤' : '💼'}</span>
-                      <p className="font-bold text-gray-900 capitalize">{role}</p>
-                      <p className="text-xs text-gray-500 mt-0.5">
+                      <p className="font-bold text-[color:var(--text-1)] capitalize">{role}</p>
+                      <p className="text-xs text-[color:var(--text-3)] mt-0.5">
                         {role === 'client' ? 'Hire freelancers' : 'Offer services'}
                       </p>
                     </button>
@@ -468,8 +468,8 @@ const ProfilePage = () => {
             className="space-y-6"
           >
             {/* Stats Card */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-              <h3 className="text-lg font-bold text-gray-900 mb-4">Stats</h3>
+            <div className="ui-card p-6">
+              <h3 className="text-lg font-bold text-[color:var(--text-1)] mb-4">Stats</h3>
               <div className="space-y-4">
                 {[
                   { label: 'Rating', value: user.freelancerProfile?.averageRating?.toFixed(1) || '0.0', icon: <FiStar className="w-4 h-4 text-amber-500" /> },
@@ -477,23 +477,23 @@ const ProfilePage = () => {
                   { label: 'Completed', value: user.freelancerProfile?.completedOrders || 0, icon: '✅' },
                   { label: 'Earnings', value: `$${user.freelancerProfile?.totalEarnings || 0}`, icon: '💰' },
                 ].map(stat => (
-                  <div key={stat.label} className="flex items-center justify-between py-2 border-b border-gray-50 last:border-0">
-                    <span className="text-gray-500 text-sm flex items-center gap-2">
+                  <div key={stat.label} className="flex items-center justify-between py-2 border-b border-[color:var(--line)] last:border-0">
+                    <span className="text-[color:var(--text-2)] text-sm flex items-center gap-2">
                       <span className="text-base">{stat.icon}</span>
                       {stat.label}
                     </span>
-                    <span className="font-bold text-gray-900">{stat.value}</span>
+                    <span className="font-bold text-[color:var(--text-1)]">{stat.value}</span>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* Verification Status */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-              <h3 className="text-lg font-bold text-gray-900 mb-4">Verification</h3>
+            <div className="ui-card p-6">
+              <h3 className="text-lg font-bold text-[color:var(--text-1)] mb-4">Verification</h3>
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-gray-500 text-sm">Email</span>
+                  <span className="text-[color:var(--text-2)] text-sm">Email</span>
                   {user.isEmailVerified ? (
                     <span className="flex items-center gap-1 text-green-600 text-sm font-medium">
                       <FiCheck className="w-4 h-4" /> Verified
@@ -503,12 +503,12 @@ const ProfilePage = () => {
                   )}
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-gray-500 text-sm">Phone</span>
-                  <span className="text-gray-400 text-sm">Not added</span>
+                  <span className="text-[color:var(--text-2)] text-sm">Phone</span>
+                  <span className="text-[color:var(--text-muted)] text-sm">Not added</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-gray-500 text-sm">ID</span>
-                  <span className="text-gray-400 text-sm">Not verified</span>
+                  <span className="text-[color:var(--text-2)] text-sm">ID</span>
+                  <span className="text-[color:var(--text-muted)] text-sm">Not verified</span>
                 </div>
               </div>
             </div>
@@ -524,7 +524,7 @@ const ProfilePage = () => {
           >
             <button
               onClick={handleSave}
-              className="px-8 py-3.5 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-semibold rounded-xl shadow-xl shadow-green-500/30 hover:shadow-2xl hover:shadow-green-500/40 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 flex items-center gap-2"
+              className="ui-btn-primary px-8 py-3.5 text-white font-semibold rounded-xl transition-all duration-300 flex items-center gap-2"
             >
               <FiCheck className="w-5 h-5" />
               Save Changes
