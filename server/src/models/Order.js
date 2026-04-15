@@ -54,6 +54,10 @@ const orderSchema = new mongoose.Schema({
 
  
   payment: {
+    idempotencyKey: {
+      type: String,
+      trim: true
+    },
     stripePaymentIntentId: String,
     method: { type: String, default: 'card' },
     status: {
@@ -61,7 +65,10 @@ const orderSchema = new mongoose.Schema({
       enum: ['pending', 'succeeded', 'failed', 'refunded'],
       default: 'pending'
     },
-    paidAt: Date
+    paidAt: Date,
+    refundId: String,
+    refundedAt: Date,
+    refundAmount: Number
   },
 
   requirements: [{
@@ -162,6 +169,7 @@ orderSchema.index({ gig: 1 });
 orderSchema.index({ status: 1 });
 orderSchema.index({ createdAt: -1 });
 orderSchema.index({ 'payment.stripePaymentIntentId': 1 });
+orderSchema.index({ 'payment.idempotencyKey': 1 }, { unique: true, sparse: true });
 
 orderSchema.virtual('isLate').get(function () {
   if (this.status === 'completed' || this.status === 'cancelled') {

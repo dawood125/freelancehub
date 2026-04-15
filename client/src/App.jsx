@@ -1,3 +1,4 @@
+import { lazy, Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { useTheme } from "./context/ThemeContext";
@@ -6,20 +7,29 @@ import { useTheme } from "./context/ThemeContext";
 import Navbar from "./components/layout/Navbar";
 import Footer from "./components/layout/Footer";
 
-// Pages
-import HomePage from "./pages/home/HomePage";
-import LoginPage from "./pages/auth/LoginPage";
-import RegisterPage from "./pages/auth/RegisterPage";
-import VerifyEmailPage from "./pages/auth/VerifyEmailPage";
-import ForgotPasswordPage from "./pages/auth/ForgotPasswordPage";
-import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
-import ProfilePage from "./pages/profile/ProfilePage";
-import GigsPage from "./pages/gigs/GigsPage";
-import GigDetailPage from "./pages/gigs/GigDetailPage";
-import CreateGigPage from "./pages/gigs/CreateGigPage";
-import OrdersPage from "./pages/orders/OrdersPage";
-import OrderDetailPage from "./pages/orders/OrderDetailPage";
-import CheckoutPage from "./pages/checkout/CheckoutPage";
+// Lazy pages for route-level code splitting
+const HomePage = lazy(() => import("./pages/home/HomePage"));
+const LoginPage = lazy(() => import("./pages/auth/LoginPage"));
+const RegisterPage = lazy(() => import("./pages/auth/RegisterPage"));
+const VerifyEmailPage = lazy(() => import("./pages/auth/VerifyEmailPage"));
+const ForgotPasswordPage = lazy(() => import("./pages/auth/ForgotPasswordPage"));
+const ResetPasswordPage = lazy(() => import("./pages/auth/ResetPasswordPage"));
+const ProfilePage = lazy(() => import("./pages/profile/ProfilePage"));
+const GigsPage = lazy(() => import("./pages/gigs/GigsPage"));
+const GigDetailPage = lazy(() => import("./pages/gigs/GigDetailPage"));
+const CreateGigPage = lazy(() => import("./pages/gigs/CreateGigPage"));
+const OrdersPage = lazy(() => import("./pages/orders/OrdersPage"));
+const OrderDetailPage = lazy(() => import("./pages/orders/OrderDetailPage"));
+const CheckoutPage = lazy(() => import("./pages/checkout/CheckoutPage"));
+
+const RouteFallback = () => (
+  <div className="min-h-[56vh] flex items-center justify-center px-4">
+    <div className="glass-card rounded-2xl px-6 py-5 flex items-center gap-3">
+      <div className="w-5 h-5 rounded-full border-2 border-[rgba(var(--accent-rgb),0.25)] border-t-[rgb(var(--accent-rgb))] animate-spin" />
+      <p className="text-sm font-medium text-(--text-2)">Loading page...</p>
+    </div>
+  </div>
+);
 
 const AppLayout = () => {
   const { theme } = useTheme();
@@ -55,29 +65,31 @@ const AppLayout = () => {
 
       {!isAuthRoute && <Navbar />}
 
-      <main className="flex-grow">
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/verify-email" element={<VerifyEmailPage />} />
-          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-          <Route
-            path="/reset-password/:token"
-            element={<ResetPasswordPage />}
-          />
+      <main className="grow">
+        <Suspense fallback={<RouteFallback />}>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/verify-email" element={<VerifyEmailPage />} />
+            <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+            <Route
+              path="/reset-password/:token"
+              element={<ResetPasswordPage />}
+            />
 
-          <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/profile" element={<ProfilePage />} />
 
-          <Route path="/gigs" element={<GigsPage />} />
-          <Route path="/gigs/:id" element={<GigDetailPage />} />
-          <Route path="/create-gig" element={<CreateGigPage />} />
+            <Route path="/gigs" element={<GigsPage />} />
+            <Route path="/gigs/:id" element={<GigDetailPage />} />
+            <Route path="/create-gig" element={<CreateGigPage />} />
 
-          <Route path="/checkout" element={<CheckoutPage />} />
+            <Route path="/checkout" element={<CheckoutPage />} />
 
-          <Route path="/orders" element={<OrdersPage />} />
-          <Route path="/orders/:id" element={<OrderDetailPage />} />
-        </Routes>
+            <Route path="/orders" element={<OrdersPage />} />
+            <Route path="/orders/:id" element={<OrderDetailPage />} />
+          </Routes>
+        </Suspense>
       </main>
 
       {!isAuthRoute && <Footer />}

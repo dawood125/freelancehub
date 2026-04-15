@@ -1,6 +1,7 @@
 const Order = require('../models/Order');
 const Gig = require('../models/Gig');
 const User = require('../models/User');
+const stripe = require('../config/stripe');
 const AppError = require('../utils/AppError');
 const catchAsync = require('../utils/catchAsync');
 
@@ -312,6 +313,40 @@ const cancelOrder = catchAsync(async (req, res, next) => {
   const { reason } = req.body;
   if (!reason) return next(new AppError('Please provide a reason for cancellation', 400));
 
+  const isPaidOrder = order.payment?.status === 'succeeded';
+
+  // For paid orders, we refund first and only then cancel locally.
+  if (isPaidOrder) {
+    if (!order.payment?.stripePaymentIntentId) {
+      return next(new AppError('Order is marked as paid but missing payment intent. Please contact support.', 409));
+    }
+
+    if (!order.payment?.refundId) {
+      const refund = await stripe.refunds.create(
+        {
+          payment_intent: order.payment.stripePaymentIntentId,
+          metadata: {
+            orderId: order._id.toString(),
+            orderNumber: order.orderNumber,
+            cancelledBy: req.user._id.toString()
+          },
+          reason: 'requested_by_customer'
+        },
+        {
+          idempotencyKey: `fh_refund_${order._id.toString()}`
+        }
+      );
+
+      order.payment.refundId = refund.id;
+      order.payment.refundAmount = typeof refund.amount === 'number'
+        ? Math.round((refund.amount / 100) * 100) / 100
+        : undefined;
+    }
+
+    order.payment.status = 'refunded';
+    order.payment.refundedAt = new Date();
+  }
+
   order.status = 'cancelled';
   order.timeline.cancelledAt = new Date();
   order.autoCompleteAt = undefined;
@@ -325,14 +360,11 @@ const cancelOrder = catchAsync(async (req, res, next) => {
 
   await order.save();
 
-  // ★ Only track cancellation stat if order was paid (not just pending_payment)
-  if (order.payment?.status === 'succeeded') {
+  // Only track cancellation stat if order had completed payment.
+  if (isPaidOrder) {
     await Gig.findByIdAndUpdate(order.gig, {
       $inc: { 'stats.cancelledOrders': 1 }
     });
-
-    // TODO: Trigger Stripe refund here for paid orders
-    // await stripe.refunds.create({ payment_intent: order.payment.stripePaymentIntentId });
   }
 
   const populatedOrder = await populateOrder(Order.findById(order._id));

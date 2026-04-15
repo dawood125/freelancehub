@@ -53,6 +53,13 @@ const CheckoutForm = ({ gig, packageType }) => {
 
   const [isProcessing, setIsProcessing] = useState(false);
   const [cardComplete, setCardComplete] = useState(false);
+  const [checkoutAttemptKey] = useState(() => {
+    const randomPart = typeof crypto !== "undefined" && crypto.randomUUID
+      ? crypto.randomUUID()
+      : `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+
+    return `checkout-${gig._id}-${packageType}-${randomPart}`;
+  });
 
   const selectedPkg = gig.packages[packageType] || gig.packages.basic;
   const subtotal = selectedPkg.price;
@@ -74,9 +81,17 @@ const CheckoutForm = ({ gig, packageType }) => {
       const response = await paymentService.createPaymentIntent({
         gigId: gig._id,
         packageType,
+        idempotencyKey: checkoutAttemptKey,
       });
 
-      const { clientSecret, order } = response.data;
+      const { clientSecret, order, alreadyPaid } = response.data;
+
+      if (alreadyPaid) {
+        toast.success("Payment already confirmed for this order.");
+        navigate(`/orders/${order._id}`);
+        setIsProcessing(false);
+        return;
+      }
 
       // Step 2: Confirm payment with Stripe
       const { error, paymentIntent } = await stripe.confirmCardPayment(

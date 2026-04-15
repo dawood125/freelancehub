@@ -2,8 +2,16 @@ import api from './api';
 
 const paymentService = {
 
-  createPaymentIntent: async ({ gigId, packageType }) => {
-    const response = await api.post('/payments/create-intent', { gigId, packageType });
+  createPaymentIntent: async ({ gigId, packageType, idempotencyKey }) => {
+    const response = await api.post(
+      '/payments/create-intent',
+      { gigId, packageType },
+      {
+        headers: idempotencyKey
+          ? { 'x-idempotency-key': idempotencyKey }
+          : undefined
+      }
+    );
     return response.data;
   },
 
