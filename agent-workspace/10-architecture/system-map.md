@@ -16,6 +16,7 @@ Last updated: 2026-04-15
 - Payment endpoints
 - Review endpoints
 - Category endpoints
+- Messaging module (conversation/message APIs + socket events)
 
 ## Frontend Module Shape (Current)
 
@@ -25,6 +26,6 @@ Last updated: 2026-04-15
 
 ## Architectural Focus Next
 
-1. Payment transaction safety and webhook integrity
-2. Event-driven notifications/messages foundation
-3. Better testability and guardrails around state transitions
+1. Frontend chat integration and unread indicator UX
+2. Event-driven notification foundation
+3. Better testability and guardrails around realtime/message flows

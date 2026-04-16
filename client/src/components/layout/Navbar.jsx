@@ -3,10 +3,12 @@ import { Link, useLocation } from 'react-router-dom';
 import { HiMenu, HiX } from 'react-icons/hi';
 import { FiSearch, FiMoon, FiSun } from 'react-icons/fi';
 import { useTheme } from '../../context/ThemeContext';
+import messageService from '../../services/messageService';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [unreadMessages, setUnreadMessages] = useState(0);
   const location = useLocation();
   const { theme, toggleTheme } = useTheme();
 
@@ -30,8 +32,37 @@ const Navbar = () => {
     { name: 'Explore', path: '/gigs' },
     { name: 'Create Gig', path: '/create-gig' },
     { name: 'Orders', path: '/orders' },
+    { name: 'Messages', path: '/messages' },
     { name: 'Profile', path: '/profile' },
   ];
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setUnreadMessages(0);
+      return;
+    }
+
+    const fetchUnreadCount = async () => {
+      try {
+        const response = await messageService.getConversations();
+        const conversations = response.data?.conversations || [];
+
+        const count = conversations.reduce((sum, entry) => {
+          return sum + (entry.unreadCount || 0);
+        }, 0);
+
+        setUnreadMessages(count);
+      } catch {
+        // Silent on nav polling. Main messages page handles detailed errors.
+      }
+    };
+
+    fetchUnreadCount();
+    const intervalId = setInterval(fetchUnreadCount, 20000);
+
+    return () => clearInterval(intervalId);
+  }, [location.pathname]);
 
   return (
     <>
@@ -65,6 +96,11 @@ const Navbar = () => {
                   }`}
                 >
                   {link.name}
+                  {link.path === '/messages' && unreadMessages > 0 && (
+                    <span className="absolute -top-1 -right-1 min-w-5 h-5 px-1.5 rounded-full bg-[rgb(var(--accent-rgb))] text-white text-[10px] font-bold inline-flex items-center justify-center">
+                      {unreadMessages > 99 ? '99+' : unreadMessages}
+                    </span>
+                  )}
                 </Link>
               ))}
             </div>
@@ -119,6 +155,11 @@ const Navbar = () => {
                 className="block px-4 py-3 text-[color:var(--text-2)] font-medium rounded-xl hover:bg-[color:var(--surface-soft)] hover:text-[color:var(--accent)] transition-all duration-300"
               >
                 {link.name}
+                {link.path === '/messages' && unreadMessages > 0 && (
+                  <span className="ml-2 inline-flex min-w-5 h-5 px-1.5 rounded-full bg-[rgb(var(--accent-rgb))] text-white text-[10px] font-bold items-center justify-center align-middle">
+                    {unreadMessages > 99 ? '99+' : unreadMessages}
+                  </span>
+                )}
               </Link>
             ))}
             <hr className="my-3 border-[color:var(--line)]" />

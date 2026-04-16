@@ -16,13 +16,25 @@ Goal:
 - Build conversation/message models and real-time socket events.
 
 Work items:
-- Define conversation and message schemas with role-safe access rules.
-- Implement messaging APIs for list/create/read/update message states.
-- Add Socket.IO room and event flow for real-time delivery.
-- Build basic chat UI page and unread indicators.
+- [x] Define conversation and message schemas with role-safe access rules.
+- [x] Implement messaging APIs for list/create/read/update message states.
+- [x] Add Socket.IO room and event flow for real-time delivery.
+- [x] Build basic chat UI page and unread indicators.
 
 Messaging milestone status:
-- Not started yet.
+- In progress.
+
+Completed now:
+- Added `Conversation` and `Message` models with indexes and unread tracking.
+- Added messaging service layer for conversation creation, message send/read, pagination, and access guards.
+- Added protected message routes and controller endpoints.
+- Added Socket.IO server with JWT-authenticated connections and conversation room events.
+- Wired sockets into server startup and message routes into API app.
+- Fixed gig detail package selection UX (removed forced top scroll) and strengthened contact-to-conversation entry path.
+- Verified messaging route existence directly in source app runtime (`/api/messages/conversations` returns `401` when unauthenticated).
+
+Remaining in milestone:
+- Add messaging-specific automated tests.
 
 ## Milestone 3 Progress Notes
 

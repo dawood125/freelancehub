@@ -18,7 +18,7 @@ const STATUS_CONFIG = {
   in_progress: { label: 'In Progress', color: 'text-blue-600 bg-blue-50 border-blue-200', icon: '🔨', step: 2 },
   delivered: { label: 'Delivered', color: 'text-purple-600 bg-purple-50 border-purple-200', icon: '📦', step: 3 },
   revision_requested: { label: 'Revision Requested', color: 'text-orange-600 bg-orange-50 border-orange-200', icon: '🔄', step: 2 },
-  completed: { label: 'Completed', color: 'text-green-600 bg-green-50 border-green-200', icon: '✅', step: 4 },
+  completed: { label: 'Completed', color: 'text-green-600 bg-green-50 border-green-200', step: 4 },
   cancelled: { label: 'Cancelled', color: 'text-red-600 bg-red-50 border-red-200', icon: '❌', step: 0 },
 };
 

@@ -12,8 +12,8 @@ Frontend:
 
 Backend:
 - Express API in `server/`
-- Modules present: auth, users, gigs, orders, payments, reviews, categories
-- MongoDB models present for User, Gig, Order, Review, Category
+- Modules present: auth, users, gigs, orders, payments, reviews, categories, messaging
+- MongoDB models present for User, Gig, Order, Review, Category, Conversation, Message
 
 ## Why Recent Work Was Done
 
@@ -35,3 +35,6 @@ Backend:
 - Step 2 complete: paid-order cancellation refund consistency and refund webhook synchronization.
 - Step 3 complete: automated tests added for idempotency, webhook retries, and refund synchronization.
 - Payment Hardening Sprint is complete. Next implementation focus is Messaging Sprint.
+- Messaging Step 1 complete: backend messaging APIs + Socket.IO realtime events are implemented.
+- Messaging Step 2 complete: frontend Messages page and navbar unread indicator integration are implemented.
+- Next step: messaging-specific automated tests, then milestone close.

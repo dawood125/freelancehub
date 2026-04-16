@@ -50,13 +50,48 @@ const GigDetailPage = () => {
     }
 
     const currentUser = JSON.parse(localStorage.getItem("user") || "{}");
-    if (currentUser.id === gig.seller?._id) {
+    if (currentUser._id === gig.seller?._id) {
       toast.error("You cannot order your own gig");
       return;
     }
 
     // Navigate to checkout page (instead of creating order directly)
     navigate(`/checkout?gig=${gig._id}&package=${selectedPackage}`);
+  };
+
+  const handleContactSeller = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      toast.error("Please login to message the seller");
+      navigate("/login");
+      return;
+    }
+
+    const currentUser = JSON.parse(localStorage.getItem("user") || "{}");
+    if (currentUser._id === gig.seller?._id) {
+      toast.error("You cannot message yourself from this gig");
+      return;
+    }
+
+    try {
+      const response = await orderService.getMyOrders({ role: "buyer", limit: 100 });
+      const orders = response?.data?.orders || [];
+
+      const relatedOrder = orders.find(
+        (order) => order?.gig?._id === gig._id && order?.status !== "cancelled",
+      );
+
+      if (!relatedOrder) {
+        toast.error("Place an order first to start a conversation with this seller.");
+        navigate(`/checkout?gig=${gig._id}&package=${selectedPackage}`);
+        return;
+      }
+
+      navigate(`/messages?orderId=${relatedOrder._id}`);
+    } catch (error) {
+      const message = error.response?.data?.message || "Failed to start conversation.";
+      toast.error(message);
+    }
   };
 
   if (isLoading) {
@@ -393,7 +428,6 @@ const GigDetailPage = () => {
                           <button
                             onClick={() => {
                               setSelectedPackage(tab.key);
-                              window.scrollTo({ top: 0, behavior: "smooth" });
                             }}
                             className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 ${
                               selectedPackage === tab.key
@@ -502,7 +536,10 @@ const GigDetailPage = () => {
                 </button>
 
                 {/* Contact Button */}
-                <button className="w-full mt-2.5 py-2.5 text-[color:var(--text-2)] font-semibold border border-[color:var(--line)] rounded-xl hover:border-[color:var(--accent)] hover:text-[color:var(--accent)] transition-all duration-300 flex items-center justify-center gap-2 text-sm">
+                <button
+                  onClick={handleContactSeller}
+                  className="w-full mt-2.5 py-2.5 text-[color:var(--text-2)] font-semibold border border-[color:var(--line)] rounded-xl hover:border-[color:var(--accent)] hover:text-[color:var(--accent)] transition-all duration-300 flex items-center justify-center gap-2 text-sm"
+                >
                   <FiMessageSquare className="w-5 h-5" />
                   Contact Seller
                 </button>

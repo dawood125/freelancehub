@@ -78,3 +78,56 @@ Reason:
 
 Impact:
 - Payment Hardening Sprint now has repeatable automated verification and is ready to close.
+
+---
+
+## 2026-04-16 (Messaging Sprint - Step 1)
+
+Decision:
+- Implement messaging as a dedicated module with `Conversation` and `Message` models plus a shared `messageService` for access-safe business logic.
+
+Reason:
+- Keeps controller and socket event handlers thin while reusing the same authorization and state updates across HTTP and real-time channels.
+
+Impact:
+- Messaging APIs and socket handlers now share consistent participant checks and unread-count behavior.
+
+Decision:
+- Bind conversations to orders (one conversation per order) for the initial milestone slice.
+
+Reason:
+- Strongest role-safety baseline with existing marketplace entities and avoids uncontrolled cross-user chat creation.
+
+Impact:
+- Buyer and seller can communicate with explicit order-linked access control, with room to expand to pre-order chat later.
+
+Decision:
+- Build first chat UI as a dedicated `/messages` page with conversation list + thread pane + unread badge on navbar.
+
+Reason:
+- Delivers a complete vertical slice quickly while staying aligned with current route/navigation architecture.
+
+Impact:
+- Messaging is now accessible end-to-end from UI and can be iterated with richer UX features in later milestones.
+
+---
+
+## 2026-04-16 (Messaging Sprint - Stability Fixes)
+
+Decision:
+- Treat `/api/messages/conversations` 404 as runtime drift (stale process) rather than route wiring failure after verifying route exists in source app execution.
+
+Reason:
+- Source-level app check returned `401` on `/api/messages/conversations`, proving route is mounted.
+
+Impact:
+- Troubleshooting guidance now includes backend restart/process validation when route mismatch appears.
+
+Decision:
+- Remove forced scroll-to-top on package selection in gig detail compare table and strengthen order/contact action flows.
+
+Reason:
+- Package selection UX was disruptive and could block perceived checkout progression.
+
+Impact:
+- Package selection remains in context, checkout navigation remains stable, and contact flow now routes through order-based messaging.

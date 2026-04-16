@@ -10,7 +10,7 @@ const STATUS_CONFIG = {
   in_progress: { label: 'In Progress', color: 'bg-blue-100 text-blue-700', icon: '🔨' },
   delivered: { label: 'Delivered', color: 'bg-purple-100 text-purple-700', icon: '📦' },
   revision_requested: { label: 'Revision Requested', color: 'bg-orange-100 text-orange-700', icon: '🔄' },
-  completed: { label: 'Completed', color: 'bg-green-100 text-green-700', icon: '✅' },
+  completed: { label: 'Completed', color: 'bg-green-100 text-green-700', },
   cancelled: { label: 'Cancelled', color: 'bg-red-100 text-red-700', icon: '❌' },
 };
 
