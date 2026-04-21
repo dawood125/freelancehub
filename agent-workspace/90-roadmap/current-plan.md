@@ -1,28 +1,32 @@
 # Current Plan
 
-Last updated: 2026-04-15
+Last updated: 2026-04-21
 
 ## Completed Milestones
 
 1. Premium UI redesign and consistency pass
 2. Frontend route-level lazy loading and bundle split improvements
 3. Payment Hardening Sprint
+4. Messaging Sprint
 
 ## Active Milestone
 
-4. Messaging Sprint
+5. Notifications Sprint
 
 Goal:
-- Build conversation/message models and real-time socket events.
+- Build event-driven notification model, API, and UI panel.
+
+Pre-start adjustments completed:
+- Messaging module UX consistency pass completed (chat pane scroll constraints, sender identity rendering fixes, and live presence indicators).
 
 Work items:
-- [x] Define conversation and message schemas with role-safe access rules.
-- [x] Implement messaging APIs for list/create/read/update message states.
-- [x] Add Socket.IO room and event flow for real-time delivery.
-- [x] Build basic chat UI page and unread indicators.
+- [ ] Define notification schema and event taxonomy (order/message/review/payment triggers).
+- [ ] Implement protected notification APIs (list, mark-read, mark-all-read).
+- [ ] Add notification UI entry point (navbar badge + panel/page).
+- [ ] Add notification automated tests for lifecycle and access behavior.
 
 Messaging milestone status:
-- In progress.
+- Complete.
 
 Completed now:
 - Added `Conversation` and `Message` models with indexes and unread tracking.
@@ -32,9 +36,11 @@ Completed now:
 - Wired sockets into server startup and message routes into API app.
 - Fixed gig detail package selection UX (removed forced top scroll) and strengthened contact-to-conversation entry path.
 - Verified messaging route existence directly in source app runtime (`/api/messages/conversations` returns `401` when unauthenticated).
+- Added `server/tests/messageController.test.js` covering conversation create/list/read flows, socket emit behavior, and controller error forwarding.
+- Verified backend suite passes with `messageController.test.js` and `paymentController.test.js`.
 
 Remaining in milestone:
-- Add messaging-specific automated tests.
+- None. Milestone is complete.
 
 ## Milestone 3 Progress Notes
 
@@ -50,10 +56,7 @@ Completed now:
 Remaining in milestone:
 - None. Milestone is complete.
 
-## Next Milestones (After Messaging)
-
-5. Notifications Sprint
-- Build event-driven notification model, API, and UI panel.
+## Next Milestones (After Notifications)
 
 6. Dashboard Sprint
 - Build seller, client, and admin analytics surfaces.

@@ -16,10 +16,23 @@ const getCurrentUserId = () => {
     if (!rawUser) return '';
 
     const parsed = JSON.parse(rawUser);
-    return parsed?._id || '';
+    return parsed?._id || parsed?.id || '';
   } catch {
     return '';
   }
+};
+
+const getEntityId = (value) => {
+  if (!value) return '';
+  if (typeof value === 'string') return value;
+  return value._id || value.id || '';
+};
+
+const getSenderId = (message) => getEntityId(message?.sender);
+
+const getOtherParticipant = (participants, currentUserId) => {
+  if (!Array.isArray(participants) || !participants.length) return null;
+  return participants.find((participant) => getEntityId(participant) !== currentUserId) || participants[0];
 };
 
 const formatTime = (value) => {
@@ -33,6 +46,7 @@ const MessagesPage = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const socketRef = useRef(null);
+  const selectedConversationIdRef = useRef('');
   const messagePaneRef = useRef(null);
 
   const [isBooting, setIsBooting] = useState(true);
@@ -40,11 +54,16 @@ const MessagesPage = () => {
   const [conversations, setConversations] = useState([]);
   const [selectedConversationId, setSelectedConversationId] = useState('');
   const [messages, setMessages] = useState([]);
+  const [onlineUserIds, setOnlineUserIds] = useState([]);
   const [draftMessage, setDraftMessage] = useState('');
   const [isSending, setIsSending] = useState(false);
 
   const token = useMemo(() => localStorage.getItem('token') || '', []);
   const currentUserId = useMemo(() => getCurrentUserId(), []);
+
+  useEffect(() => {
+    selectedConversationIdRef.current = selectedConversationId;
+  }, [selectedConversationId]);
 
   useEffect(() => {
     if (!token) {
@@ -75,8 +94,8 @@ const MessagesPage = () => {
 
         const current = next[idx];
         const shouldIncrementUnread =
-          conversationId !== selectedConversationId &&
-          message?.sender?._id !== currentUserId;
+          conversationId !== selectedConversationIdRef.current &&
+          getSenderId(message) !== currentUserId;
 
         const unreadCount = shouldIncrementUnread
           ? (current.unreadCount || 0) + 1
@@ -105,7 +124,7 @@ const MessagesPage = () => {
         return next;
       });
 
-      if (conversationId === selectedConversationId) {
+      if (conversationId === selectedConversationIdRef.current) {
         setMessages((prev) => {
           if (prev.some((item) => item._id === message._id)) {
             return prev;
@@ -113,6 +132,46 @@ const MessagesPage = () => {
           return [...prev, message];
         });
       }
+    });
+
+    socket.on('conversation:presence', ({ conversationId, onlineUserIds: payloadOnlineUserIds }) => {
+      if (conversationId !== selectedConversationIdRef.current) return;
+
+      if (!Array.isArray(payloadOnlineUserIds) || !payloadOnlineUserIds.length) return;
+      setOnlineUserIds((prev) => {
+        const next = new Set(prev);
+        payloadOnlineUserIds.forEach((id) => {
+          if (id) next.add(id);
+        });
+        return Array.from(next);
+      });
+    });
+
+    socket.on('conversation:presence:update', ({ conversationId, userId, online }) => {
+      if (conversationId !== selectedConversationIdRef.current || !userId || userId === currentUserId) return;
+
+      setOnlineUserIds((prev) => {
+        const nextSet = new Set(prev);
+        if (online) {
+          nextSet.add(userId);
+        } else {
+          nextSet.delete(userId);
+        }
+        return Array.from(nextSet);
+      });
+    });
+
+    socket.on('presence:user-online', ({ userId }) => {
+      if (!userId || userId === currentUserId) return;
+      setOnlineUserIds((prev) => {
+        if (prev.includes(userId)) return prev;
+        return [...prev, userId];
+      });
+    });
+
+    socket.on('presence:user-offline', ({ userId }) => {
+      if (!userId || userId === currentUserId) return;
+      setOnlineUserIds((prev) => prev.filter((id) => id !== userId));
     });
 
     socket.on('socket:error', (payload) => {
@@ -125,7 +184,7 @@ const MessagesPage = () => {
       socket.disconnect();
       socketRef.current = null;
     };
-  }, [token, selectedConversationId, currentUserId]);
+  }, [token, currentUserId]);
 
   useEffect(() => {
     if (!selectedConversationId || !socketRef.current) return;
@@ -141,11 +200,12 @@ const MessagesPage = () => {
     setIsBooting(true);
     try {
       const orderId = searchParams.get('orderId');
-      const queryConversation = searchParams.get('conversation');
+      let queryConversation = searchParams.get('conversation');
 
       if (orderId) {
         const response = await messageService.getOrCreateConversation(orderId);
         const conversationId = response.data.conversation._id;
+        queryConversation = conversationId;
         setSearchParams({ conversation: conversationId });
       }
 
@@ -264,6 +324,11 @@ const MessagesPage = () => {
   const selectedConversation = conversations.find(
     (entry) => entry.conversation._id === selectedConversationId
   );
+  const activeOtherParticipant = getOtherParticipant(selectedConversation?.conversation?.participants, currentUserId);
+  const activeOtherParticipantId = getEntityId(activeOtherParticipant);
+  const isActiveOtherParticipantOnline = activeOtherParticipantId
+    ? onlineUserIds.includes(activeOtherParticipantId)
+    : false;
 
   return (
     <div className="min-h-screen bg-[color:var(--bg)] py-8">
@@ -318,9 +383,15 @@ const MessagesPage = () => {
                     const { conversation, unreadCount } = entry;
                     const isActive = conversation._id === selectedConversationId;
 
-                    const otherParticipant = (conversation.participants || []).find(
-                      (participant) => participant._id !== currentUserId
-                    ) || conversation.participants?.[0];
+                    const otherParticipant = getOtherParticipant(conversation.participants, currentUserId);
+                    const otherParticipantId = getEntityId(otherParticipant);
+                    const isOtherParticipantOnline = otherParticipantId
+                      ? onlineUserIds.includes(otherParticipantId)
+                      : false;
+                    const lastMessageSenderId = getEntityId(conversation.lastMessage?.sender);
+                    const lastMessagePrefix = lastMessageSenderId && lastMessageSenderId === currentUserId
+                      ? 'You: '
+                      : '';
 
                     return (
                       <button
@@ -335,11 +406,22 @@ const MessagesPage = () => {
                       >
                         <div className="flex items-start justify-between gap-3">
                           <div className="min-w-0">
-                            <p className="font-semibold text-sm text-[color:var(--text-1)] truncate">
-                              {otherParticipant?.name || otherParticipant?.username || 'Conversation'}
-                            </p>
+                            <div className="flex items-center gap-2">
+                              <span
+                                className={`h-2 w-2 rounded-full ${
+                                  isOtherParticipantOnline
+                                    ? 'bg-[rgb(var(--ok-rgb))]'
+                                    : 'bg-[color:var(--text-3)]'
+                                }`}
+                              />
+                              <p className="font-semibold text-sm text-[color:var(--text-1)] truncate">
+                                {otherParticipant?.name || otherParticipant?.username || 'Conversation'}
+                              </p>
+                            </div>
                             <p className="text-xs text-[color:var(--text-3)] truncate mt-0.5">
-                              {conversation.lastMessage?.text || 'No messages yet'}
+                              {conversation.lastMessage?.text
+                                ? `${lastMessagePrefix}${conversation.lastMessage.text}`
+                                : 'No messages yet'}
                             </p>
                           </div>
 
@@ -361,7 +443,7 @@ const MessagesPage = () => {
               )}
             </aside>
 
-            <section className="lg:col-span-8 glass-card rounded-2xl p-4 sm:p-5 min-h-[70vh] flex flex-col">
+            <section className="lg:col-span-8 glass-card rounded-2xl p-4 sm:p-5 h-[70vh] flex flex-col">
               {!selectedConversation ? (
                 <div className="flex-1 flex items-center justify-center text-center">
                   <div>
@@ -372,18 +454,40 @@ const MessagesPage = () => {
               ) : (
                 <>
                   <div className="px-1 pb-3 mb-3 border-b border-[color:var(--line)]">
-                    <p className="text-sm font-semibold text-[color:var(--text-1)]">Conversation</p>
-                    <p className="text-xs text-[color:var(--text-3)]">Order linked secure chat</p>
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="min-w-0">
+                        <p className="text-sm font-semibold text-[color:var(--text-1)] truncate">
+                          {activeOtherParticipant?.name || activeOtherParticipant?.username || 'Conversation'}
+                        </p>
+                        <p className="text-xs text-[color:var(--text-3)]">Order linked secure chat</p>
+                      </div>
+                      <span
+                        className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-semibold ${
+                          isActiveOtherParticipantOnline
+                            ? 'bg-[rgba(var(--ok-rgb),0.16)] text-[rgb(var(--ok-rgb))]'
+                            : 'bg-[color:var(--surface-soft)] text-[color:var(--text-3)]'
+                        }`}
+                      >
+                        <span
+                          className={`h-2 w-2 rounded-full ${
+                            isActiveOtherParticipantOnline
+                              ? 'bg-[rgb(var(--ok-rgb))]'
+                              : 'bg-[color:var(--text-3)]'
+                          }`}
+                        />
+                        {isActiveOtherParticipantOnline ? 'Online' : 'Offline'}
+                      </span>
+                    </div>
                   </div>
 
-                  <div ref={messagePaneRef} className="flex-1 overflow-auto pr-1 space-y-3">
+                  <div ref={messagePaneRef} className="flex-1 min-h-0 overflow-y-auto pr-1 space-y-3">
                     {isLoadingMessages ? (
                       <div className="h-full flex items-center justify-center">
                         <div className="w-7 h-7 border-2 border-[rgba(var(--accent-rgb),0.25)] border-t-[rgb(var(--accent-rgb))] rounded-full animate-spin" />
                       </div>
                     ) : messages.length ? (
                       messages.map((message) => {
-                        const isMine = message.sender?._id === currentUserId;
+                        const isMine = getSenderId(message) === currentUserId;
 
                         return (
                           <div
@@ -397,6 +501,11 @@ const MessagesPage = () => {
                                   : 'bg-[color:var(--surface-soft)] border-[color:var(--line)] text-[color:var(--text-1)]'
                               }`}
                             >
+                              <p className="text-[11px] font-semibold text-[color:var(--text-3)] mb-1">
+                                {isMine
+                                  ? 'You'
+                                  : (message.sender?.name || message.sender?.username || 'User')}
+                              </p>
                               <p className="text-sm whitespace-pre-wrap leading-relaxed">{message.content}</p>
                               <p className="text-[10px] text-[color:var(--text-3)] mt-1 text-right">
                                 {formatTime(message.createdAt)}

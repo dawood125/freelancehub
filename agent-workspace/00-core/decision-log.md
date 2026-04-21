@@ -131,3 +131,38 @@ Reason:
 
 Impact:
 - Package selection remains in context, checkout navigation remains stable, and contact flow now routes through order-based messaging.
+
+---
+
+## 2026-04-21 (Messaging Sprint - Step 3)
+
+Decision:
+- Add a dedicated messaging controller Jest suite in `server/tests/messageController.test.js` as the final milestone release gate.
+
+Reason:
+- Messaging sprint closure required repeatable verification for controller contracts, socket emission behavior, and async error forwarding.
+
+Impact:
+- Messaging milestone is now test-backed and closed; backend suite currently passes with both payment and messaging tests.
+
+Decision:
+- Move active roadmap execution from Messaging Sprint to Notifications Sprint.
+
+Reason:
+- All planned messaging work items are complete and validated.
+
+Impact:
+- Next implementation focus is notification model/API/UI with matching automated tests.
+
+---
+
+## 2026-04-21 (Messaging UX Consistency Pass)
+
+Decision:
+- Perform a focused messaging module stabilization pass before starting Notifications Sprint.
+
+Reason:
+- Reported UX regressions blocked usability: chat pane not scrolling, unreliable sender differentiation, and missing live user presence.
+
+Impact:
+- Messages UI now uses robust user ID resolution (`id`/`_id`) for sender alignment, fixed-height scrollable thread layout, and Socket.IO-driven conversation presence indicators (online/offline) for participants.

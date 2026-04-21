@@ -8,6 +8,27 @@ const {
 } = require('../services/messageService');
 
 let ioInstance = null;
+const activeConnectionsByUser = new Map();
+
+const incrementUserConnections = (userId) => {
+  const previous = activeConnectionsByUser.get(userId) || 0;
+  const next = previous + 1;
+  activeConnectionsByUser.set(userId, next);
+  return previous === 0;
+};
+
+const decrementUserConnections = (userId) => {
+  const previous = activeConnectionsByUser.get(userId) || 0;
+  if (previous <= 1) {
+    activeConnectionsByUser.delete(userId);
+    return previous > 0;
+  }
+
+  activeConnectionsByUser.set(userId, previous - 1);
+  return false;
+};
+
+const isUserOnline = (userId) => activeConnectionsByUser.has(userId);
 
 const getTokenFromHandshake = (socket) => {
   const authToken = socket.handshake?.auth?.token;
@@ -52,16 +73,36 @@ const initSocket = (httpServer) => {
 
   ioInstance.on('connection', (socket) => {
     const userId = socket.user._id.toString();
+    const becameOnline = incrementUserConnections(userId);
 
     socket.join(`user:${userId}`);
+
+    if (becameOnline) {
+      ioInstance.emit('presence:user-online', { userId });
+    }
 
     socket.on('conversation:join', async (payload = {}) => {
       try {
         const { conversationId } = payload;
         if (!conversationId) return;
 
-        await assertConversationParticipant(conversationId, userId);
+        const conversation = await assertConversationParticipant(conversationId, userId);
         socket.join(`conversation:${conversationId}`);
+
+        const onlineUserIds = (conversation.participants || [])
+          .map((participantId) => participantId.toString())
+          .filter((participantId) => participantId !== userId && isUserOnline(participantId));
+
+        socket.emit('conversation:presence', {
+          conversationId,
+          onlineUserIds
+        });
+
+        ioInstance.to(`conversation:${conversationId}`).emit('conversation:presence:update', {
+          conversationId,
+          userId,
+          online: true
+        });
 
         socket.emit('conversation:joined', { conversationId });
       } catch (error) {
@@ -111,6 +152,29 @@ const initSocket = (httpServer) => {
           event: 'conversation:read',
           message: error.message || 'Unable to mark conversation as read'
         });
+      }
+    });
+
+    socket.on('disconnecting', () => {
+      if (!ioInstance) return;
+
+      Array.from(socket.rooms).forEach((room) => {
+        if (!room.startsWith('conversation:')) return;
+        const conversationId = room.replace('conversation:', '');
+        if (!conversationId) return;
+
+        ioInstance.to(room).emit('conversation:presence:update', {
+          conversationId,
+          userId,
+          online: false
+        });
+      });
+    });
+
+    socket.on('disconnect', () => {
+      const wentOffline = decrementUserConnections(userId);
+      if (wentOffline && ioInstance) {
+        ioInstance.emit('presence:user-offline', { userId });
       }
     });
   });
