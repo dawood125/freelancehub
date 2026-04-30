@@ -166,3 +166,16 @@ Reason:
 
 Impact:
 - Messages UI now uses robust user ID resolution (`id`/`_id`) for sender alignment, fixed-height scrollable thread layout, and Socket.IO-driven conversation presence indicators (online/offline) for participants.
+
+---
+
+## 2026-04-30 (Notifications Sprint - Kickoff)
+
+Decision:
+- Start the notifications module with a minimal but real end-to-end slice: backend notification model/API, notification inbox page, navbar unread badge, and live creation from message/payment events.
+
+Reason:
+- The project needs an actual event-driven notification surface before expanding to richer order/review categories.
+
+Impact:
+- Notifications are now available as a route-backed inbox with unread counts, read actions, and realtime emission support for core marketplace events.

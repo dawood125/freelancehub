@@ -3,6 +3,7 @@ const Order = require('../models/Order');
 const Gig = require('../models/Gig');
 const AppError = require('../utils/AppError');
 const catchAsync = require('../utils/catchAsync');
+const { createNotification } = require('../services/notificationService');
 
 const populateOrder = (query) => {
   return query
@@ -267,6 +268,26 @@ const handleWebhook = async (req, res) => {
         await Gig.findByIdAndUpdate(transitionedOrder.gig, {
           $inc: { 'stats.orders': 1 }
         });
+
+        try {
+          await createNotification({
+            recipientId: transitionedOrder.seller,
+            actorId: paymentIntent.metadata?.buyerId,
+            type: 'payment_succeeded',
+            title: 'Payment received',
+            body: `Order ${transitionedOrder.orderNumber} has been paid and is ready to start.`,
+            link: `/orders/${transitionedOrder._id}`,
+            entityType: 'order',
+            entityId: transitionedOrder._id,
+            metadata: {
+              orderId: transitionedOrder._id.toString(),
+              orderNumber: transitionedOrder.orderNumber,
+              sellerId: transitionedOrder.seller.toString()
+            }
+          });
+        } catch (notificationError) {
+          console.warn('Unable to create payment notification:', notificationError.message);
+        }
 
         console.log(`✅ Order ${transitionedOrder.orderNumber} payment confirmed`);
       } else {

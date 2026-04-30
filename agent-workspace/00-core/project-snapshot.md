@@ -40,3 +40,4 @@ Backend:
 - Messaging Step 3 complete: messaging controller automated tests added in `server/tests/messageController.test.js` and full backend test suite is passing.
 - Messaging Sprint is now complete. Next implementation focus is Notifications Sprint.
 - Pre-Notifications stability pass completed for messaging UX: fixed sender identity resolution (`id` vs `_id`), restored proper chat scrolling with fixed-height message pane constraints, and added live participant presence via Socket.IO online/offline events.
+- Notifications module kickoff complete: notification model/service/controller/routes added, notification inbox page and navbar badge wired, and first event sources added from messages and payment success.

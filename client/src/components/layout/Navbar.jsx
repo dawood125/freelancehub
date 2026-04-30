@@ -4,11 +4,13 @@ import { HiMenu, HiX } from 'react-icons/hi';
 import { FiSearch, FiMoon, FiSun } from 'react-icons/fi';
 import { useTheme } from '../../context/ThemeContext';
 import messageService from '../../services/messageService';
+import notificationService from '../../services/notificationService';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [unreadMessages, setUnreadMessages] = useState(0);
+  const [unreadNotifications, setUnreadNotifications] = useState(0);
   const location = useLocation();
   const { theme, toggleTheme } = useTheme();
 
@@ -32,6 +34,7 @@ const Navbar = () => {
     { name: 'Explore', path: '/gigs' },
     { name: 'Create Gig', path: '/create-gig' },
     { name: 'Orders', path: '/orders' },
+    { name: 'Notifications', path: '/notifications' },
     { name: 'Messages', path: '/messages' },
     { name: 'Profile', path: '/profile' },
   ];
@@ -40,19 +43,25 @@ const Navbar = () => {
     const token = localStorage.getItem('token');
     if (!token) {
       setUnreadMessages(0);
+      setUnreadNotifications(0);
       return;
     }
 
     const fetchUnreadCount = async () => {
       try {
-        const response = await messageService.getConversations();
-        const conversations = response.data?.conversations || [];
+        const [messagesResponse, notificationsResponse] = await Promise.all([
+          messageService.getConversations(),
+          notificationService.getUnreadCount()
+        ]);
+
+        const conversations = messagesResponse.data?.conversations || [];
 
         const count = conversations.reduce((sum, entry) => {
           return sum + (entry.unreadCount || 0);
         }, 0);
 
         setUnreadMessages(count);
+        setUnreadNotifications(notificationsResponse.data?.unreadCount || 0);
       } catch {
         // Silent on nav polling. Main messages page handles detailed errors.
       }
@@ -99,6 +108,11 @@ const Navbar = () => {
                   {link.path === '/messages' && unreadMessages > 0 && (
                     <span className="absolute -top-1 -right-1 min-w-5 h-5 px-1.5 rounded-full bg-[rgb(var(--accent-rgb))] text-white text-[10px] font-bold inline-flex items-center justify-center">
                       {unreadMessages > 99 ? '99+' : unreadMessages}
+                    </span>
+                  )}
+                  {link.path === '/notifications' && unreadNotifications > 0 && (
+                    <span className="absolute -top-1 -right-1 min-w-5 h-5 px-1.5 rounded-full bg-[rgb(var(--warn-rgb))] text-white text-[10px] font-bold inline-flex items-center justify-center">
+                      {unreadNotifications > 99 ? '99+' : unreadNotifications}
                     </span>
                   )}
                 </Link>
@@ -158,6 +172,11 @@ const Navbar = () => {
                 {link.path === '/messages' && unreadMessages > 0 && (
                   <span className="ml-2 inline-flex min-w-5 h-5 px-1.5 rounded-full bg-[rgb(var(--accent-rgb))] text-white text-[10px] font-bold items-center justify-center align-middle">
                     {unreadMessages > 99 ? '99+' : unreadMessages}
+                  </span>
+                )}
+                {link.path === '/notifications' && unreadNotifications > 0 && (
+                  <span className="ml-2 inline-flex min-w-5 h-5 px-1.5 rounded-full bg-[rgb(var(--warn-rgb))] text-white text-[10px] font-bold items-center justify-center align-middle">
+                    {unreadNotifications > 99 ? '99+' : unreadNotifications}
                   </span>
                 )}
               </Link>

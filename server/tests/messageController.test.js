@@ -12,6 +12,10 @@ jest.mock('../src/sockets/socketServer', () => ({
   getIO: jest.fn()
 }));
 
+jest.mock('../src/services/notificationService', () => ({
+  createNotification: jest.fn()
+}));
+
 const {
   createOrGetConversationForOrder,
   listConversationsForUser,
@@ -21,6 +25,7 @@ const {
 } = require('../src/services/messageService');
 
 const { getIO } = require('../src/sockets/socketServer');
+const { createNotification } = require('../src/services/notificationService');
 
 const {
   getOrCreateConversation,
@@ -137,6 +142,9 @@ describe('messageController', () => {
     getIO.mockReturnValue({ to });
 
     sendMessage.mockResolvedValue({
+      conversation: {
+        participants: ['user_1', 'user_2']
+      },
       message: { _id: 'msg_1', content: 'hello there' }
     });
 
@@ -157,6 +165,7 @@ describe('messageController', () => {
       conversationId: 'conv_1',
       message: { _id: 'msg_1', content: 'hello there' }
     });
+    expect(createNotification).toHaveBeenCalledTimes(1);
 
     expect(result.type).toBe('json');
     expect(result.res.status).toHaveBeenCalledWith(201);

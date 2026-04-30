@@ -1,6 +1,6 @@
 # Current Plan
 
-Last updated: 2026-04-21
+Last updated: 2026-04-30
 
 ## Completed Milestones
 
@@ -20,10 +20,11 @@ Pre-start adjustments completed:
 - Messaging module UX consistency pass completed (chat pane scroll constraints, sender identity rendering fixes, and live presence indicators).
 
 Work items:
-- [ ] Define notification schema and event taxonomy (order/message/review/payment triggers).
-- [ ] Implement protected notification APIs (list, mark-read, mark-all-read).
-- [ ] Add notification UI entry point (navbar badge + panel/page).
-- [ ] Add notification automated tests for lifecycle and access behavior.
+- [x] Define notification schema and event taxonomy (order/message/review/payment triggers).
+- [x] Implement protected notification APIs (list, mark-read, mark-all-read).
+- [x] Add notification UI entry point (navbar badge + panel/page).
+- [x] Add notification automated tests for lifecycle and access behavior.
+- [x] Wire initial notification emission from message and payment success events.
 
 Messaging milestone status:
 - Complete.
@@ -40,7 +41,8 @@ Completed now:
 - Verified backend suite passes with `messageController.test.js` and `paymentController.test.js`.
 
 Remaining in milestone:
-- None. Milestone is complete.
+- Expand notification emission to remaining order/review lifecycle events.
+- Add richer notification filters and deep links if needed.
 
 ## Milestone 3 Progress Notes
 

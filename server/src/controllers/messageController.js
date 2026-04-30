@@ -7,6 +7,7 @@ const {
   markConversationRead
 } = require('../services/messageService');
 const { getIO } = require('../sockets/socketServer');
+const { createNotification } = require('../services/notificationService');
 
 const getOrCreateConversation = catchAsync(async (req, res) => {
   const { orderId } = req.params;
@@ -70,6 +71,31 @@ const createMessage = catchAsync(async (req, res) => {
       conversationId,
       message: result.message
     });
+  }
+
+  const recipient = result.conversation?.participants?.find((participantId) => {
+    return participantId.toString() !== req.user._id.toString();
+  });
+
+  if (recipient) {
+    try {
+      await createNotification({
+        recipientId: recipient,
+        actorId: req.user._id,
+        type: 'message_received',
+        title: 'New message received',
+        body: `${req.user.name || 'A user'} sent you a message.`,
+        link: `/messages?conversation=${conversationId}`,
+        entityType: 'conversation',
+        entityId: conversationId,
+        metadata: {
+          conversationId,
+          messageId: result.message._id
+        }
+      });
+    } catch (notificationError) {
+      console.warn('Unable to create message notification:', notificationError.message);
+    }
   }
 
   res.status(201).json({

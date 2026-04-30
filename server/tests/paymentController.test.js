@@ -23,9 +23,14 @@ jest.mock('../src/models/Gig', () => ({
   findByIdAndUpdate: jest.fn()
 }));
 
+jest.mock('../src/services/notificationService', () => ({
+  createNotification: jest.fn()
+}));
+
 const stripe = require('../src/config/stripe');
 const Order = require('../src/models/Order');
 const Gig = require('../src/models/Gig');
+const { createNotification } = require('../src/services/notificationService');
 const {
   createPaymentIntent,
   handleWebhook
@@ -120,7 +125,8 @@ describe('paymentController hardening', () => {
     Order.findOneAndUpdate.mockResolvedValue({
       _id: 'order_1',
       orderNumber: 'FH-TEST-0001',
-      gig: 'gig_1'
+      gig: 'gig_1',
+      seller: 'seller_1'
     });
 
     const req = {
@@ -136,6 +142,7 @@ describe('paymentController hardening', () => {
 
     expect(Order.findOneAndUpdate).toHaveBeenCalled();
     expect(Gig.findByIdAndUpdate).toHaveBeenCalledWith('gig_1', { $inc: { 'stats.orders': 1 } });
+    expect(createNotification).toHaveBeenCalledTimes(1);
     expect(res.json).toHaveBeenCalledWith({ received: true });
   });
 
