@@ -5,6 +5,7 @@ import { FiSearch, FiMoon, FiSun } from 'react-icons/fi';
 import { useTheme } from '../../context/ThemeContext';
 import messageService from '../../services/messageService';
 import notificationService from '../../services/notificationService';
+import useAuthStore from '../../store/useAuthStore';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -13,6 +14,11 @@ const Navbar = () => {
   const [unreadNotifications, setUnreadNotifications] = useState(0);
   const location = useLocation();
   const { theme, toggleTheme } = useTheme();
+  const { user, token, logout } = useAuthStore();
+
+  const handleLogout = () => {
+    logout();
+  };
 
   const isHomePage = location.pathname === '/';
   const useSolidSurface = !isHomePage || isScrolled;
@@ -31,8 +37,8 @@ const Navbar = () => {
   }, [location.pathname]);
 
   const navLinks = [
+    { name: 'Dashboard', path: '/dashboard' },
     { name: 'Explore', path: '/gigs' },
-    { name: 'Create Gig', path: '/create-gig' },
     { name: 'Orders', path: '/orders' },
     { name: 'Notifications', path: '/notifications' },
     { name: 'Messages', path: '/messages' },
@@ -40,7 +46,6 @@ const Navbar = () => {
   ];
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
     if (!token) {
       setUnreadMessages(0);
       setUnreadNotifications(0);
@@ -71,7 +76,7 @@ const Navbar = () => {
     const intervalId = setInterval(fetchUnreadCount, 20000);
 
     return () => clearInterval(intervalId);
-  }, [location.pathname]);
+  }, [location.pathname, token]);
 
   return (
     <>
@@ -133,19 +138,41 @@ const Navbar = () => {
                 {theme === 'dark' ? <FiSun className="w-[18px] h-[18px]" /> : <FiMoon className="w-[18px] h-[18px]" />}
               </button>
 
-              <Link
-                to="/login"
-                className="px-4 py-2 text-sm font-semibold rounded-xl transition-all duration-300 text-[color:var(--text-2)] hover:text-[color:var(--text-1)] hover:bg-[color:var(--surface-card)]"
-              >
-                Sign In
-              </Link>
+              {user ? (
+                <div className="flex items-center gap-3 ml-2">
+                  <Link to={`/users/${user.username || user._id}`} className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+                    {user.avatar?.url ? (
+                      <img src={user.avatar.url} alt="Profile" className="w-8 h-8 rounded-full object-cover ring-2 ring-[color:var(--line)]" />
+                    ) : (
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center text-white font-bold text-sm">
+                        {user.name?.charAt(0).toUpperCase()}
+                      </div>
+                    )}
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="px-4 py-2 text-sm font-semibold rounded-xl transition-all duration-300 text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 border border-[color:var(--line)]"
+                  >
+                    Logout
+                  </button>
+                </div>
+              ) : (
+                <>
+                  <Link
+                    to="/login"
+                    className="px-4 py-2 text-sm font-semibold rounded-xl transition-all duration-300 text-[color:var(--text-2)] hover:text-[color:var(--text-1)] hover:bg-[color:var(--surface-card)]"
+                  >
+                    Sign In
+                  </Link>
 
-              <Link
-                to="/register"
-                className="px-5 py-2.5 text-sm font-semibold brand-gradient text-white rounded-xl hover:shadow-[0_14px_30px_rgba(88,101,242,0.35)] hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300"
-              >
-                Join Free
-              </Link>
+                  <Link
+                    to="/register"
+                    className="px-5 py-2.5 text-sm font-semibold brand-gradient text-white rounded-xl hover:shadow-[0_14px_30px_rgba(88,101,242,0.35)] hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300"
+                  >
+                    Join Free
+                  </Link>
+                </>
+              )}
             </div>
 
             <button
@@ -182,13 +209,6 @@ const Navbar = () => {
               </Link>
             ))}
             <hr className="my-3 border-[color:var(--line)]" />
-            <Link
-              to="/login"
-              onClick={() => setIsMenuOpen(false)}
-              className="block px-4 py-3 text-[color:var(--text-2)] font-medium rounded-xl hover:bg-[color:var(--surface-soft)] hover:text-[color:var(--accent)] transition-all duration-300"
-            >
-              Sign In
-            </Link>
             <button
               onClick={toggleTheme}
               className="w-full mt-2 px-4 py-3 text-[color:var(--text-2)] font-medium rounded-xl border border-[color:var(--line)] bg-[color:var(--surface-soft)] flex items-center justify-center gap-2"
@@ -196,13 +216,35 @@ const Navbar = () => {
               {theme === 'dark' ? <FiSun className="w-4 h-4" /> : <FiMoon className="w-4 h-4" />}
               {theme === 'dark' ? 'Light mode' : 'Dark mode'}
             </button>
-            <Link
-              to="/register"
-              onClick={() => setIsMenuOpen(false)}
-              className="block mt-2 text-center px-6 py-3 brand-gradient text-white font-semibold rounded-xl hover:shadow-lg transition-all duration-300"
-            >
-              Join Free
-            </Link>
+            
+            {user ? (
+              <button
+                onClick={() => {
+                  handleLogout();
+                  setIsMenuOpen(false);
+                }}
+                className="w-full mt-2 text-center px-6 py-3 bg-red-500 text-white font-semibold rounded-xl hover:shadow-lg transition-all duration-300"
+              >
+                Logout
+              </button>
+            ) : (
+              <>
+                <Link
+                  to="/login"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="block px-4 py-3 text-[color:var(--text-2)] font-medium rounded-xl hover:bg-[color:var(--surface-soft)] hover:text-[color:var(--accent)] transition-all duration-300 mt-2 border border-[color:var(--line)] text-center"
+                >
+                  Sign In
+                </Link>
+                <Link
+                  to="/register"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="block mt-2 text-center px-6 py-3 brand-gradient text-white font-semibold rounded-xl hover:shadow-lg transition-all duration-300"
+                >
+                  Join Free
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </nav>

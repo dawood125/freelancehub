@@ -10,6 +10,7 @@ import { FiUser, FiAtSign, FiMail, FiLock, FiEye, FiEyeOff, FiArrowRight, FiChec
 import { FcGoogle } from 'react-icons/fc';
 import { FaGithub } from 'react-icons/fa';
 import authService from '../../services/authService';
+import useAuthStore from '../../store/useAuthStore';
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -95,8 +96,7 @@ const RegisterPage = () => {
         username: formData.username.toLowerCase(),
       });
 
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('user', JSON.stringify(response.data.user));
+      useAuthStore.getState().login(response.data.user, response.data.token);
 
       toast.success('Account created! Check your email for verification code 📧');
 

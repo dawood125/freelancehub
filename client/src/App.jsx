@@ -23,6 +23,7 @@ const OrderDetailPage = lazy(() => import("./pages/orders/OrderDetailPage"));
 const CheckoutPage = lazy(() => import("./pages/checkout/CheckoutPage"));
 const MessagesPage = lazy(() => import("./pages/messages/MessagesPage"));
 const NotificationsPage = lazy(() => import("./pages/notifications/NotificationsPage"));
+const DashboardPage = lazy(() => import("./pages/dashboard/DashboardPage"));
 
 const RouteFallback = () => (
   <div className="min-h-[56vh] flex items-center justify-center px-4">
@@ -81,6 +82,7 @@ const AppLayout = () => {
             />
 
             <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/dashboard" element={<DashboardPage />} />
 
             <Route path="/gigs" element={<GigsPage />} />
             <Route path="/gigs/:id" element={<GigDetailPage />} />

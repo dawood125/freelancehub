@@ -428,6 +428,14 @@ const GigDetailPage = () => {
                           <button
                             onClick={() => {
                               setSelectedPackage(tab.key);
+                              setTimeout(() => {
+                                const continueBtn = document.getElementById('continue-order-btn');
+                                if (continueBtn) {
+                                  continueBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                  continueBtn.classList.add('ring-4', 'ring-green-500/50', 'scale-[1.02]');
+                                  setTimeout(() => continueBtn.classList.remove('ring-4', 'ring-green-500/50', 'scale-[1.02]'), 1000);
+                                }
+                              }, 100);
                             }}
                             className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 ${
                               selectedPackage === tab.key
@@ -528,6 +536,7 @@ const GigDetailPage = () => {
 
                 {/* Order Button */}
                 <button
+                  id="continue-order-btn"
                   onClick={handleOrderClick}
                   className="w-full py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-green-500/25 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 flex items-center justify-center gap-2 text-sm"
                 >

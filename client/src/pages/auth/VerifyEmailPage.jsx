@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { FiMail, FiArrowLeft, FiRefreshCw } from 'react-icons/fi';
 import authService from '../../services/authService';
+import useAuthStore from '../../store/useAuthStore';
 
 const VerifyEmailPage = () => {
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
@@ -13,8 +14,9 @@ const VerifyEmailPage = () => {
 
   const navigate = useNavigate();
   const location = useLocation();
+  const { user, updateUser } = useAuthStore();
 
-  const email = location.state?.email || JSON.parse(localStorage.getItem('user') || '{}').email || '';
+  const email = location.state?.email || user?.email || '';
 
   
   const inputRefs = useRef([]);
@@ -89,9 +91,9 @@ const VerifyEmailPage = () => {
     try {
       await authService.verifyEmail({ email, otp: otpString });
 
-      const user = JSON.parse(localStorage.getItem('user') || '{}');
-      user.isEmailVerified = true;
-      localStorage.setItem('user', JSON.stringify(user));
+      if (user) {
+        updateUser({ ...user, isEmailVerified: true });
+      }
 
       toast.success('Email verified successfully! 🎉');
       navigate('/');

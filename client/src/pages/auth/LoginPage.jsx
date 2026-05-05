@@ -6,6 +6,7 @@ import { FiMail, FiLock, FiEye, FiEyeOff, FiArrowRight } from 'react-icons/fi';
 import { FcGoogle } from 'react-icons/fc';
 import { FaGithub } from 'react-icons/fa';
 import authService from '../../services/authService';
+import useAuthStore from '../../store/useAuthStore';
 
 const LoginPage = () => {
 
@@ -36,8 +37,7 @@ const LoginPage = () => {
 
     try {
       const response = await authService.login(formData);
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('user', JSON.stringify(response.data.user));
+      useAuthStore.getState().login(response.data.user, response.data.token);
 
       toast.success(`Welcome back, ${response.data.user.name}! 👋`);
       navigate('/');
