@@ -40,6 +40,8 @@ const register = catchAsync(async (req, res, next) => {
     await sendVerificationEmail(user.email, user.name, otp);
   } catch (emailError) {
     console.error('❌ Email sending failed:', emailError.message);
+    await User.findByIdAndDelete(user._id);
+    return next(new AppError('We could not send the verification email. Please try registering again after checking the email settings.', 500));
   }
 
   const token = generateAccessToken(user._id);

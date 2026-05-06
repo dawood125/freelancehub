@@ -179,3 +179,25 @@ Reason:
 
 Impact:
 - Notifications are now available as a route-backed inbox with unread counts, read actions, and realtime emission support for core marketplace events.
+
+---
+
+## 2026-05-06 (Auth/Profile Stabilization)
+
+Decision:
+- Add a public profile route at `/users/:username` and make the avatar/seller links resolve to an actual page.
+
+Reason:
+- Avatar and seller clicks were landing on the app shell because the frontend route was missing.
+
+Impact:
+- Public profile navigation now renders a real profile view instead of a blank layout.
+
+Decision:
+- Harden verification email delivery by supporting SendGrid-style env fallbacks and failing registration when the verification email cannot be sent.
+
+Reason:
+- Registration was succeeding even when verification email delivery failed, which hid the actual problem from users.
+
+Impact:
+- Email configuration errors now surface immediately and no orphaned user account is left behind when the verification email cannot be delivered.

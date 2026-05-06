@@ -1,6 +1,6 @@
 # Project Snapshot
 
-Last updated: 2026-04-21
+Last updated: 2026-05-06
 
 ## What We Have
 
@@ -41,3 +41,5 @@ Backend:
 - Messaging Sprint is now complete. Next implementation focus is Notifications Sprint.
 - Pre-Notifications stability pass completed for messaging UX: fixed sender identity resolution (`id` vs `_id`), restored proper chat scrolling with fixed-height message pane constraints, and added live participant presence via Socket.IO online/offline events.
 - Notifications module kickoff complete: notification model/service/controller/routes added, notification inbox page and navbar badge wired, and first event sources added from messages and payment success.
+- Public profile route added at `/users/:username` so avatar and seller links now resolve to a real page.
+- Verification email transport now supports SendGrid-style environment fallbacks and registration fails cleanly if the verification email cannot be sent.

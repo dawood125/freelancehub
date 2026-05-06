@@ -1,13 +1,45 @@
 const nodemailer = require('nodemailer');
 
 
-const createTransporter = () => {
-  const transporter = nodemailer.createTransport({
-    host: process.env.EMAIL_HOST,       
-    port: process.env.EMAIL_PORT,      
+const resolveEmailTransport = () => {
+  const hasSendGridKey = Boolean(process.env.SENDGRID_API_KEY);
+  const host = process.env.EMAIL_HOST || (hasSendGridKey ? 'smtp.sendgrid.net' : undefined);
+  const port = Number(process.env.EMAIL_PORT || (hasSendGridKey ? 587 : undefined));
+  const user = process.env.EMAIL_USER || (hasSendGridKey ? 'apikey' : undefined);
+  const pass = process.env.EMAIL_PASS || process.env.SENDGRID_API_KEY;
+  const from = process.env.EMAIL_FROM || process.env.SENDGRID_FROM_EMAIL;
+
+  if (!host || !port || !user || !pass || !from) {
+    throw new Error(
+      'Email configuration is incomplete. Set EMAIL_HOST, EMAIL_PORT, EMAIL_USER, EMAIL_PASS, and EMAIL_FROM, or provide SENDGRID_API_KEY with EMAIL_FROM.',
+    );
+  }
+
+  return {
+    host,
+    port,
+    secure: port === 465,
+    requireTLS: port === 587,
     auth: {
-      user: process.env.EMAIL_USER,     
-      pass: process.env.EMAIL_PASS      
+      user,
+      pass,
+    },
+    from,
+  };
+};
+
+
+const createTransporter = () => {
+  const transport = resolveEmailTransport();
+
+  const transporter = nodemailer.createTransport({
+    host: transport.host,
+    port: transport.port,
+    secure: transport.secure,
+    requireTLS: transport.requireTLS,
+    auth: {
+      user: transport.auth.user,
+      pass: transport.auth.pass,
     }
   });
 
@@ -16,12 +48,13 @@ const createTransporter = () => {
 
 const sendEmail = async (options) => {
   const transporter = createTransporter();
+  const { from } = resolveEmailTransport();
 
   const mailOptions = {
-    from: `"FreelanceHub" <${process.env.EMAIL_FROM}>`, 
-    to: options.to,           
-    subject: options.subject, 
-    html: options.html        
+    from: `"FreelanceHub" <${from}>`,
+    to: options.to,
+    subject: options.subject,
+    html: options.html
   };
 
   await transporter.sendMail(mailOptions);
