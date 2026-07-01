@@ -72,6 +72,17 @@ jobs:
             set -e
             echo "🔧 Server deployment starting..."
 
+            # Source NVM and setup environment
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+
+            # Verify Node and npm are available
+            echo "📋 Environment check:"
+            echo "Node: $(node -v 2>/dev/null || echo 'not found')"
+            echo "NPM:  $(npm -v 2>/dev/null || echo 'not found')"
+            echo "PM2:  $(pm2 -v 2>/dev/null || echo 'not found')"
+
             # Working directory
             APP_DIR="/home/ubuntu/freelancehub"
             DEPLOY_DIR="/home/ubuntu/freelancehub-deploy"
@@ -83,13 +94,13 @@ jobs:
               mkdir -p "$APP_DIR"
             fi
 
-            # Backup current .env file
+            # Backup current .env file (CRITICAL)
             if [ -f "$APP_DIR/server/.env" ]; then
               echo "💾 Backing up .env file..."
               cp "$APP_DIR/server/.env" /tmp/env-backup
             fi
 
-            # Backup current deployment (optional, for rollback)
+            # Backup current deployment (for rollback)
             if [ -d "$APP_DIR" ] && [ "$(ls -A $APP_DIR 2>/dev/null)" ]; then
               echo "📦 Backing up current version..."
               rm -rf "$BACKUP_DIR"
