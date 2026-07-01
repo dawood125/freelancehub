@@ -1,0 +1,139 @@
+name: Deploy to AWS EC2
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy Application
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install root dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Install server dependencies
+        run: |
+          cd server
+          npm install --omit=dev --no-audit --no-fund
+
+      - name: Install client dependencies
+        run: |
+          cd client
+          npm install --no-audit --no-fund
+
+      - name: Build client
+        run: |
+          cd client
+          npm run build
+
+      - name: Create deployment package
+        run: |
+          echo "📦 Creating deployment package..."
+          mkdir -p deploy-package
+          cp -r server/.env deploy-package/.env 2>/dev/null || echo "No .env in server, skipping"
+          cp -r server/src deploy-package/src
+          cp -r server/package.json deploy-package/package.json
+          cp -r server/server.js deploy-package/server.js
+          cp -r client/dist deploy-package/client-dist
+          echo "✅ Deployment package created"
+
+      - name: Deploy to EC2
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: "deploy-package/*"
+          target: "/home/ubuntu/freelancehub-deploy"
+          rm: false
+
+      - name: Restart application on EC2
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          command_timeout: 10m
+          script: |
+            set -e
+            echo "🚀 Starting deployment..."
+            cd /home/ubuntu
+
+            # Backup current deployment
+            if [ -d "freelancehub-current" ]; then
+              echo "📦 Backing up current version..."
+              rm -rf freelancehub-backup
+              mv freelancehub-current freelancehub-backup
+            fi
+
+            # Promote new deployment to current
+            echo "🔄 Promoting new deployment..."
+            rm -rf freelancehub-current
+            mv freelancehub-deploy freelancehub-current
+
+            # Install production dependencies
+            echo "📥 Installing server dependencies..."
+            cd freelancehub-current/server
+            npm install --omit=dev --no-audit --no-fund
+
+            # Move client build to root
+            echo "🎨 Setting up client build..."
+            cd /home/ubuntu/freelancehub-current
+            if [ -d "client-dist" ]; then
+              rm -rf client
+              mv client-dist client
+              cd client
+              # Need package.json for client structure
+              cd ..
+            fi
+
+            # Restart with PM2
+            echo "♻️  Restarting application with PM2..."
+            cd /home/ubuntu/freelancehub-current/server
+            pm2 delete freelancehub-api 2>/dev/null || true
+            pm2 start server.js --name "freelancehub-api"
+            pm2 save
+
+            # Reload nginx
+            echo "🌐 Reloading Nginx..."
+            sudo systemctl reload nginx
+
+            # Health check
+            echo "🏥 Running health check..."
+            sleep 3
+            if pm2 status | grep -q "online"; then
+              echo "✅ Application is online!"
+            else
+              echo "❌ Application failed to start. Rolling back..."
+              pm2 delete freelancehub-api 2>/dev/null || true
+              if [ -d "/home/ubuntu/freelancehub-backup/server" ]; then
+                cd /home/ubuntu/freelancehub-backup/server
+                pm2 start server.js --name "freelancehub-api"
+                cd /home/ubuntu
+                rm -rf freelancehub-current
+                mv freelancehub-backup freelancehub-current
+              fi
+              exit 1
+            fi
+
+            # Cleanup old backup
+            if [ -d "/home/ubuntu/freelancehub-backup" ]; then
+              echo "🧹 Cleaning up old backup..."
+              rm -rf /home/ubuntu/freelancehub-backup
+            fi
+
+            echo "🎉 Deployment completed successfully!"
+            pm2 status
