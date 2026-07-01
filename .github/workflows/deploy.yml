@@ -19,7 +19,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
 
       - name: Install root dependencies
         run: npm install --no-audit --no-fund
@@ -43,66 +42,69 @@ jobs:
         run: |
           echo "📦 Creating deployment package..."
           mkdir -p deploy-package
-          cp -r server/.env deploy-package/.env 2>/dev/null || echo "No .env in server, skipping"
+          # Copy server files (excluding node_modules and .env for security)
           cp -r server/src deploy-package/src
-          cp -r server/package.json deploy-package/package.json
-          cp -r server/server.js deploy-package/server.js
+          cp server/package.json deploy-package/package.json
+          cp server/server.js deploy-package/server.js
+          # Copy client build
           cp -r client/dist deploy-package/client-dist
           echo "✅ Deployment package created"
 
-      - name: Deploy to EC2
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_KEY }}
-          source: "deploy-package/*"
-          target: "/home/ubuntu/freelancehub-deploy"
-          rm: false
+      - name: Setup SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts 2>/dev/null || true
 
-      - name: Restart application on EC2
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_KEY }}
-          command_timeout: 10m
-          script: |
+      - name: Copy files to EC2
+        run: |
+          echo "📤 Copying files to server..."
+          scp -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no -r deploy-package/* ubuntu@${{ secrets.EC2_HOST }}:/home/ubuntu/freelancehub-deploy/
+          echo "✅ Files copied"
+
+      - name: Deploy on EC2
+        run: |
+          echo "🚀 Starting deployment on server..."
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_HOST }} << 'DEPLOY_SCRIPT'
             set -e
-            echo "🚀 Starting deployment..."
-            cd /home/ubuntu
+            echo "🔧 Server deployment starting..."
 
             # Backup current deployment
-            if [ -d "freelancehub-current" ]; then
+            if [ -d "/home/ubuntu/freelancehub-current" ]; then
               echo "📦 Backing up current version..."
-              rm -rf freelancehub-backup
-              mv freelancehub-current freelancehub-backup
+              rm -rf /home/ubuntu/freelancehub-backup
+              mv /home/ubuntu/freelancehub-current /home/ubuntu/freelancehub-backup
             fi
 
-            # Promote new deployment to current
-            echo "🔄 Promoting new deployment..."
-            rm -rf freelancehub-current
-            mv freelancehub-deploy freelancehub-current
+            # Promote new deployment
+            echo "🔄 Activating new deployment..."
+            rm -rf /home/ubuntu/freelancehub-current
+            mv /home/ubuntu/freelancehub-deploy /home/ubuntu/freelancehub-current
 
-            # Install production dependencies
+            # Setup .env if not present in deployment
+            if [ ! -f "/home/ubuntu/freelancehub-current/server/.env" ]; then
+              if [ -f "/home/ubuntu/freelancehub-backup/server/.env" ]; then
+                echo "♻️  Restoring .env from backup..."
+                cp /home/ubuntu/freelancehub-backup/server/.env /home/ubuntu/freelancehub-current/server/.env
+              fi
+            fi
+
+            # Install server dependencies
             echo "📥 Installing server dependencies..."
-            cd freelancehub-current/server
+            cd /home/ubuntu/freelancehub-current/server
             npm install --omit=dev --no-audit --no-fund
 
-            # Move client build to root
-            echo "🎨 Setting up client build..."
+            # Move client build to proper location
+            echo "🎨 Setting up client..."
             cd /home/ubuntu/freelancehub-current
             if [ -d "client-dist" ]; then
               rm -rf client
               mv client-dist client
-              cd client
-              # Need package.json for client structure
-              cd ..
             fi
 
             # Restart with PM2
-            echo "♻️  Restarting application with PM2..."
-            cd /home/ubuntu/freelancehub-current/server
+            echo "♻️  Restarting application..."
             pm2 delete freelancehub-api 2>/dev/null || true
             pm2 start server.js --name "freelancehub-api"
             pm2 save
@@ -115,9 +117,10 @@ jobs:
             echo "🏥 Running health check..."
             sleep 3
             if pm2 status | grep -q "online"; then
-              echo "✅ Application is online!"
+              echo "✅ Deployment successful! Application is online."
+              pm2 status
             else
-              echo "❌ Application failed to start. Rolling back..."
+              echo "❌ Health check failed! Rolling back..."
               pm2 delete freelancehub-api 2>/dev/null || true
               if [ -d "/home/ubuntu/freelancehub-backup/server" ]; then
                 cd /home/ubuntu/freelancehub-backup/server
@@ -129,11 +132,12 @@ jobs:
               exit 1
             fi
 
-            # Cleanup old backup
+            # Cleanup
             if [ -d "/home/ubuntu/freelancehub-backup" ]; then
               echo "🧹 Cleaning up old backup..."
               rm -rf /home/ubuntu/freelancehub-backup
             fi
 
             echo "🎉 Deployment completed successfully!"
-            pm2 status
+          DEPLOY_SCRIPT
+          echo "✅ Server deployment done"
