@@ -60,6 +60,8 @@ jobs:
       - name: Copy files to EC2
         run: |
           echo "📤 Copying files to server..."
+          # Clean up old deploy folder first
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_HOST }} "rm -rf /home/ubuntu/freelancehub-deploy && mkdir -p /home/ubuntu/freelancehub-deploy"
           scp -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no -r deploy-package/* ubuntu@${{ secrets.EC2_HOST }}:/home/ubuntu/freelancehub-deploy/
           echo "✅ Files copied"
 
@@ -70,43 +72,66 @@ jobs:
             set -e
             echo "🔧 Server deployment starting..."
 
-            # Backup current deployment
-            if [ -d "/home/ubuntu/freelancehub-current" ]; then
+            # Working directory
+            APP_DIR="/home/ubuntu/freelancehub"
+            DEPLOY_DIR="/home/ubuntu/freelancehub-deploy"
+            BACKUP_DIR="/home/ubuntu/freelancehub-backup"
+
+            # Check if app directory exists
+            if [ ! -d "$APP_DIR" ]; then
+              echo "📁 Creating app directory: $APP_DIR"
+              mkdir -p "$APP_DIR"
+            fi
+
+            # Backup current .env file
+            if [ -f "$APP_DIR/server/.env" ]; then
+              echo "💾 Backing up .env file..."
+              cp "$APP_DIR/server/.env" /tmp/env-backup
+            fi
+
+            # Backup current deployment (optional, for rollback)
+            if [ -d "$APP_DIR" ] && [ "$(ls -A $APP_DIR 2>/dev/null)" ]; then
               echo "📦 Backing up current version..."
-              rm -rf /home/ubuntu/freelancehub-backup
-              mv /home/ubuntu/freelancehub-current /home/ubuntu/freelancehub-backup
+              rm -rf "$BACKUP_DIR"
+              cp -r "$APP_DIR" "$BACKUP_DIR" 2>/dev/null || true
             fi
 
-            # Promote new deployment
-            echo "🔄 Activating new deployment..."
-            rm -rf /home/ubuntu/freelancehub-current
-            mv /home/ubuntu/freelancehub-deploy /home/ubuntu/freelancehub-current
+            # Stop PM2 process before deploying
+            echo "⏸️  Stopping current app..."
+            pm2 stop freelancehub-api 2>/dev/null || true
 
-            # Setup .env if not present in deployment
-            if [ ! -f "/home/ubuntu/freelancehub-current/server/.env" ]; then
-              if [ -f "/home/ubuntu/freelancehub-backup/server/.env" ]; then
-                echo "♻️  Restoring .env from backup..."
-                cp /home/ubuntu/freelancehub-backup/server/.env /home/ubuntu/freelancehub-current/server/.env
-              fi
-            fi
+            # Update server code (keep .env and node_modules)
+            echo "🔄 Updating server code..."
+            rm -rf "$APP_DIR/server/src"
+            cp -r "$DEPLOY_DIR/src" "$APP_DIR/server/src"
+            cp "$DEPLOY_DIR/package.json" "$APP_DIR/server/package.json"
+            cp "$DEPLOY_DIR/server.js" "$APP_DIR/server/server.js"
 
-            # Install server dependencies
+            # Install/update server dependencies
             echo "📥 Installing server dependencies..."
-            cd /home/ubuntu/freelancehub-current/server
+            cd "$APP_DIR/server"
             npm install --omit=dev --no-audit --no-fund
 
-            # Move client build to proper location
-            echo "🎨 Setting up client..."
-            cd /home/ubuntu/freelancehub-current
-            if [ -d "client-dist" ]; then
-              rm -rf client
-              mv client-dist client
+            # Restore .env file (CRITICAL - never overwrite)
+            if [ -f /tmp/env-backup ]; then
+              echo "♻️  Restoring .env file..."
+              cp /tmp/env-backup "$APP_DIR/server/.env"
+              rm /tmp/env-backup
             fi
 
-            # Restart with PM2
-            echo "♻️  Restarting application..."
-            pm2 delete freelancehub-api 2>/dev/null || true
-            pm2 start server.js --name "freelancehub-api"
+            # Update client build
+            echo "🎨 Updating client build..."
+            rm -rf "$APP_DIR/client/dist"
+            mkdir -p "$APP_DIR/client"
+            cp -r "$DEPLOY_DIR/client-dist" "$APP_DIR/client/dist"
+
+            # Clean up deploy folder
+            rm -rf "$DEPLOY_DIR"
+
+            # Start application with PM2
+            echo "♻️  Starting application..."
+            cd "$APP_DIR/server"
+            pm2 start server.js --name "freelancehub-api" || pm2 restart freelancehub-api
             pm2 save
 
             # Reload nginx
@@ -121,21 +146,19 @@ jobs:
               pm2 status
             else
               echo "❌ Health check failed! Rolling back..."
-              pm2 delete freelancehub-api 2>/dev/null || true
-              if [ -d "/home/ubuntu/freelancehub-backup/server" ]; then
-                cd /home/ubuntu/freelancehub-backup/server
-                pm2 start server.js --name "freelancehub-api"
-                cd /home/ubuntu
-                rm -rf freelancehub-current
-                mv freelancehub-backup freelancehub-current
+              if [ -d "$BACKUP_DIR/server" ]; then
+                rm -rf "$APP_DIR/server"
+                cp -r "$BACKUP_DIR/server" "$APP_DIR/server"
+                cd "$APP_DIR/server"
+                pm2 restart freelancehub-api
               fi
               exit 1
             fi
 
-            # Cleanup
-            if [ -d "/home/ubuntu/freelancehub-backup" ]; then
+            # Cleanup old backup
+            if [ -d "$BACKUP_DIR" ]; then
               echo "🧹 Cleaning up old backup..."
-              rm -rf /home/ubuntu/freelancehub-backup
+              rm -rf "$BACKUP_DIR"
             fi
 
             echo "🎉 Deployment completed successfully!"
